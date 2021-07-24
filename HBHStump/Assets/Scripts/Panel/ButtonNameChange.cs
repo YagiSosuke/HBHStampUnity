@@ -31,7 +31,6 @@ public class ButtonNameChange : MonoBehaviour
     {
         TempWord = ButtonText.text;
         StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(TempWord);  //現在設定されているパーツに対応する文字を登録
-        StumpScript.nowWordText[StumpScript.TempStump].text = StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).getWord(); //記録されている文字を視覚的に表す
         //Frame.gameObject.transform.position = this.transform.position;
     }
 }

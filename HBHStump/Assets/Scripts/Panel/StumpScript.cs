@@ -47,7 +47,8 @@ public class StumpScript : MonoBehaviour
                                           new StampPartsWord("体"),
                                           new StampPartsWord("尻") };
 
-    public static string TempStump;         //選択したスタンプ
+    public static string TempStump;         //選択したスタンプ名
+
     [SerializeField] GameObject Frame;      //選択したボタンの枠
 
     //各パーツごとの言葉を表示するテキスト
@@ -65,7 +66,9 @@ public class StumpScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("tempstump = " + TempStump);
+        StumpScript.nowWordText["頭"].text = StumpScript.GetPartsWord(stampPartsWord, "頭").getWord(); //記録されている文字を視覚的に表す
+        StumpScript.nowWordText["体"].text = StumpScript.GetPartsWord(stampPartsWord, "体").getWord(); //記録されている文字を視覚的に表す
+        StumpScript.nowWordText["尻"].text = StumpScript.GetPartsWord(stampPartsWord, "尻").getWord(); //記録されている文字を視覚的に表す
     }
 
     //スタンプ名記録

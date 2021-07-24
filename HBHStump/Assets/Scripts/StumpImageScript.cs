@@ -11,7 +11,7 @@ public class StumpImageScript : MonoBehaviour
     Vector3 MousePos;       //マウスの位置
 
     public static Text NowParts;          //現在の部位
-    Text NowWord;           //現在の言葉
+    public static Text NowWord;           //現在の言葉
 
 
     // Start is called before the first frame update
@@ -31,6 +31,8 @@ public class StumpImageScript : MonoBehaviour
         Image.transform.position = MousePos;
 
         NowParts.text = StumpScript.TempStump;
-        NowWord.text = ButtonNameChange.TempWord;
+        //以下を修正
+        //NowWord.text = ButtonNameChange.TempWord;
+        NowWord.text = StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).getWord();
     }
 }
