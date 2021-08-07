@@ -58,6 +58,7 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
     [SerializeField] int pos_y;     //自分の今いる座標
 
     ClareConditions clare;          //クリア条件を組み込んでいるスクリプト
+    
 
     // Start is called before the first frame update
     void Start()
@@ -71,11 +72,10 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
 
         FogParticle = (GameObject)Resources.Load("Prefabs/CFX2_WWExplosion_C_Copy");
         string objName = pos_x + "-" + pos_y + "Effect";
-        FogUI = GameObject.Find(objName);
-        FogUI.transform.SetParent(this.gameObject.transform.parent.transform, true);
-        //FogUIInstance = this.gameObject.transform.GetChild(0).GetChild(0).gameObject;
-
-        audio = GameObject.Find("StumpImage").GetComponent<AudioSource>();
+        //FogUI = GameObject.Find(objName);
+        //FogUI.transform.SetParent(this.gameObject.transform.parent.transform, true);
+        
+        //audio = GameObject.Find("StumpImage").GetComponent<AudioSource>();
 
         SerchF = false;
 
@@ -128,6 +128,7 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
         {
             if (count == 0)
             {
+                Debug.Log("Coordinate = " + pos_x + "," + pos_y);
                 //煙を出す
                 Instantiate(FogParticle, new Vector3(GameObject.Find(("" + pos_x + "-" + pos_y + "Camera")).transform.position.x, GameObject.Find((string)("" + pos_x + "-" + pos_y + "Camera")).transform.position.y-.8f, GameObject.Find((string)("" + pos_x + "-" + pos_y + "Camera")).transform.position.z + 5), Quaternion.Euler(new Vector3(90, 0, -this.gameObject.transform.eulerAngles.z)));
 
@@ -142,7 +143,13 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
                     Debug.Log(Dic[ChangeNum].AfterObject);
                     NewObj = Instantiate(Dic[ChangeNum].AfterObject, this.transform.parent.transform.position, Quaternion.identity, ParentObject.transform);
 
-                    FogUI.transform.SetParent(NewObj.transform, true);
+
+                    //新ゲームモード用の処理
+                    CharactorChangePos ccp = GameObject.Find("Charctors").GetComponent<CharactorChangePos>();
+                    ccp.opChar.ChangeCharctor(pos_y, NewObj);
+                    
+                    //おかしい
+                    //FogUI.transform.SetParent(NewObj.transform, true);
                     //FogUIInstance.transform.SetParent(NewObj.transform.GetChild(0).transform, true);
                     Destroy(this.gameObject.GetComponent<Image>());
                     Destroy(this.gameObject.transform.parent.transform.Find("WordFlame(Clone)").gameObject);
@@ -167,5 +174,11 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData pointerData)
     {
         ChangeF = true;
+    }
+
+    //位置情報を代入する
+    public void SetPosition(int pos_x, int pos_y) {
+        this.pos_x = pos_x;
+        this.pos_y = pos_y;
     }
 }
