@@ -293,7 +293,6 @@ public class CharactorChangePos : MonoBehaviour
     void Start()
     {
         OperationCharctor.loadInstance(opChar);
-        OperationCharctor.getInstance().OperatonCharctorStart();
     }
 
     // Update is called once per frame

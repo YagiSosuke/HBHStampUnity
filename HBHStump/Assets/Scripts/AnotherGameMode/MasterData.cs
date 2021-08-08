@@ -60,7 +60,8 @@ public class MasterData : MonoBehaviour
     void Update()
     {
         if (screenMode == ScreenMode.Title) {
-
+            //モード変更時に呼び出す
+            //CharactorChangePos.OperationCharctor.getInstance().OperatonCharctorStart();
         }
         else if (screenMode == ScreenMode.Game)
         {
