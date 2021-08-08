@@ -18,36 +18,51 @@ public class MasterData : MonoBehaviour
         Game,
         Result
     }
-    [SerializeField] ScreenMode serializeScreenMode = ScreenMode.Title;
-    public static ScreenMode screenMode;
+    public ScreenMode screenMode = ScreenMode.Title;
 
     //ゲームのステータス
-    [SerializeField] float serializeRemainingTime = 60*3;
-    public static float remainingTime = 60*3;    //残り時間
-    public static float score;            //得点
+    public float remainingTime = 60*3;
+    public float score;            //得点
+
+    //変化させたオブジェクト
+    public List<Sprite> newObjects = new List<Sprite>();
 
     //時間を表示するテキスト
     [SerializeField] Text remainingTimeText;
     [SerializeField] Text ScoreText;
 
+
+
+    //別スクリプトからメソッド呼び出し用
+    [Header("別スクリプトからメソッド呼び出し用")]
+    [SerializeField] ResultPanelControl resultPanelControl;
+
+
+
+
     //スコアを加算する
-    public void AddScore()
+    //変化させたオブジェクトを記憶
+    public void AddScore(GameObject newObj)
     {
         score++;
+
+        Image img = newObj.transform.GetChild(0).GetComponent<Image>();
+        newObjects.Add(img.sprite);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        screenMode = serializeScreenMode;
-        remainingTime = serializeRemainingTime;
         score = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (screenMode == ScreenMode.Game)
+        if (screenMode == ScreenMode.Title) {
+
+        }
+        else if (screenMode == ScreenMode.Game)
         {
             //制限時間を減らしていく
             remainingTime -= Time.deltaTime;
@@ -65,6 +80,10 @@ public class MasterData : MonoBehaviour
                 remainingTimeText.text = "0";
                 CharactorChangePos.OperationCharctor.getInstance().GameFinish();
                 screenMode = ScreenMode.Result;
+
+                resultPanelControl.DisplayPanel();
+                resultPanelControl.DisplayCharacter();
+                resultPanelControl.DisplayScore();
             }
         }
         else if(screenMode == ScreenMode.Result)

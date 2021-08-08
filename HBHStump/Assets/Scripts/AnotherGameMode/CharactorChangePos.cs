@@ -267,7 +267,7 @@ public class CharactorChangePos : MonoBehaviour
             charClass[posY].SetNewObj(newObj);
 
             //得点をプラスする
-            masterData.AddScore();
+            masterData.AddScore(newObj);
 
             //changeObjを一定時間でFOさせる
             myMonobehaviour.CallStartCoroutine(charClass[posY].DestroyNewObj());            
