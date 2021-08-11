@@ -282,7 +282,22 @@ public class CharactorChangePos : MonoBehaviour
             }
         }
     }
-    
+
+
+    //他スクリプトで呼び出し用の変数
+    public void GameSceneAfter()
+    {
+        OperationCharctor.getInstance().OperatonCharctorStart();
+    }
+    public void GameSceneContinuation()
+    {
+        OperationCharctor.getInstance().OperatonCharctorUpdate();
+    }
+    public void GameSceneBefore()
+    {
+        OperationCharctor.getInstance().GameFinish();
+    }
+
 
     public OperationCharctor opChar = new OperationCharctor();
 

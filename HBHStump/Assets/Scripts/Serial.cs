@@ -9,7 +9,6 @@ using UniRx;
 
 public class Serial : MonoBehaviour
 {
-
     public string portName = "COM8";
     public int baurate = 115200;
     public string stampPartsName = "頭";
@@ -27,18 +26,7 @@ public class Serial : MonoBehaviour
     {
         Debug.Log(stampPartsName + "の実行");
         if(serial == null) Open();
-        /*
-        IDGroup[0] = GameObject.Find("AIDText").GetComponent<Text>();
-        IDGroup[1] = GameObject.Find("KIDText").GetComponent<Text>();
-        IDGroup[2] = GameObject.Find("SIDText").GetComponent<Text>();
-        IDGroup[3] = GameObject.Find("TIDText").GetComponent<Text>();
-        IDGroup[4] = GameObject.Find("NIDText").GetComponent<Text>();
-        IDGroup[5] = GameObject.Find("HIDText").GetComponent<Text>();
-        IDGroup[6] = GameObject.Find("MIDText").GetComponent<Text>();
-        IDGroup[7] = GameObject.Find("YIDText").GetComponent<Text>();
-        IDGroup[8] = GameObject.Find("RIDText").GetComponent<Text>();
-        IDGroup[9] = GameObject.Find("WIDText").GetComponent<Text>();
-        */
+        
         for(int i = 0; i < 5; i++)
         {
             for(int j = 0; j < 3; j++)
@@ -80,6 +68,7 @@ public class Serial : MonoBehaviour
             }
 
             //設定
+            #region
             if (true) {
                 switch (NowWordButton)
                 {
@@ -115,12 +104,15 @@ public class Serial : MonoBehaviour
                         break;
                 }
             }
+            #endregion
 
             if (NowWordButton == "endz")
             {
-                //文字をセット
+                //文字、座標入力をセット
                 switch (message)
                 {
+                    //文字の判定
+                    #region
                     case "a.png":
                         ButtonNameChange.TempWord = "あ";
                         StumpScript.TempStump = stampPartsName;    //変数に設定
@@ -476,8 +468,10 @@ public class Serial : MonoBehaviour
                         StumpScript.TempStump = stampPartsName;    //変数に設定
                         StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
+                    #endregion
 
                     //スタンプ位置の判定
+                    #region
                     case "0,0":
                         StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[0, 0] = true;
@@ -538,6 +532,7 @@ public class Serial : MonoBehaviour
                         StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[4, 2] = true;
                         break;
+                        #endregion
                 }
             }
         }
