@@ -576,8 +576,8 @@ public class Serial : MonoBehaviour
     public void setParts(string parts)
     {
         Debug.Log("実行" + parts);
-        //StumpScript.TempStump = parts;
-        //StumpImageScript.NowParts.text = parts;
+        StumpScript.TempStump = parts;
+        StumpImageScript.NowParts.text = parts;
     }
 
 

@@ -983,6 +983,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SerialObjectHip
       objectReference: {fileID: 0}
+    - target: {fileID: 2306696581503447773, guid: 6d49a9a57226b3a419db191464302460,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2306696581503447779, guid: 6d49a9a57226b3a419db191464302460,
         type: 3}
       propertyPath: m_Enabled
