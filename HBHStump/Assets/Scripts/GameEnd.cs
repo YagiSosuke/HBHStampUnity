@@ -8,12 +8,11 @@ using UnityEngine.SceneManagement;
 public class GameEnd : MonoBehaviour
 {
     bool CanvasF = false;        //キャンバス2が見えているかのフラグ
-    GameObject Canvas2;
+    [SerializeField] GameObject Canvas2;
 
     // Start is called before the first frame update
     void Start()
     {
-        Canvas2 = GameObject.Find("Canvas2");
         Canvas2.SetActive(CanvasF);
     }
 
