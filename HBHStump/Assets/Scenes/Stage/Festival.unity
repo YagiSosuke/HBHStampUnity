@@ -1167,6 +1167,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3d50569bc35faa4caa067c78e482227, type: 3}
+--- !u!1 &111140869 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3491665401120901386, guid: f3d50569bc35faa4caa067c78e482227,
+    type: 3}
+  m_PrefabInstance: {fileID: 111140868}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &122787780
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1744,6 +1750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18b5d0e66221368458ea87a3a9f96598, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Canvas2: {fileID: 111140869}
 --- !u!81 &441805259
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2866,7 +2873,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 5b0fcd2be20d0b2449438a2b98f789f9, type: 2}
+      objectReference: {fileID: 9100000, guid: 6f56673daa7eecb4aa421417524c4560, type: 2}
     - target: {fileID: 3046440993666731625, guid: 6fca67cadefdc1a49ad770e8b70844e2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2990,7 +2997,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 5b0fcd2be20d0b2449438a2b98f789f9, type: 2}
+      objectReference: {fileID: 9100000, guid: 6f56673daa7eecb4aa421417524c4560, type: 2}
     - target: {fileID: 3057725004816619329, guid: a4884da684841b14cb68cfd545953a8c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3224,7 +3231,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 5b0fcd2be20d0b2449438a2b98f789f9, type: 2}
+      objectReference: {fileID: 9100000, guid: 6f56673daa7eecb4aa421417524c4560, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 150a268b0ddbe3a44a0cc10190bf38b0, type: 3}
 --- !u!1001 &5387615539624682909
@@ -3238,7 +3245,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 5b0fcd2be20d0b2449438a2b98f789f9, type: 2}
+      objectReference: {fileID: 9100000, guid: 6f56673daa7eecb4aa421417524c4560, type: 2}
     - target: {fileID: 7533539808199009289, guid: fcd041b1b6a9bad43b393610a69e8fdd,
         type: 3}
       propertyPath: m_LocalPosition.x

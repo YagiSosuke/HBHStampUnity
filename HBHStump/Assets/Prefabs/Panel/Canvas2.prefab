@@ -15097,6 +15097,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36b3669fcb5b9c646ab44cdfc62583e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NowParts: {fileID: 3491665401940862067}
+  NowWord: {fileID: 3491665400904473948}
 --- !u!82 &3491665401011735736
 AudioSource:
   m_ObjectHideFlags: 0
@@ -16440,6 +16442,7 @@ GameObject:
   - component: {fileID: 3491665401120901391}
   - component: {fileID: 3491665401120901384}
   - component: {fileID: 3491665401120901385}
+  - component: {fileID: 2166189893775776851}
   m_Layer: 5
   m_Name: Canvas2
   m_TagString: Untagged
@@ -16533,6 +16536,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!225 &2166189893775776851
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3491665401120901386}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3491665401136721217
 GameObject:
   m_ObjectHideFlags: 0
@@ -20649,7 +20664,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.7058824}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -27867,7 +27882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.47843137}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

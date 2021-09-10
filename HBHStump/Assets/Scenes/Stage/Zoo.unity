@@ -1746,6 +1746,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3d50569bc35faa4caa067c78e482227, type: 3}
+--- !u!1 &982624224 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3491665401120901386, guid: f3d50569bc35faa4caa067c78e482227,
+    type: 3}
+  m_PrefabInstance: {fileID: 982624223}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1003340618
 GameObject:
   m_ObjectHideFlags: 0
@@ -2539,6 +2545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18b5d0e66221368458ea87a3a9f96598, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Canvas2: {fileID: 982624224}
 --- !u!81 &1891099946
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2841,7 +2848,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 5b0fcd2be20d0b2449438a2b98f789f9, type: 2}
+      objectReference: {fileID: 9100000, guid: 6f56673daa7eecb4aa421417524c4560, type: 2}
     - target: {fileID: 4293159170902025428, guid: 43c409ce466fcc846b98b50f76dff0df,
         type: 3}
       propertyPath: m_Name
@@ -2965,7 +2972,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 5b0fcd2be20d0b2449438a2b98f789f9, type: 2}
+      objectReference: {fileID: 9100000, guid: 6f56673daa7eecb4aa421417524c4560, type: 2}
     - target: {fileID: 4450615106307402377, guid: 2632cdb50ed83c142a8e7e8e238192e4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3199,7 +3206,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 5b0fcd2be20d0b2449438a2b98f789f9, type: 2}
+      objectReference: {fileID: 9100000, guid: 6f56673daa7eecb4aa421417524c4560, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7eb6049354037c040aaed5fd8e37a0b8, type: 3}
 --- !u!1001 &7633285936969888350
@@ -3323,6 +3330,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 5b0fcd2be20d0b2449438a2b98f789f9, type: 2}
+      objectReference: {fileID: 9100000, guid: 6f56673daa7eecb4aa421417524c4560, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d652989da0a44af4cb751a18cb6a6f57, type: 3}
