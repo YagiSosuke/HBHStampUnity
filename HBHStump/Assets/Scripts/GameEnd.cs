@@ -13,7 +13,7 @@ public class GameEnd : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Canvas2.SetActive(CanvasF);
+        Canvas2Alpha();
     }
 
     // Update is called once per frame
@@ -33,7 +33,12 @@ public class GameEnd : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.C))
         {
             CanvasF = !CanvasF;
-            Canvas2.SetActive(CanvasF);
+            Canvas2Alpha();
         }
+    }
+
+    void Canvas2Alpha()
+    {
+        Canvas2.SetActive(CanvasF);
     }
 }

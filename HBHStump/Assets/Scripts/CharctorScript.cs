@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEditor;
 
 /*キャラクターにスタンプ打った時のスクリプト（辞書）*/
@@ -145,10 +146,12 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
 
 
                     //新ゲームモード用の処理
-                    CharactorChangePos ccp = GameObject.Find("Charctors").GetComponent<CharactorChangePos>();
-                    ccp.opChar.ChangeCharctor(pos_y, NewObj);
+                    if (SceneManager.GetActiveScene().name == "ManyChangeScene")
+                    {
+                        CharactorChangePos ccp = GameObject.Find("Charctors").GetComponent<CharactorChangePos>();
+                        ccp.opChar.ChangeCharctor(pos_y, NewObj);
+                    }
                     
-                    //おかしい
                     //FogUI.transform.SetParent(NewObj.transform, true);
                     //FogUIInstance.transform.SetParent(NewObj.transform.GetChild(0).transform, true);
                     Destroy(this.gameObject.GetComponent<Image>());

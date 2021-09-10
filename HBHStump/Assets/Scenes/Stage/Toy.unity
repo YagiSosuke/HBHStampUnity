@@ -333,6 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18b5d0e66221368458ea87a3a9f96598, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Canvas2: {fileID: 2047211858}
 --- !u!81 &160185770
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2840,6 +2841,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3d50569bc35faa4caa067c78e482227, type: 3}
+--- !u!1 &2047211858 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3491665401120901386, guid: f3d50569bc35faa4caa067c78e482227,
+    type: 3}
+  m_PrefabInstance: {fileID: 2047211857}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1183287765419605486
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2851,7 +2858,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 5b0fcd2be20d0b2449438a2b98f789f9, type: 2}
+      objectReference: {fileID: 9100000, guid: 6f56673daa7eecb4aa421417524c4560, type: 2}
     - target: {fileID: 3612947617056210876, guid: bc54e87f46adf2342b55af224be97cbb,
         type: 3}
       propertyPath: m_Name
@@ -3085,7 +3092,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 5b0fcd2be20d0b2449438a2b98f789f9, type: 2}
+      objectReference: {fileID: 9100000, guid: 6f56673daa7eecb4aa421417524c4560, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be639831d0f075841b516a1aaef4514e, type: 3}
 --- !u!1001 &8784344737548000409
@@ -3209,6 +3216,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 5b0fcd2be20d0b2449438a2b98f789f9, type: 2}
+      objectReference: {fileID: 9100000, guid: 6f56673daa7eecb4aa421417524c4560, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb7cf68e1c5a279478d15ee67d30de7d, type: 3}

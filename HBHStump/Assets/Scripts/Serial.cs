@@ -22,6 +22,8 @@ public class Serial : MonoBehaviour
 
     public static bool[,] PushF = new bool[5, 3];
 
+    [SerializeField] StumpImageScript stumpImageScript;     //現在のパーツを視覚的に表示するスクリプト
+
     void Start()
     {
         Debug.Log(stampPartsName + "の実行");
@@ -50,24 +52,11 @@ public class Serial : MonoBehaviour
     {
         while (this.isLoop)
         {
-
             string message = serial.ReadLine();
-            Debug.Log("message;" + message);
+            Debug.Log("message:" + message);
+            
 
-            if (message == "Head")
-            {
-                setParts("頭");
-            }
-            else if (message == "Body")
-            {
-                setParts("体");
-            }
-            else if (message == "Hip")
-            {
-                setParts("尻");
-            }
-
-            //設定
+            //設定 - おそらくいらない
             #region
             if (true) {
                 switch (NowWordButton)
@@ -111,362 +100,233 @@ public class Serial : MonoBehaviour
                 //文字、座標入力をセット
                 switch (message)
                 {
+                    //パーツの設定
+                    #region
+                    case "Head":
+                        setParts("頭");
+                        break;
+                    case "Body":
+                        setParts("体");
+                        break;
+                    case "Hip":
+                        setParts("尻");
+                        break;
+                    #endregion
+
                     //文字の判定
                     #region
                     case "a.png":
                         ButtonNameChange.TempWord = "あ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "i.png":
                         ButtonNameChange.TempWord = "い";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "u.png":
                         ButtonNameChange.TempWord = "う";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "e.png":
                         ButtonNameChange.TempWord = "え";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録                        
                         break;
                     case "o.png":
                         ButtonNameChange.TempWord = "お";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ka.png":
                         ButtonNameChange.TempWord = "か";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ki.png":
                         ButtonNameChange.TempWord = "き";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ku.png":
                         ButtonNameChange.TempWord = "く";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ke.png":
                         ButtonNameChange.TempWord = "け";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ko.png":
                         ButtonNameChange.TempWord = "こ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "sa.png":
                         ButtonNameChange.TempWord = "さ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "si.png":
                         ButtonNameChange.TempWord = "し";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "su.png":
                         ButtonNameChange.TempWord = "す";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "se.png":
                         ButtonNameChange.TempWord = "せ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "so.png":
                         ButtonNameChange.TempWord = "そ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ta.png":
                         ButtonNameChange.TempWord = "た";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ti.png":
                         ButtonNameChange.TempWord = "ち";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "tu.png":
                         ButtonNameChange.TempWord = "つ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "te.png":
                         ButtonNameChange.TempWord = "て";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "to.png":
                         ButtonNameChange.TempWord = "と";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "na.png":
                         ButtonNameChange.TempWord = "な";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ni.png":
                         ButtonNameChange.TempWord = "に";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "nu.png":
                         ButtonNameChange.TempWord = "ぬ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ne.png":
                         ButtonNameChange.TempWord = "ね";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "no.png":
                         ButtonNameChange.TempWord = "の";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ha.png":
                         ButtonNameChange.TempWord = "は";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "hi.png":
                         ButtonNameChange.TempWord = "ひ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "hu.png":
                         ButtonNameChange.TempWord = "ふ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "he.png":
                         ButtonNameChange.TempWord = "へ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ho.png":
                         ButtonNameChange.TempWord = "ほ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ma.png":
                         ButtonNameChange.TempWord = "ま";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "mi.png":
                         ButtonNameChange.TempWord = "み";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "mu.png":
                         ButtonNameChange.TempWord = "む";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "me.png":
                         ButtonNameChange.TempWord = "め";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "mo.png":
                         ButtonNameChange.TempWord = "も";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ya.png":
                         ButtonNameChange.TempWord = "や";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "yu.png":
                         ButtonNameChange.TempWord = "ゆ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "yo.png":
                         ButtonNameChange.TempWord = "よ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ra.png":
                         ButtonNameChange.TempWord = "ら";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ri.png":
                         ButtonNameChange.TempWord = "り";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ru.png":
                         ButtonNameChange.TempWord = "る";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "re.png":
                         ButtonNameChange.TempWord = "れ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ro.png":
                         ButtonNameChange.TempWord = "ろ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "wa.png":
                         ButtonNameChange.TempWord = "わ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "wo.png":
                         ButtonNameChange.TempWord = "を";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "nn.png":
                         ButtonNameChange.TempWord = "ん";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ga.png":
                         ButtonNameChange.TempWord = "が";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "gi.png":
                         ButtonNameChange.TempWord = "ぎ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "gu.png":
                         ButtonNameChange.TempWord = "ぐ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ge.png":
                         ButtonNameChange.TempWord = "げ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "go.png":
                         ButtonNameChange.TempWord = "ご";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "za.png":
                         ButtonNameChange.TempWord = "ざ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "zi.png":
                         ButtonNameChange.TempWord = "じ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "zu.png":
                         ButtonNameChange.TempWord = "ず";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ze.png":
                         ButtonNameChange.TempWord = "ぜ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "zo.png":
                         ButtonNameChange.TempWord = "ぞ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "da.png":
                         ButtonNameChange.TempWord = "だ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "di.png":
                         ButtonNameChange.TempWord = "ぢ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "du.png":
                         ButtonNameChange.TempWord = "づ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "de.png":
                         ButtonNameChange.TempWord = "で";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "do.png":
                         ButtonNameChange.TempWord = "ど";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "ba.png":
                         ButtonNameChange.TempWord = "ば";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "bi.png":
                         ButtonNameChange.TempWord = "び";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "bu.png":
                         ButtonNameChange.TempWord = "ぶ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "be.png":
                         ButtonNameChange.TempWord = "べ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "bo.png":
                         ButtonNameChange.TempWord = "ぼ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "pa.png":
                         ButtonNameChange.TempWord = "ぱ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "pi.png":
                         ButtonNameChange.TempWord = "ぴ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "pu.png":
                         ButtonNameChange.TempWord = "ぷ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "pe.png":
                         ButtonNameChange.TempWord = "ぺ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     case "po.png":
                         ButtonNameChange.TempWord = "ぽ";
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
-                        StumpScript.GetPartsWord(StumpScript.stampPartsWord, StumpScript.TempStump).setWord(ButtonNameChange.TempWord);  //現在設定されているパーツに対応する文字を登録
                         break;
                     #endregion
 
@@ -534,6 +394,8 @@ public class Serial : MonoBehaviour
                         break;
                         #endregion
                 }
+
+                StumpScript.stampPartsWord[StumpScript.TempStump] = ButtonNameChange.TempWord;  //現在設定されているパーツに対応する文字を登録
             }
         }
     }
@@ -577,7 +439,6 @@ public class Serial : MonoBehaviour
     {
         Debug.Log("実行" + parts);
         StumpScript.TempStump = parts;
-        StumpImageScript.NowParts.text = parts;
     }
 
 
