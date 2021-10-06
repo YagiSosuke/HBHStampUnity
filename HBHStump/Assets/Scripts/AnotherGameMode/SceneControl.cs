@@ -13,6 +13,7 @@ public class SceneControl : MonoBehaviour
     public enum ScreenMode
     {
         Title,
+        Tutorial,
         Game,
         Result
     }
@@ -138,6 +139,12 @@ public class SceneControl : MonoBehaviour
                     StartCoroutine(StateChange(stateChangeInterval));
                 }
             }
+            #endregion
+        }
+        else if(screenMode == ScreenMode.Tutorial)
+        {
+            #region
+
             #endregion
         }
         else if (screenMode == ScreenMode.Game)

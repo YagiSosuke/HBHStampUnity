@@ -39,7 +39,7 @@ public class CharctorNameSet : MonoBehaviour
 
             if (i == 0)
             {
-                if (gameObject.tag == "Head")
+                if (gameObject.tag == "Head" || gameObject.tag == "HeadSample")
                 {
                     AddFrame = FrameChild;
                     FrameChild.GetComponent<Image>().color = Color.green;
@@ -48,7 +48,7 @@ public class CharctorNameSet : MonoBehaviour
             }
             else if (i == (Name.Length) / 2)
             {
-                if (gameObject.tag == "Body")
+                if (gameObject.tag == "Body" || gameObject.tag == "BodySample")
                 {
                     AddFrame = FrameChild;
                     FrameChild.GetComponent<Image>().color = Color.green;
@@ -57,7 +57,7 @@ public class CharctorNameSet : MonoBehaviour
             }
             else if (i == Name.Length - 1)
             {
-                if (gameObject.tag == "Hip")
+                if (gameObject.tag == "Hip" || gameObject.tag == "HipSample")
                 {
                     AddFrame = FrameChild;
                     FrameChild.GetComponent<Image>().color = Color.green;
@@ -78,7 +78,7 @@ public class CharctorNameSet : MonoBehaviour
                 //Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length-1) * 100, 100);        //枠のサイズを決定
                 AddFrame.transform.localScale = Vector3.zero;
             }
-            else if(count < 1 )
+            else if(count < 1)
             {
                 float lerp = (count) * (count) * (count) * (count);
                 //Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length - 1) * 100 + (lerp * 100), 100);        //枠のサイズを決定

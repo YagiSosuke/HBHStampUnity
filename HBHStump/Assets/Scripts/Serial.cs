@@ -21,6 +21,7 @@ public class Serial : MonoBehaviour
     Text[] IDGroup = new Text[10];                     //IDを表示するテキストたち
 
     public static bool[,] PushF = new bool[5, 3];
+    public static bool cardReadF = false;
 
     [SerializeField] StumpImageScript stumpImageScript;     //現在のパーツを視覚的に表示するスクリプト
 
@@ -43,8 +44,22 @@ public class Serial : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.N)){
             Debug.Log("呼び出し");
             serial.Write("callz");
-        }        
-
+        }
+        if (cardReadF)
+        {
+            StartCoroutine(CardReadFlagDown());
+        }
+        for(int i = 0; i < 5; i++)
+        {
+            for(int j = 0; j < 3; j++)
+            {
+                if (PushF[i, j])
+                {
+                    IEnumerator coroutine = PushFlagDown(i, j);
+                    StartCoroutine(coroutine);
+                }
+            }
+        }
     }
 
     //シリアル通信でデータを受け取った時
@@ -100,6 +115,11 @@ public class Serial : MonoBehaviour
                 //文字、座標入力をセット
                 switch (message)
                 {
+                    //カードの読み込み
+                    case "CardRead":
+                        cardReadF = true;
+                        break;
+
                     //パーツの設定
                     #region
                     case "Head":
@@ -444,6 +464,8 @@ public class Serial : MonoBehaviour
 
 
     //設定スクリプト
+    //たぶんいらない
+    #region
     public void AButton()
     {
         if (GameObject.Find("AToggle").GetComponent<Toggle>().isOn)
@@ -559,6 +581,7 @@ public class Serial : MonoBehaviour
         NowWordButton = "endz";
         serial.Write("wz");
     }
+    #endregion
 
     //言葉を設定したとき
     public void SetWordSub(string message)
@@ -569,5 +592,18 @@ public class Serial : MonoBehaviour
         {
             IDGroup[i].text = M[i];
         }
+    }
+
+    //カードで文字を読み込んだフラグを下げたいとき
+    private IEnumerator CardReadFlagDown()
+    {
+        yield return null;
+        cardReadF = false;
+    }
+    //スタンプを押したフラグを下げたいとき
+    private IEnumerator PushFlagDown(int x, int y)
+    {
+        yield return null;
+        PushF[x, y] = false;
     }
 }

@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Stage/DiningRoom.unity
+- path: Assets/Scenes/AnotherGameMode/TestScene.unity
   isLoaded: 1
   isActive: 1
