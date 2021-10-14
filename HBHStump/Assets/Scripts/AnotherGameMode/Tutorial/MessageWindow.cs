@@ -14,7 +14,7 @@ public class MessageWindow : MonoBehaviour
     [SerializeField] Text messageText;
 
     //メッセージ列
-    List<string> message;
+    public List<string> message;
 
     //表示するメッセージ
     string messageLine;
@@ -37,6 +37,14 @@ public class MessageWindow : MonoBehaviour
 
     //画面にスタンプが押されたかどうかのフラグ
     public bool pushF = false;
+
+
+    //文字送り時の効果音鳴らすものたち
+    #region
+    [Header("文字送り時の効果音鳴らすものたち")]
+    [SerializeField] AudioSource audio;
+    [SerializeField] AudioClip pushAudioClip;
+    #endregion
 
     //メッセージ列を読み込む
     //加えて、初期化もする
@@ -106,6 +114,7 @@ public class MessageWindow : MonoBehaviour
 
         if ((Input.GetMouseButtonDown(0) || pushF) && messageCount >= messageLength)
         {
+            audio.PlayOneShot(pushAudioClip);
             NextMessage();
         }
         pushF = false;

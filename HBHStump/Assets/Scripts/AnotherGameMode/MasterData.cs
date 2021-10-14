@@ -11,8 +11,8 @@ csv書込みも行う予定
 public class MasterData : MonoBehaviour
 {
     //ゲームのステータス
-    public float remainingTime = 60*3;
-    float remainingTimeTemp;       //制限時間は何秒か記憶用
+    public float remainingTime = 60*3;    //此方の変数を減らしていく
+    public float remainingTimeTemp;       //制限時間は何秒か記憶用
     public float score;            //得点
 
     //変化させたオブジェクト

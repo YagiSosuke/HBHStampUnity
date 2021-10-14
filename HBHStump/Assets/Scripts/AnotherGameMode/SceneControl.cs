@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
+using System.Threading;
 
 /*
 シーン遷移や各シーンごとの処理をまとめて操作する
@@ -14,6 +16,7 @@ public class SceneControl : MonoBehaviour
     {
         Title,
         Tutorial,
+        GameSetting,
         Game,
         Result
     }
@@ -29,8 +32,7 @@ public class SceneControl : MonoBehaviour
     //画面遷移するまでのインターバル
     float stateChangeInterval = -1.0f;
 
-    //時間を表示するテキスト
-    [SerializeField] Text remainingTimeText;
+    //スコアを表示するテキスト
     [SerializeField] Text ScoreText;
 
     //別スクリプトからメソッド呼び出し用
@@ -57,8 +59,7 @@ public class SceneControl : MonoBehaviour
                 switch (screenMode)
                 {
                     case ScreenMode.Title:
-                        screenMode++;
-                        break;
+                    case ScreenMode.GameSetting:
                     case ScreenMode.Game:
                         screenMode++;
                         break;
@@ -100,6 +101,15 @@ public class SceneControl : MonoBehaviour
         stateChangeInterval = -1;
     }
 
+    //デバイスとの通信をするスクリプト
+    [SerializeField] Serial serialScript;
+
+    //セームをセットアップするときのカウント
+    async UniTask GameSetupCount()
+    {
+        await UniTask.Delay(3000);
+        StateChange();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -129,6 +139,17 @@ public class SceneControl : MonoBehaviour
                 {
                     StateChange();
                 }
+                else if(serialScript.enabled == true)
+                {
+                    for(int i=0; i < 15; i++)
+                    {
+                        if(Serial.PushF[i%5, i / 5])
+                        {
+                            StateChange();
+                            break;
+                        }
+                    }
+                }
             }
             else if (transitionMode == TransitionMode.beforeSwitching)
             {
@@ -147,6 +168,23 @@ public class SceneControl : MonoBehaviour
 
             #endregion
         }
+        else if(screenMode == ScreenMode.GameSetting)
+        {
+            #region
+            if (transitionMode == TransitionMode.afterSwitching)
+            {
+                GameSetupCount().Forget();
+                StateChange();
+            }
+            else if (transitionMode == TransitionMode.continuation)
+            {
+            }
+            else if (transitionMode == TransitionMode.beforeSwitching)
+            {
+                StateChange();
+            }
+            #endregion
+        }
         else if (screenMode == ScreenMode.Game)
         {
             #region
@@ -161,7 +199,6 @@ public class SceneControl : MonoBehaviour
             {
                 //制限時間を減らしていく
                 masterData.remainingTime -= Time.deltaTime;
-                remainingTimeText.text = masterData.remainingTime.ToString("0");
                 //得点を表示
                 ScoreText.text = masterData.score.ToString() + "point";
 
@@ -176,7 +213,6 @@ public class SceneControl : MonoBehaviour
             }
             else if (transitionMode == TransitionMode.beforeSwitching)
             {
-                remainingTimeText.text = "0";
                 charactorChangePos.GameSceneBefore();
                 
                 StateChange();
@@ -198,10 +234,20 @@ public class SceneControl : MonoBehaviour
             }
             else if (transitionMode == TransitionMode.continuation)
             {
-                //連続で呼び出し続ける
                 if (Input.GetMouseButtonDown(0))
                 {
                     StateChange();
+                }
+                else if (serialScript.enabled == true)
+                {
+                    for (int i = 0; i < 15; i++)
+                    {
+                        if (Serial.PushF[i % 5, i / 5])
+                        {
+                            StateChange();
+                            break;
+                        }
+                    }
                 }
             }
             else if (transitionMode == TransitionMode.beforeSwitching)

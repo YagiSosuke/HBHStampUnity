@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 /*
 チュートリアルのメッセージを管理する
@@ -149,7 +150,7 @@ public class TutorialMessage : MonoBehaviour
         else if ((serialScipt.enabled == false && verificationPanelScript.noF) ||
                  (serialScipt.enabled == true && Serial.PushF[3, 1]))
         {
-            sceneControl.screenMode = SceneControl.ScreenMode.Game;
+            sceneControl.screenMode = (SceneControl.ScreenMode)((int)sceneControl.screenMode + 1);
             transitionMode = TransitionMode.afterSwitching;
             explainPanel.VerificationPanelFO();
         }
@@ -159,6 +160,7 @@ public class TutorialMessage : MonoBehaviour
     //主に文字送りをするメソッド
     //transitionMode変更もまとめている
     //文字送り以外の処理を呼び出す場合は、この関数は最後に描く(transitionMode の Update も兼ねているため)
+    #region
     void ViewingMessage(string[] message)
     {
         if (transitionMode == TransitionMode.afterSwitching)
@@ -169,6 +171,7 @@ public class TutorialMessage : MonoBehaviour
         else if (transitionMode == TransitionMode.continuation)
         {
             messageWindow.MessageWindowUpdate();
+            DisplayTouchInstruction();
             if (messageWindow.messageFinish)
             {
                 TransitionChange();
@@ -176,6 +179,7 @@ public class TutorialMessage : MonoBehaviour
         }
         else if (transitionMode == TransitionMode.beforeSwitching)
         {
+            UndisplayTouchInstruction();
             TransitionChange();
         }
     }
@@ -192,6 +196,15 @@ public class TutorialMessage : MonoBehaviour
         else if (transitionMode == TransitionMode.continuation)
         {
             messageWindow.MessageWindowUpdate();
+
+            if (messageWindow.messageNum * 2 + 2 < message.Length && messageWindow.messageCount >= messageWindow.messageLength) 
+            {
+                DisplayTouchInstruction();
+            }
+            else
+            {
+                UndisplayTouchInstruction();
+            }
             if (stepChangeConditions.StepChangeF())
             {
                 TransitionChange();
@@ -199,6 +212,7 @@ public class TutorialMessage : MonoBehaviour
         }
         else if (transitionMode == TransitionMode.beforeSwitching)
         {
+            UndisplayTouchInstruction();
             TransitionChange();
         }
     }
@@ -213,6 +227,15 @@ public class TutorialMessage : MonoBehaviour
         else if (transitionMode == TransitionMode.continuation)
         {
             messageWindow.MessageWindowUpdate();
+
+            if (messageWindow.messageNum * 2 + 2 < message.Length && messageWindow.messageCount >= messageWindow.messageLength)
+            {
+                DisplayTouchInstruction();
+            }
+            else
+            {
+                UndisplayTouchInstruction();
+            }
             if (messageWindow.messageNum*2+2 >= message.Length && messageWindow.messageCount >= messageWindow.messageLength)
             {
                 TransitionChange();
@@ -220,6 +243,7 @@ public class TutorialMessage : MonoBehaviour
         }
         else if (transitionMode == TransitionMode.beforeSwitching)
         {
+            UndisplayTouchInstruction();
             TransitionChange();
         }
     }
@@ -244,9 +268,6 @@ public class TutorialMessage : MonoBehaviour
         }
     }
 
-    //シリアル通信のスクリプト
-    [SerializeField] Serial serialScipt;
-    
     //文字送りメソッドで Step を変更させる為の条件を示すクラス群
     public interface StepChangeConditions
     {
@@ -442,11 +463,44 @@ public class TutorialMessage : MonoBehaviour
     public StepChangeConditions middleChangeConditions;
     public StepChangeConditions cardReadConditions;
     public StepChangeConditions mikanChangeConditions;
+    #endregion
+
+    //シリアル通信のスクリプト
+    [SerializeField] Serial serialScipt;
 
     //みかんの変身補助パネルのチェックのアニメ
     [SerializeField] TrySupportCheck trySupportCheck;
     //チュートリアルにて、みかんに変身できたかどうかを判断する
     [SerializeField] TutorialCharactorScript tutorialCharactorScript;
+
+    //メッセージを表示しきった時にタッチを促す画像を表示
+    #region
+    [SerializeField] CanvasGroup touchInstructionImage;
+    [SerializeField] Animator touchInstructionAnimator;
+    void DisplayTouchInstruction()
+    {
+        if(messageWindow.messageCount >= messageWindow.messageLength)
+        {
+            if (touchInstructionImage.alpha != 1.0f)
+            {
+                touchInstructionAnimator.SetBool("AnimationF", true);
+                touchInstructionImage.DOFade(endValue: 1.0f, duration: 0.2f);
+            }
+        }
+        else
+        {
+            UndisplayTouchInstruction();
+        }
+    }
+    void UndisplayTouchInstruction()
+    {
+        if (touchInstructionImage.alpha != 0.0f)
+        {
+            touchInstructionAnimator.SetBool("AnimationF", true);
+            touchInstructionImage.DOFade(endValue: 0.0f, duration: 0.2f);
+        }
+    }
+    #endregion
 
 
     // Start is called before the first frame update
@@ -471,6 +525,7 @@ public class TutorialMessage : MonoBehaviour
                 explainPanel.TutorialVerification();
                 if (transitionMode == TransitionMode.afterSwitching)
                 {
+                    touchInstructionImage.alpha = 0;
                     verificationPanelScript.SetUp();
                     TransitionChange();
                 }
@@ -591,7 +646,7 @@ public class TutorialMessage : MonoBehaviour
 
                 transitionMode = TransitionMode.afterSwitching;
                 tutorialStep = TutorialStep.TutorialVerification;
-                sceneControl.screenMode = SceneControl.ScreenMode.Game;
+                sceneControl.screenMode = (SceneControl.ScreenMode)((int)sceneControl.screenMode + 1);
             }
         }
         else

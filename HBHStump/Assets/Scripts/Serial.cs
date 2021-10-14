@@ -353,63 +353,48 @@ public class Serial : MonoBehaviour
                     //スタンプ位置の判定
                     #region
                     case "0,0":
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[0, 0] = true;
                         break;
                     case "1,0":
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[1, 0] = true;
                         break;
                     case "2,0":
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[2, 0] = true;
                         break;
                     case "3,0":
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[3, 0] = true;
                         break;
                     case "4,0":
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[4, 0] = true;
                         break;
                     case "0,1":
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[0, 1] = true;
                         break;
                     case "1,1":
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[1, 1] = true;
                         break;
                     case "2,1":
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[2, 1] = true;
                         break;
                     case "3,1":
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[3, 1] = true;
                         break;
                     case "4,1":
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[4, 1] = true;
                         break;
                     case "0,2":
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[0, 2] = true;
                         break;
                     case "1,2":
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[1, 2] = true;
                         break;
                     case "2,2":
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[2, 2] = true;
                         break;
                     case "3,2":
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[3, 2] = true;
                         break;
                     case "4,2":
-                        StumpScript.TempStump = stampPartsName;    //変数に設定
                         PushF[4, 2] = true;
                         break;
                         #endregion
@@ -443,6 +428,7 @@ public class Serial : MonoBehaviour
         catch (Exception e)
         {
             Debug.Log("can not open serial port");
+            Debug.LogException(e);
         }
     }
 

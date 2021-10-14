@@ -5,22 +5,25 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Title.unity
     guid: 9ec2da55181cbc34ea2c860550d6bd81
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Menu.unity
     guid: b85c7fc392c35604186573aea6257d66
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Stage/DiningRoom.unity
     guid: 87a66b43d7570b44eae8ca9c237b7e7f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Stage/Festival.unity
     guid: be547807d66c874488b1810108fd5395
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Stage/Zoo.unity
     guid: 02871aec396f15f42b20578f2b41bd77
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Stage/Toy.unity
     guid: 6f7351a0117714642a78940b0f1babda
+  - enabled: 1
+    path: Assets/Scenes/AnotherGameMode/ManyChangeScene.unity
+    guid: baf6ebd3934196d43a6d3cb1061f55f4
   m_configObjects: {}
