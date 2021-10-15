@@ -32,10 +32,7 @@ public class SceneControl : MonoBehaviour
     
     //画面遷移するまでのインターバル
     float stateChangeInterval = -1.0f;
-
-    //スコアを表示するテキスト
-    [SerializeField] Text ScoreText;
-
+    
     //別スクリプトからメソッド呼び出し用
     [Header("別スクリプトからメソッド呼び出し用")]
     [SerializeField] MasterData masterData;
@@ -202,8 +199,6 @@ public class SceneControl : MonoBehaviour
             {
                 //制限時間を減らしていく
                 masterData.remainingTime -= Time.deltaTime;
-                //得点を表示
-                ScoreText.text = masterData.score.ToString() + "point";
 
                 //キャラクター変化全般を操作する
                 charactorChangePos.GameSceneContinuation();

@@ -20,15 +20,16 @@ public class ResultPanelControl : MonoBehaviour
     [SerializeField] Text scoreText;
     //変化させたキャラクターを表示するパネル
     [SerializeField] GameObject[] characterImages = new GameObject[50];
-
-    //パネルを表示する
-    public void DisplayPanel(float interval)
+    
+    //キャラクター一覧を設定する
+    public void SetupCharacter()
     {
-        DOTween.To(
-            () => resultPanel.alpha,
-            (n) => resultPanel.alpha = n,
-            1.0f,
-            interval);
+        //キャラクターを表示するオブジェクトを初期化する
+        for (int i = 0; i < 50; i++)
+        {
+            characterImages[i].GetComponent<Image>().sprite = null;
+            characterImages[i].SetActive(false);
+        }
     }
     //スコアを表示する
     public void DisplayScore()
@@ -37,27 +38,18 @@ public class ResultPanelControl : MonoBehaviour
     }
     //変化させたキャラクター一覧を表示する
     public void DisplayCharacter()
-    {
-        //キャラクターを表示するオブジェクトを初期化する
-        for(int i = 0; i < 50; i++)
-        {
-            characterImages[i].GetComponent<Image>().sprite = null;
-            characterImages[i].SetActive(false);
-        }
-
-        
+    {        
         for(int i=0; i<masterData.newObjects.Count; i++)
         {
-            characterImages[i].SetActive(true);
-            characterImages[i].transform.localScale = new Vector2(1.5f, 1.5f);
-            IEnumerator iEnumerator = DisplayOneCharacter(i);
-            StartCoroutine(iEnumerator);
+            DisplayOneCharacter(i).Forget();
         }
     }
     //キャラクターを一体表示する
-    IEnumerator DisplayOneCharacter(int num) {
+    async UniTask DisplayOneCharacter(int num) {
         float interval = num * 0.1f;
-        yield return new WaitForSeconds(interval);
+        await UniTask.Delay((int)(interval*1000));
+        characterImages[num].SetActive(true);
+        characterImages[num].transform.localScale = new Vector2(1.5f, 1.5f);
         characterImages[num].GetComponent<Image>().sprite = masterData.newObjects[num];
         characterImages[num].transform.DOScale(Vector2.one, 0.5f);
     }
@@ -75,8 +67,9 @@ public class ResultPanelControl : MonoBehaviour
     //他スクリプトで呼び出し用の変数
     public async UniTask ResultSceneAfter(float num)
     {
+        SetupCharacter();
         scoreText.text = "0";
-        DisplayPanel(num);
+        resultPanel.DOFade(endValue: 1.0f, duration: num);
         await UniTask.Delay((int)(num * 1000));
         DisplayCharacter();
         DisplayScore();
@@ -88,17 +81,5 @@ public class ResultPanelControl : MonoBehaviour
     {
         NonDisplayPanel(num);
     }
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }
