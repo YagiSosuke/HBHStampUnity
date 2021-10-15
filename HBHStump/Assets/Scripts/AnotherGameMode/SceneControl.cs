@@ -18,6 +18,7 @@ public class SceneControl : MonoBehaviour
         Tutorial,
         GameSetting,
         Game,
+        GameFinish,
         Result
     }
     public ScreenMode screenMode = ScreenMode.Title;
@@ -58,21 +59,19 @@ public class SceneControl : MonoBehaviour
                 transitionMode = 0;
                 switch (screenMode)
                 {
-                    case ScreenMode.Title:
-                    case ScreenMode.GameSetting:
-                    case ScreenMode.Game:
-                        screenMode++;
-                        break;
                     case ScreenMode.Result:
                         screenMode = 0;
+                        break;
+                    default:
+                        screenMode++;
                         break;
                 }
                 break;
         }
     }
-    IEnumerator StateChange(float num)
+    async UniTask StateChange(float num)
     {
-        yield return new WaitForSeconds(num);
+        await UniTask.Delay((int)(num * 1000));
 
         switch (transitionMode)
         {
@@ -86,14 +85,11 @@ public class SceneControl : MonoBehaviour
                 transitionMode = 0;
                 switch (screenMode)
                 {
-                    case ScreenMode.Title:
-                        screenMode++;
-                        break;
-                    case ScreenMode.Game:
-                        screenMode++;
-                        break;
                     case ScreenMode.Result:
                         screenMode = 0;
+                        break;
+                    default:
+                        screenMode++;
                         break;
                 }
                 break;
@@ -108,6 +104,13 @@ public class SceneControl : MonoBehaviour
     async UniTask GameSetupCount()
     {
         await UniTask.Delay(3000);
+        StateChange();
+    }
+
+    //セームを終了するときのカウント
+    async UniTask GameFinishCount()
+    {
+        await UniTask.Delay(1500);
         StateChange();
     }
 
@@ -130,7 +133,7 @@ public class SceneControl : MonoBehaviour
                     stateChangeInterval = 1.0f;
                     titleCharImageMove.TitleSceneAfter(stateChangeInterval);
 
-                    StartCoroutine(StateChange(stateChangeInterval));
+                    StateChange(stateChangeInterval).Forget();
                 }
             }
             else if (transitionMode == TransitionMode.continuation)
@@ -157,7 +160,7 @@ public class SceneControl : MonoBehaviour
                 {
                     stateChangeInterval = 1.0f;
                     titleCharImageMove.TitleSceneBefore(stateChangeInterval);
-                    StartCoroutine(StateChange(stateChangeInterval));
+                    StateChange(stateChangeInterval).Forget();
                 }
             }
             #endregion
@@ -219,6 +222,24 @@ public class SceneControl : MonoBehaviour
             }
             #endregion
         }
+        else if (screenMode == ScreenMode.GameFinish)
+        {
+            #region
+            if (transitionMode == TransitionMode.afterSwitching)
+            {
+                GameFinishCount().Forget();
+                StateChange();
+            }
+            else if (transitionMode == TransitionMode.continuation)
+            {
+            }
+            else if (transitionMode == TransitionMode.beforeSwitching)
+            {
+                StateChange();
+            }
+
+            #endregion
+        }
         else if (screenMode == ScreenMode.Result)
         {
             #region
@@ -228,8 +249,8 @@ public class SceneControl : MonoBehaviour
                 {
                     stateChangeInterval = 1.0f;
 
-                    StartCoroutine(resultPanelControl.ResultSceneAfter(stateChangeInterval));
-                    StartCoroutine(StateChange(stateChangeInterval));
+                    resultPanelControl.ResultSceneAfter(stateChangeInterval).Forget();
+                    StateChange(stateChangeInterval).Forget();
                 }
             }
             else if (transitionMode == TransitionMode.continuation)

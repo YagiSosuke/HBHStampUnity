@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Cysharp.Threading.Tasks;
 
 /*
 リザルトパネルを操作する
@@ -72,11 +73,11 @@ public class ResultPanelControl : MonoBehaviour
     }
 
     //他スクリプトで呼び出し用の変数
-    public IEnumerator ResultSceneAfter(float num)
+    public async UniTask ResultSceneAfter(float num)
     {
         scoreText.text = "0";
         DisplayPanel(num);
-        yield return new WaitForSeconds(num);
+        await UniTask.Delay((int)(num * 1000));
         DisplayCharacter();
         DisplayScore();
     }
