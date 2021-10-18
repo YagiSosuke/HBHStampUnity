@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Cysharp.Threading.Tasks;
 
 /*
 チュートリアルのメッセージを管理する
@@ -260,6 +261,8 @@ public class TutorialMessage : MonoBehaviour
             if (stepChangeConditions.StepChangeF())
             {
                 TransitionChange();
+                goodText.displayGoodText().Forget();
+                Debug.Log("タスクをじっこうした");
             }
         }
         else if (transitionMode == TransitionMode.beforeSwitching)
@@ -475,6 +478,7 @@ public class TutorialMessage : MonoBehaviour
 
     //メッセージを表示しきった時にタッチを促す画像を表示
     #region
+    [Header("メッセージを表示しきった時にタッチを促す画像")]
     [SerializeField] CanvasGroup touchInstructionImage;
     [SerializeField] Animator touchInstructionAnimator;
     void DisplayTouchInstruction()
@@ -501,6 +505,10 @@ public class TutorialMessage : MonoBehaviour
         }
     }
     #endregion
+
+    //タスク後にGoodと表示する画像
+    [Header("タスク後にGoodと表示する画像")]
+    [SerializeField] GoodText goodText;
 
 
     // Start is called before the first frame update
