@@ -1,8 +1,7 @@
 fileFormatVersion: 2
-guid: 64b2fc0b9d5eb2a4fbe3254683250246
+guid: 6d99f2e02b711754598276875d583a7e
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: shape036_style01_color08_0
+  fileIDToRecycleName: {}
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -33,15 +32,15 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: -1
-    aniso: -1
+    aniso: 1
     mipBias: -100
     wrapU: 1
     wrapV: 1
-    wrapW: 1
+    wrapW: -1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -105,31 +104,11 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: shape036_style01_color08_0
-      rect:
-        serializedVersion: 2
-        x: 54
-        y: 117
-        width: 148
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 13, y: 0, z: 13, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8eae15403df91b84b88898ee3b71407d
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 1549fe1b872bf324f82122e77be2f2d2
+    spriteID: a7bc697abd7c05444920c80564f4bba3
     vertices: []
     indices: 
     edges: []

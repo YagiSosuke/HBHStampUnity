@@ -110,14 +110,7 @@ public class SceneControl : MonoBehaviour
         await UniTask.Delay(1500);
         StateChange();
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    
     void Update()
     {
         if (screenMode == ScreenMode.Title)
@@ -250,19 +243,14 @@ public class SceneControl : MonoBehaviour
             }
             else if (transitionMode == TransitionMode.continuation)
             {
-                if (Input.GetMouseButtonDown(0))
+                resultPanelControl.ResultSceneContinuation();
+
+                //ランキングパネルが出ていないときに実行
+                if (resultPanelControl.rankNum == -1)
                 {
-                    StateChange();
-                }
-                else if (serialScript.enabled == true)
-                {
-                    for (int i = 0; i < 15; i++)
+                    if (Input.GetMouseButtonDown(0) || (serialScript.enabled == true && serialScript.pushCheck()))
                     {
-                        if (Serial.PushF[i % 5, i / 5])
-                        {
-                            StateChange();
-                            break;
-                        }
+                        StateChange();
                     }
                 }
             }

@@ -592,4 +592,16 @@ public class Serial : MonoBehaviour
         yield return null;
         PushF[x, y] = false;
     }
+
+    public bool pushCheck()
+    {
+        for (int i = 0; i < 15; i++)
+        {
+            if (Serial.PushF[i % 5, i / 5])
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
