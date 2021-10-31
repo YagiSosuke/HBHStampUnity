@@ -22,7 +22,7 @@ public class StumpScript : MonoBehaviour
         { "尻", "あ" }
     };
 
-    public static string TempStump;         //選択したスタンプ名
+    public static string TempStump = "頭";         //選択したスタンプ名
 
     [SerializeField] GameObject Frame;      //選択したボタンの枠
 

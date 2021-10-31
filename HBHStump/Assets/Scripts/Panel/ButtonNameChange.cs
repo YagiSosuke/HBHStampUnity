@@ -30,7 +30,9 @@ public class ButtonNameChange : MonoBehaviour
     public void SetWord()
     {
         TempWord = ButtonText.text;
-        StumpScript.stampPartsWord[StumpScript.TempStump] = TempWord;  //現在設定されているパーツに対応する文字を登録
+        StumpScript.stampPartsWord["頭"] = TempWord;  
+        StumpScript.stampPartsWord["体"] = TempWord;  
+        StumpScript.stampPartsWord["尻"] = TempWord;  
         //Frame.gameObject.transform.position = this.transform.position;
     }
 }

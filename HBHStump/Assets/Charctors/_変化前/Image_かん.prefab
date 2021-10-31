@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 2813632959046226949}
   - component: {fileID: 7706309990448209226}
   - component: {fileID: 15232955231658256}
-  - component: {fileID: 4608993276055535851}
   - component: {fileID: 6478597574919693422}
   - component: {fileID: 5338084642468299225}
   - component: {fileID: 2963289097307585592}
+  - component: {fileID: 6248626779589423254}
   m_Layer: 5
   m_Name: "Image_\u304B\u3093"
   m_TagString: Untagged
@@ -77,22 +77,6 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!114 &4608993276055535851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3419198568507989652}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50b8e21dfd09fba41a1a5cbbbbd66367, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FramePrefab: {fileID: 79066979534195216, guid: d94d445da8f6c27488d8ab725ef3b437,
-    type: 3}
-  FrameChildPrefab: {fileID: 7015819730844844405, guid: 824f3376aba9d11429eabd85ea71ffba,
-    type: 3}
 --- !u!95 &6478597574919693422
 Animator:
   serializedVersion: 3
@@ -132,7 +116,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3419198568507989652}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3af9b28760d683648b7b85fc7aa403b2, type: 3}
   m_Name: 
@@ -186,6 +170,22 @@ MonoBehaviour:
   audio: {fileID: 0}
   pos_x: 4
   pos_y: 1
+--- !u!114 &6248626779589423254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3419198568507989652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50b8e21dfd09fba41a1a5cbbbbd66367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FramePrefab: {fileID: 79066979534195216, guid: d94d445da8f6c27488d8ab725ef3b437,
+    type: 3}
+  FrameChildPrefab: {fileID: 7015819730844844405, guid: 824f3376aba9d11429eabd85ea71ffba,
+    type: 3}
 --- !u!1 &4434399507600770558
 GameObject:
   m_ObjectHideFlags: 0

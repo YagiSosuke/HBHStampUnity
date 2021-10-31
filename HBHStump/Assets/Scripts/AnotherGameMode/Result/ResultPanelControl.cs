@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Cysharp.Threading.Tasks;
 
 /*
 リザルトパネルを操作する
@@ -10,24 +11,72 @@ using DG.Tweening;
 
 public class ResultPanelControl : MonoBehaviour
 {
-    [SerializeField] MasterData masterData;
-    //リザルト画面時に表示するパネル
-    [SerializeField] CanvasGroup resultPanel;
-
-
+    MasterData masterData;
+    RankingControl rankCtrl;
+    CanvasGroup resultPanel;
+    [SerializeField] Serial serialScript;
+    
     //得点を表示するパネル
     [SerializeField] Text scoreText;
     //変化させたキャラクターを表示するパネル
     [SerializeField] GameObject[] characterImages = new GameObject[50];
+    GameObject rankPanel;
 
-    //パネルを表示する
-    public void DisplayPanel(float interval)
+    //ステップが進んだ時のプッシュ音
+    AudioSource pushAudio;
+
+    //終了時の紙吹雪
+    [SerializeField] ParticleSystem redPaper;
+    [SerializeField] ParticleSystem yellowPaper;
+
+    //ドラムロール
+    [SerializeField] AudioSource audio;
+    [SerializeField] AudioClip drumRoll;
+    [SerializeField] AudioClip drumFinish;
+
+    //ランキング関連
+    #region
+    //ランキングが更新されるかのフラグ
+    public int rankNum;
+    //ランキング更新時、状態を変化させて管理
+    bool executionF = false;
+    enum RankPanelTransition {
+        beforeView,
+        nowView,
+        afterView,
+    };
+    RankPanelTransition rankPanelTransition = RankPanelTransition.beforeView;
+    void TransitionUpdate()
     {
-        DOTween.To(
-            () => resultPanel.alpha,
-            (n) => resultPanel.alpha = n,
-            1.0f,
-            interval);
+        rankPanelTransition++;
+        executionF = false;
+    }
+    //「ランクイン」テキストのアニメーション
+    Animator rankInAnim;
+    AudioSource rankInAudio;
+    #endregion
+
+    void Start() {
+        masterData = GameObject.Find("GameControler").GetComponent<MasterData>();
+        rankCtrl = GameObject.Find("RankPanel").GetComponent<RankingControl>();
+        resultPanel = GameObject.Find("ResultPanel").GetComponent<CanvasGroup>();
+
+        pushAudio = GameObject.Find("PushSpeaker").GetComponent<AudioSource>();
+
+        rankPanel = GameObject.Find("RankPanel");
+        rankInAnim = GameObject.Find("RankInText").GetComponent<Animator>();
+        rankInAudio = GameObject.Find("RankPanel").GetComponent<AudioSource>();
+    }
+
+    //キャラクター一覧を設定する
+    public void SetupCharacter()
+    {
+        //キャラクターを表示するオブジェクトを初期化する
+        for (int i = 0; i < 50; i++)
+        {
+            characterImages[i].GetComponent<Image>().sprite = null;
+            characterImages[i].SetActive(false);
+        }
     }
     //スコアを表示する
     public void DisplayScore()
@@ -36,27 +85,18 @@ public class ResultPanelControl : MonoBehaviour
     }
     //変化させたキャラクター一覧を表示する
     public void DisplayCharacter()
-    {
-        //キャラクターを表示するオブジェクトを初期化する
-        for(int i = 0; i < 50; i++)
-        {
-            characterImages[i].GetComponent<Image>().sprite = null;
-            characterImages[i].SetActive(false);
-        }
-
-        
+    {        
         for(int i=0; i<masterData.newObjects.Count; i++)
         {
-            characterImages[i].SetActive(true);
-            characterImages[i].transform.localScale = new Vector2(1.5f, 1.5f);
-            IEnumerator iEnumerator = DisplayOneCharacter(i);
-            StartCoroutine(iEnumerator);
+            DisplayOneCharacter(i).Forget();
         }
     }
     //キャラクターを一体表示する
-    IEnumerator DisplayOneCharacter(int num) {
+    async UniTask DisplayOneCharacter(int num) {
         float interval = num * 0.1f;
-        yield return new WaitForSeconds(interval);
+        await UniTask.Delay((int)(interval*1000));
+        characterImages[num].SetActive(true);
+        characterImages[num].transform.localScale = new Vector2(1.5f, 1.5f);
         characterImages[num].GetComponent<Image>().sprite = masterData.newObjects[num];
         characterImages[num].transform.DOScale(Vector2.one, 0.5f);
     }
@@ -72,32 +112,93 @@ public class ResultPanelControl : MonoBehaviour
     }
 
     //他スクリプトで呼び出し用の変数
-    public IEnumerator ResultSceneAfter(float num)
+    public async UniTask ResultSceneAfter(float num)
     {
+        //ランキング更新
+        rankNum = rankCtrl.rankUpdate(masterData.score);
+
+        //パネル更新
+        SetupCharacter();
         scoreText.text = "0";
-        DisplayPanel(num);
-        yield return new WaitForSeconds(num);
+        await resultPanel.DOFade(endValue: 1.0f, duration: num);
         DisplayCharacter();
         DisplayScore();
+
+        //紙吹雪表示
+        UniTask.Void(async () =>
+        {
+            await UniTask.Delay(masterData.score * 100);
+            redPaper.Play();
+            yellowPaper.Play();
+        });
+
+        //効果音再生
+        UniTask.Void(async () =>
+        {
+            audio.PlayOneShot(drumRoll);
+            await UniTask.Delay(masterData.score * 100);
+            audio.Stop();
+            audio.PlayOneShot(drumFinish);
+        });
     }
     public void ResultSceneContinuation()
     {
+        //ランキング更新時パネルを表示
+        if (rankNum != -1)
+        {
+            if (rankPanelTransition == RankPanelTransition.beforeView && !executionF)
+            {
+                UniTask.Void(async () =>
+                {
+                    executionF = true;
+                    //パネル - 自分の順位だけ強調する
+                    rankCtrl.rankBackFlash(rankNum).Forget();
+                    //パネルを出す
+                    await UniTask.Delay(1000);
+                    await rankPanel.transform.DOLocalMoveY(0, 1.0f);
+                    //「ランクイン」の音、テキストを表示
+                    UniTask.Void(async () =>
+                    {
+                        await UniTask.Delay(700);
+                        rankInAudio.Play();
+                    });
+                    UniTask.Void(async () =>
+                    {
+                        rankInAnim.SetBool("AnimationF", true);
+                        await UniTask.Delay(4000);
+                        rankInAnim.SetBool("AnimationF", false);
+                    });
+                    TransitionUpdate();
+                });
+            }
+            else if (rankPanelTransition == RankPanelTransition.nowView && !executionF)
+            {
+                if(Input.GetMouseButtonDown(0) || (serialScript.enabled == true && serialScript.pushCheck()))
+                {
+                    TransitionUpdate();
+                }
+            }
+            else if (rankPanelTransition == RankPanelTransition.afterView && !executionF)
+            {
+                UniTask.Void(async () =>
+                {
+                    executionF = true;
+                    //プッシュ音を鳴らす
+                    pushAudio.Play();
+                    //パネルを消す
+                    rankPanel.transform.DOLocalMoveY(1100, 1.0f);
+                    await UniTask.Delay(1500);
+
+                    rankPanelTransition = RankPanelTransition.beforeView;
+                    executionF = false;
+                    rankNum = -1;
+                });
+            }
+        }
     }
     public void ResultSceneBefore(float num)
     {
+        pushAudio.Play();
         NonDisplayPanel(num);
-    }
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
