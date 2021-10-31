@@ -19,7 +19,8 @@ public class SceneControl : MonoBehaviour
         GameSetting,
         Game,
         GameFinish,
-        Result
+        Result,
+        Hint
     }
     public ScreenMode screenMode = ScreenMode.Title;
     public enum TransitionMode
@@ -29,6 +30,8 @@ public class SceneControl : MonoBehaviour
         beforeSwitching
     }
     public TransitionMode transitionMode = TransitionMode.afterSwitching;
+    //1度のみ実行するときのフラグ
+    bool onceDoF = false;
     
     //画面遷移するまでのインターバル
     float stateChangeInterval = -1.0f;
@@ -39,10 +42,11 @@ public class SceneControl : MonoBehaviour
     [SerializeField] TitleCharImageMove titleCharImageMove;
     [SerializeField] CharactorChangePos charactorChangePos;
     [SerializeField] ResultPanelControl resultPanelControl;
-    
+    [SerializeField] HintPanel hintPanel;
+
 
     //数秒後に状態を遷移する
-    void StateChange()
+    public void StateChange()
     {
         switch (transitionMode)
         {
@@ -56,7 +60,7 @@ public class SceneControl : MonoBehaviour
                 transitionMode = 0;
                 switch (screenMode)
                 {
-                    case ScreenMode.Result:
+                    case ScreenMode.Hint:
                         screenMode = 0;
                         break;
                     default:
@@ -66,7 +70,7 @@ public class SceneControl : MonoBehaviour
                 break;
         }
     }
-    async UniTask StateChange(float num)
+    public async UniTask StateChange(float num)
     {
         await UniTask.Delay((int)(num * 1000));
 
@@ -82,7 +86,7 @@ public class SceneControl : MonoBehaviour
                 transitionMode = 0;
                 switch (screenMode)
                 {
-                    case ScreenMode.Result:
+                    case ScreenMode.Hint:
                         screenMode = 0;
                         break;
                     default:
@@ -238,7 +242,7 @@ public class SceneControl : MonoBehaviour
                     stateChangeInterval = 1.0f;
 
                     resultPanelControl.ResultSceneAfter(stateChangeInterval).Forget();
-                    StateChange(stateChangeInterval).Forget();
+                    StateChange(masterData.score * 0.1f + 1.0f).Forget();
                 }
             }
             else if (transitionMode == TransitionMode.continuation)
@@ -258,6 +262,55 @@ public class SceneControl : MonoBehaviour
             {
                 resultPanelControl.ResultSceneBefore(1.0f);
                 StateChange();
+            }
+            #endregion
+        }
+        else if (screenMode == ScreenMode.Hint)
+        {
+            #region
+            if (transitionMode == TransitionMode.afterSwitching)
+            {
+                if (!onceDoF)
+                {
+                    //パネル表示するまでのインターバル
+                    UniTask.Void(async () =>
+                    {
+                        onceDoF = true;
+                        await hintPanel.GameSceneAfter();
+                        onceDoF = false;
+                        StateChange();
+                    });
+                }
+            }
+            else if (transitionMode == TransitionMode.continuation)
+            {
+                hintPanel.GameSceneContinuation();
+
+                //時間差でステップ変わる
+                if (!onceDoF)
+                {
+                    UniTask.Void(async () =>
+                    {
+                        onceDoF = true;
+                        await UniTask.Delay(10000);
+                        onceDoF = false;
+                        StateChange();
+                    });
+                }
+            }
+            else if (transitionMode == TransitionMode.beforeSwitching)
+            {
+                //パネル消えるまでのインターバル
+                if (!onceDoF)
+                {
+                    UniTask.Void(async () =>
+                    {
+                        onceDoF = true;
+                        await hintPanel.GameSceneBefore();
+                        onceDoF = false;
+                        StateChange();
+                    });
+                }
             }
             #endregion
         }

@@ -25,6 +25,15 @@ public class ResultPanelControl : MonoBehaviour
     //ステップが進んだ時のプッシュ音
     AudioSource pushAudio;
 
+    //終了時の紙吹雪
+    [SerializeField] ParticleSystem redPaper;
+    [SerializeField] ParticleSystem yellowPaper;
+
+    //ドラムロール
+    [SerializeField] AudioSource audio;
+    [SerializeField] AudioClip drumRoll;
+    [SerializeField] AudioClip drumFinish;
+
     //ランキング関連
     #region
     //ランキングが更新されるかのフラグ
@@ -111,10 +120,26 @@ public class ResultPanelControl : MonoBehaviour
         //パネル更新
         SetupCharacter();
         scoreText.text = "0";
-        resultPanel.DOFade(endValue: 1.0f, duration: num);
-        await UniTask.Delay((int)(num * 1000));
+        await resultPanel.DOFade(endValue: 1.0f, duration: num);
         DisplayCharacter();
         DisplayScore();
+
+        //紙吹雪表示
+        UniTask.Void(async () =>
+        {
+            await UniTask.Delay(masterData.score * 100);
+            redPaper.Play();
+            yellowPaper.Play();
+        });
+
+        //効果音再生
+        UniTask.Void(async () =>
+        {
+            audio.PlayOneShot(drumRoll);
+            await UniTask.Delay(masterData.score * 100);
+            audio.Stop();
+            audio.PlayOneShot(drumFinish);
+        });
     }
     public void ResultSceneContinuation()
     {
@@ -130,8 +155,7 @@ public class ResultPanelControl : MonoBehaviour
                     rankCtrl.rankBackFlash(rankNum).Forget();
                     //パネルを出す
                     await UniTask.Delay(1000);
-                    rankPanel.transform.DOLocalMoveY(0, 1.0f);
-                    await UniTask.Delay(1000);
+                    await rankPanel.transform.DOLocalMoveY(0, 1.0f);
                     //「ランクイン」の音、テキストを表示
                     UniTask.Void(async () =>
                     {

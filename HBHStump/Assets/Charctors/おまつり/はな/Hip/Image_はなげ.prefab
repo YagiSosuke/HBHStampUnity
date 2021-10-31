@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7733854233860076038}
   m_Layer: 5
   m_Name: "Image_\u306F\u306A\u3052"
-  m_TagString: Hip
+  m_TagString: HipSample
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -102,7 +102,7 @@ Animator:
   m_GameObject: {fileID: 1023419081125702987}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5b0fcd2be20d0b2449438a2b98f789f9, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 5461318849337128763}
   m_Layer: 5
   m_Name: "Image_\u306F\u306A\u3052"
-  m_TagString: Hip
+  m_TagString: HipSample
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
