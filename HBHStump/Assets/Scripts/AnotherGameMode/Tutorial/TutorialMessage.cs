@@ -38,20 +38,15 @@ public class TutorialMessage : MonoBehaviour
         BearGreeting_Kannna,
         StampOperation_GrapStamp,
         StampOperation_RightButton,
-        StampOperation_RightButtonDoing,
         StampOperation_RightButtonDoes,
         StampOperation_LeftButton,
-        StampOperation_LeftButtonDoing,
         StampOperation_LeftButtonDoes,
         StampOperation_MiddleButton,
-        StampOperation_MiddleButtonDoing,
         StampOperation_MiddleButtonDoes,
         StampOperation_CardRead,
-        StampOperation_CardReadDoing,
         StampOperation_CardReadDoes,
         StampOperation_TutorialMikan1,
         StampOperation_TutorialMikan2,
-        StampOperation_TutorialMikanDoing,
         StampOperation_TutorialMikanDoes,
         EndStep
     }
@@ -249,20 +244,39 @@ public class TutorialMessage : MonoBehaviour
         }
     }
     //タスクの実行で transition を変更するメソッド
-    void ExececutionTask(StepChangeConditions stepChangeConditions)
+    void ExececutionTask(string[] message, StepChangeConditions stepChangeConditions)
     {
         if (transitionMode == TransitionMode.afterSwitching)
         {
+            messageWindow.LoadMessage(new List<string>(message));
             stepChangeConditions.setNowData();
             TransitionChange();
         }
         else if (transitionMode == TransitionMode.continuation)
         {
+            Debug.Log($"messageWindow.messageCount = {messageWindow.messageCount}\nmessageWindow.messageLength = {messageWindow.messageLength - 1}\nmessageWindow.message.Count = {messageWindow.message.Count}\nmessageWindow.messageNum = {messageWindow.messageNum * 2 + 1}");
+            //クリックでメッセージを表示する
+            if (messageWindow.messageCount < messageWindow.messageLength - 1 ||
+                messageWindow.message.Count > messageWindow.messageNum * 2 + 1)
+            {
+                messageWindow.MessageWindowUpdate();
+            }
+            if (messageWindow.messageNum * 2 + 1 < message.Length-1 && 
+                messageWindow.messageCount >= messageWindow.messageLength)
+            {
+                DisplayTouchInstruction();
+            }
+            else
+            {
+                UndisplayTouchInstruction();
+            }
+
+            //ステップを更新するフラグが立った場合
             if (stepChangeConditions.StepChangeF())
             {
+                Debug.Log("実行された");
                 TransitionChange();
                 goodText.displayGoodText().Forget();
-                Debug.Log("タスクをじっこうした");
             }
         }
         else if (transitionMode == TransitionMode.beforeSwitching)
@@ -574,12 +588,8 @@ public class TutorialMessage : MonoBehaviour
             else if (tutorialStep == TutorialStep.StampOperation_RightButton)
             {
                 explainPanel.ExplainRightButton();
-                //要変更
-                ViewingMessageSkip(message_StampOperation_RightButton);
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_RightButtonDoing)
-            {
-                ExececutionTask(rightChangeConditions);
+                ExececutionTask(message_StampOperation_RightButton, rightChangeConditions);
+                //TransitionChange();
             }
             else if (tutorialStep == TutorialStep.StampOperation_RightButtonDoes)
             {
@@ -588,11 +598,8 @@ public class TutorialMessage : MonoBehaviour
             else if (tutorialStep == TutorialStep.StampOperation_LeftButton)
             {
                 explainPanel.ExplainLeftButton();
-                ViewingMessageSkip(message_StampOperation_LeftButton);
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_LeftButtonDoing)
-            {
-                ExececutionTask(leftChangeConditions);
+                ExececutionTask(message_StampOperation_LeftButton, leftChangeConditions);
+                //ViewingMessageSkip(message_StampOperation_LeftButton);
             }
             else if (tutorialStep == TutorialStep.StampOperation_LeftButtonDoes)
             {
@@ -601,11 +608,7 @@ public class TutorialMessage : MonoBehaviour
             else if (tutorialStep == TutorialStep.StampOperation_MiddleButton)
             {
                 explainPanel.ExplainMiddleButton();
-                ViewingMessageSkip(message_StampOperation_MiddleButton);
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_MiddleButtonDoing)
-            {
-                ExececutionTask(middleChangeConditions);
+                ExececutionTask(message_StampOperation_MiddleButton, middleChangeConditions);
             }
             else if (tutorialStep == TutorialStep.StampOperation_MiddleButtonDoes)
             {
@@ -614,11 +617,7 @@ public class TutorialMessage : MonoBehaviour
             else if (tutorialStep == TutorialStep.StampOperation_CardRead)
             {
                 explainPanel.ExplainCardRead();
-                ViewingMessageSkip(message_StampOperation_CardRead);
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_CardReadDoing)
-            {
-                ExececutionTask(cardReadConditions);
+                ExececutionTask(message_StampOperation_CardRead, cardReadConditions);
             }
             else if (tutorialStep == TutorialStep.StampOperation_CardReadDoes)
             {
@@ -630,17 +629,13 @@ public class TutorialMessage : MonoBehaviour
                 trySupportCheck.CheckBoxSetup();
                 explainPanel.ExplainTryMikanPanel();
                 ViewingMessage(message_StampOperation_TutorialMikan1);
+                tutorialCharactorScript.ChangeF = false;
             }
             else if (tutorialStep == TutorialStep.StampOperation_TutorialMikan2)
             {
-                ViewingMessageSkip(message_StampOperation_TutorialMikan2);
-                tutorialCharactorScript.ChangeF = false;
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_TutorialMikanDoing)
-            {
+                ExececutionTask(message_StampOperation_TutorialMikan2, mikanChangeConditions);
                 trySupportCheck.CheckBoxCondition();
                 tutorialCharactorScript.PushStamp();
-                ExececutionTask(mikanChangeConditions);
             }
             else if (tutorialStep == TutorialStep.StampOperation_TutorialMikanDoes)
             {

@@ -55,29 +55,7 @@ public class HintPanel : MonoBehaviour
         }
 
 
-
-        public void HintStart()
-        {
-            //コンポーネント外す
-            sampleObj.transform.GetChild(0).GetComponent<CharctorScript>().enabled = false;
-
-            //タグを変更する
-            foreach (GameObject obj in headHint)
-            {
-                obj.tag = "HeadSample";
-                obj.transform.GetChild(0).tag = "HeadSample";
-            }
-            foreach (GameObject obj in bodyHint)
-            {
-                obj.tag = "BodySample";
-                obj.transform.GetChild(0).tag = "BodySample";
-            }
-            foreach (GameObject obj in hipHint)
-            {
-                obj.tag = "HipSample";
-                obj.transform.GetChild(0).tag = "HipSample";
-            }
-        }
+        
         //ヒント要素をパネルにセット
         public void HintSetup(GameObject parent)
         {
@@ -127,6 +105,24 @@ public class HintPanel : MonoBehaviour
                 {
                     hipHintView[1].transform.localPosition = new Vector2(-300, -350);
                 }
+            }
+            //コンポーネント外す
+            sampleObjView.transform.GetChild(0).GetComponent<CharctorScript>().enabled = false;
+            //タグを変更する
+            foreach (GameObject obj in headHintView)
+            {
+                obj.tag = "HeadSample";
+                obj.transform.GetChild(0).tag = "HeadSample";
+            }
+            foreach (GameObject obj in bodyHintView)
+            {
+                obj.tag = "BodySample";
+                obj.transform.GetChild(0).tag = "BodySample";
+            }
+            foreach (GameObject obj in hipHintView)
+            {
+                obj.tag = "HipSample";
+                obj.transform.GetChild(0).tag = "HipSample";
             }
         }        
         //ヒント要素を破棄する
@@ -184,9 +180,6 @@ public class HintPanel : MonoBehaviour
     private void Start()
     {
         hintParent = GameObject.Find("HintObjParent");
-        foreach(HintData obj in hintData){
-            obj.HintStart();
-        }
         hintCanvasGroup = GameObject.Find("HintPanel").GetComponent<CanvasGroup>();
     }
 }
