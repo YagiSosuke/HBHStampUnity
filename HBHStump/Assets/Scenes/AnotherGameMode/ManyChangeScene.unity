@@ -14043,7 +14043,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3128c64f81fd0c4eb8f828d0359f439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenMode: 5
+  screenMode: 1
   transitionMode: 0
   masterData: {fileID: 554548863}
   titleCharImageMove: {fileID: 2133498916}

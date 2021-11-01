@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Cysharp.Threading.Tasks;
 
 /*
 キャラクターが一定時間で位置を移動するスクリプト
@@ -139,20 +140,23 @@ public class CharactorChangePos : MonoBehaviour
             //charObj.gameObject.transform.localPosition = new Vector2(1200, 0);
         }
         //変化後のオブジェクトを破棄する
-        public IEnumerator DestroyNewObj()
+        public async UniTask DestroyNewObj()
         {
-            //数秒待機
-            yield return new WaitForSeconds(2.0f);
+            var obj = newObj;
             //画面外へ移動
             if (newObj.transform.position.x > 0)
             {
-                newObj.transform.DOLocalMove(new Vector2(1200, posY), 1.0f);
+                //数秒待機
+                await UniTask.Delay(2000);
+                await newObj.transform.DOLocalMove(new Vector2(1200, posY), 1.0f);
             }else
             {
-                newObj.transform.DOLocalMove(new Vector2(-1200, posY), 1.0f);
+                //数秒待機
+                await UniTask.Delay(2000);
+                await newObj.transform.DOLocalMove(new Vector2(-1200, posY), 1.0f);
             }
             //オブジェクトを削除
-            Destroy(newObj.gameObject, 1.5f);
+            Destroy(obj.gameObject, 0.5f);
         }
         //ゲームモード終了時各オブジェクトを縮小する
         public IEnumerator objShrink()
@@ -270,7 +274,7 @@ public class CharactorChangePos : MonoBehaviour
             masterData.AddScore(newObj);
 
             //changeObjを一定時間でFOさせる
-            myMonobehaviour.CallStartCoroutine(charClass[posY].DestroyNewObj());            
+            charClass[posY].DestroyNewObj().Forget();           
         }
 
         //ゲームモード終了時各オブジェクトを縮小する
@@ -303,14 +307,12 @@ public class CharactorChangePos : MonoBehaviour
 
 
 
-
-    // Start is called before the first frame update
+    
     void Start()
     {
         OperationCharctor.loadInstance(opChar);
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         //OperationCharctor.getInstance().OperatonCharctorUpdate();
