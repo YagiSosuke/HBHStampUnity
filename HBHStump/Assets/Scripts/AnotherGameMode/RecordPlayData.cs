@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Text;
 
 public class RecordPlayData : MonoBehaviour
 {
@@ -26,7 +27,7 @@ public class RecordPlayData : MonoBehaviour
     //記録データのセットアップ　
     void Init()
     {
-        recordTimeName = $"{System.DateTime.Now.Year}{System.DateTime.Now.Month}{System.DateTime.Now.Day}_{System.DateTime.Now.Hour}{System.DateTime.Now.Minute}{System.DateTime.Now.Second}";
+        recordTimeName = $"{System.DateTime.Now.Year.ToString("0000")}{System.DateTime.Now.Month.ToString("00")}{System.DateTime.Now.Day.ToString("00")}_{System.DateTime.Now.Hour.ToString("00")}{System.DateTime.Now.Minute.ToString("00")}{System.DateTime.Now.Second.ToString("00")}";
 
 #if UNITY_EDITOR
         directoryPass = Path.Combine(Application.dataPath, @"File\");
@@ -36,7 +37,6 @@ public class RecordPlayData : MonoBehaviour
         filePass = Path.Combine(directoryPass, $@"{recordTimeName}.csv");
         var f = File.CreateText(filePass);
         f.Dispose();
-        Debug.Log(recordTimeName);
 
         startTime = Time.time;
     }
@@ -47,7 +47,7 @@ public class RecordPlayData : MonoBehaviour
         var changeTime = Time.time;
         var text = $"{beforeName},{afterName},{partsName},{changeTime - startTime}\n";
 
-        File.AppendAllText(filePass, text);
+        File.AppendAllText(filePass, text, Encoding.GetEncoding("Shift_JIS"));
     }
     void writeResultData()
     {
