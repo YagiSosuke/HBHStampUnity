@@ -52,13 +52,16 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
 
     public AudioSource audio = null;     //オーディオソース（スタンプに）
 
-    bool SerchF;        //検索結果
+    public bool SerchF;        //検索結果
     int ChangeNum = 0;      //辞書の何番目に変化させるか
 
     [SerializeField] int pos_x;     //自分の今いる座標
     [SerializeField] int pos_y;     //自分の今いる座標
-
+    
     ClareConditions clare;          //クリア条件を組み込んでいるスクリプト
+
+
+    MasterData masterData;
     
 
     // Start is called before the first frame update
@@ -81,6 +84,8 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
         SerchF = false;
 
         clare = GameObject.Find("Main Camera").GetComponent<ClareConditions>();
+
+        masterData = GameObject.Find("GameControler").GetComponent<MasterData>();
     }
 
     // Update is called once per frame
@@ -116,6 +121,19 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
                 {
                     SerchF = true;
                     ChangeNum = i;
+
+                    //新ゲームモード用の処理 - プレイデータ保存
+                    if (masterData)
+                    {
+                        if (masterData.recordPlayData.enabled)
+                        {
+                            var bName = gameObject.name.Replace("Image_", "");
+                            var aName = Dic[i].AfterObject.name.Replace("Image_", "");
+                            var partsName = StumpScript.TempStump;
+
+                            masterData.recordPlayData.writeChangeData(bName, aName, partsName);
+                        }
+                    }
                 }
                 else
                 {
