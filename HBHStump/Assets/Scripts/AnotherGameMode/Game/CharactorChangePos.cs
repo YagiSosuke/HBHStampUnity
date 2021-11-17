@@ -46,7 +46,7 @@ public class CharactorChangePos : MonoBehaviour
         {
             this.posY = posY;
             this.charObj = Instantiate(charObj);
-            this.charObj.transform.parent = parent.transform;
+            this.charObj.transform.SetParent(parent.transform);
             if (Random.Range(0, 2) == 0)
             {
                 lookDirection = true;

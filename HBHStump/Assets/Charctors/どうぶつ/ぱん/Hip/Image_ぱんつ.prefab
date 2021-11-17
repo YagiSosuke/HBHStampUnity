@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7778001156553784305}
   m_Layer: 5
   m_Name: "Image_\u3071\u3093\u3064"
-  m_TagString: HipSample
+  m_TagString: Hip
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 5435749274404273868}
   m_Layer: 5
   m_Name: "Image_\u3071\u3093\u3064"
-  m_TagString: HipSample
+  m_TagString: Hip
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
