@@ -101,6 +101,7 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
         //キャラクターを変身させる
         if (ChangeF && !SerchF)
         {
+            Debug.Log("変身させた1");
             //何に変身させるか
             for(int i = 0; i < Dic.Length; i++)
             {
@@ -122,11 +123,13 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
                     SerchF = true;
                     ChangeNum = i;
 
+                    Debug.Log("変身させた2");
                     //新ゲームモード用の処理 - プレイデータ保存
                     if (masterData)
                     {
                         if (masterData.recordPlayData.enabled)
                         {
+                            Debug.Log("変身させた3");
                             var bName = gameObject.name.Replace("Image_", "");
                             var aName = Dic[i].AfterObject.name.Replace("Image_", "");
                             var partsName = StumpScript.TempStump;

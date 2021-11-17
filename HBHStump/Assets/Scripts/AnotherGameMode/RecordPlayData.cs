@@ -47,7 +47,8 @@ public class RecordPlayData : MonoBehaviour
         var changeTime = Time.time;
         var text = $"{beforeName},{afterName},{partsName},{changeTime - startTime}\n";
 
-        File.AppendAllText(filePass, text, Encoding.GetEncoding("Shift_JIS"));
+        //File.AppendAllText(filePass, text, Encoding.GetEncoding("Shift_JIS"));
+        File.AppendAllText(filePass, text);
     }
     void writeResultData()
     {
