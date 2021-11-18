@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5731544529378343066}
   m_Layer: 5
   m_Name: "Image_\u305F\u306C\u304D"
-  m_TagString: BodySample
+  m_TagString: Body
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 8004060492059311527}
   m_Layer: 5
   m_Name: "Image_\u305F\u306C\u304D"
-  m_TagString: BodySample
+  m_TagString: Body
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

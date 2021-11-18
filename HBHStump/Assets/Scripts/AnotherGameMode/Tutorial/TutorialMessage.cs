@@ -254,10 +254,10 @@ public class TutorialMessage : MonoBehaviour
         }
         else if (transitionMode == TransitionMode.continuation)
         {
-            Debug.Log($"messageWindow.messageCount = {messageWindow.messageCount}\nmessageWindow.messageLength = {messageWindow.messageLength - 1}\nmessageWindow.message.Count = {messageWindow.message.Count}\nmessageWindow.messageNum = {messageWindow.messageNum * 2 + 1}");
-            //クリックでメッセージを表示する
-            if (messageWindow.messageCount < messageWindow.messageLength - 1 ||
-                messageWindow.message.Count > messageWindow.messageNum * 2 + 1)
+            Debug.Log($"messageWindow.messageCount = {messageWindow.messageCount}\nmessageWindow.messageLength = {messageWindow.messageLength}\nmessageWindow.message.Count = {messageWindow.message.Count}\nmessageWindow.messageNum = {messageWindow.messageNum * 2}");
+           //クリックでメッセージを表示する
+            if (messageWindow.messageCount < messageWindow.messageLength ||
+                messageWindow.message.Count > messageWindow.messageNum * 2 + 2)
             {
                 messageWindow.MessageWindowUpdate();
             }
