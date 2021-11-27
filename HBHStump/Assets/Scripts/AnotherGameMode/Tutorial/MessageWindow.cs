@@ -42,9 +42,7 @@ public class MessageWindow : MonoBehaviour
     //文字送り時の効果音鳴らすものたち
     #region
     [Header("文字送り時の効果音鳴らすものたち")]
-    [SerializeField] AudioSource pushAudio;
     [SerializeField] AudioSource talkAudio;
-    [SerializeField] AudioClip pushAudioClip;
     [SerializeField] AudioClip talkAudioClip;
     #endregion
 
@@ -117,7 +115,6 @@ public class MessageWindow : MonoBehaviour
 
         if ((Input.GetMouseButtonDown(0) || pushF) && messageCount >= messageLength)
         {
-            pushAudio.PlayOneShot(pushAudioClip);
             NextMessage();
         }
         pushF = false;

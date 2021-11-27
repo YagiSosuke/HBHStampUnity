@@ -22,9 +22,6 @@ public class ResultPanelControl : MonoBehaviour
     [SerializeField] GameObject[] characterImages = new GameObject[50];
     GameObject rankPanel;
 
-    //ステップが進んだ時のプッシュ音
-    AudioSource pushAudio;
-
     //終了時の紙吹雪
     [SerializeField] ParticleSystem redPaper;
     [SerializeField] ParticleSystem yellowPaper;
@@ -56,13 +53,14 @@ public class ResultPanelControl : MonoBehaviour
     AudioSource rankInAudio;
     #endregion
 
+    [SerializeField] GameObject pleaseTouchText;
+    [SerializeField] GameObject pleaseTouchText_ranking;
+
     void Start() {
         masterData = GameObject.Find("GameControler").GetComponent<MasterData>();
         rankCtrl = GameObject.Find("RankPanel").GetComponent<RankingControl>();
         resultPanel = GameObject.Find("ResultPanel").GetComponent<CanvasGroup>();
-
-        pushAudio = GameObject.Find("PushSpeaker").GetComponent<AudioSource>();
-
+        
         rankPanel = GameObject.Find("RankPanel");
         rankInAnim = GameObject.Find("RankInText").GetComponent<Animator>();
         rankInAudio = GameObject.Find("RankPanel").GetComponent<AudioSource>();
@@ -116,6 +114,14 @@ public class ResultPanelControl : MonoBehaviour
     {
         //ランキング更新
         rankNum = rankCtrl.rankUpdate(masterData.score);
+        if (rankNum != -1)
+        {
+            pleaseTouchText.SetActive(false);
+        }
+        else
+        {
+            pleaseTouchText.SetActive(true);
+        }
 
         //パネル更新
         SetupCharacter();
@@ -151,6 +157,8 @@ public class ResultPanelControl : MonoBehaviour
                 UniTask.Void(async () =>
                 {
                     executionF = true;
+
+                    pleaseTouchText_ranking.SetActive(false);
                     //パネル - 自分の順位だけ強調する
                     rankCtrl.rankBackFlash(rankNum).Forget();
                     //パネルを出す
@@ -165,10 +173,11 @@ public class ResultPanelControl : MonoBehaviour
                     UniTask.Void(async () =>
                     {
                         rankInAnim.SetBool("AnimationF", true);
-                        await UniTask.Delay(4000);
+                        await UniTask.Delay(3000);
                         rankInAnim.SetBool("AnimationF", false);
+                        pleaseTouchText_ranking.SetActive(true);
+                        TransitionUpdate();
                     });
-                    TransitionUpdate();
                 });
             }
             else if (rankPanelTransition == RankPanelTransition.nowView && !executionF)
@@ -183,14 +192,15 @@ public class ResultPanelControl : MonoBehaviour
                 UniTask.Void(async () =>
                 {
                     executionF = true;
-                    //プッシュ音を鳴らす
-                    pushAudio.Play();
+
+                    pleaseTouchText.SetActive(true);
                     //パネルを消す
                     rankPanel.transform.DOLocalMoveY(1100, 1.0f);
                     await UniTask.Delay(1500);
 
                     rankPanelTransition = RankPanelTransition.beforeView;
                     executionF = false;
+                    
                     rankNum = -1;
                 });
             }
@@ -198,7 +208,6 @@ public class ResultPanelControl : MonoBehaviour
     }
     public void ResultSceneBefore(float num)
     {
-        pushAudio.Play();
         NonDisplayPanel(num);
     }
 }

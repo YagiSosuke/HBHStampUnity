@@ -151,6 +151,8 @@ public class HintPanel : MonoBehaviour
 
     CanvasGroup hintCanvasGroup;
 
+    [SerializeField] GameObject pleaseWaitPanel;
+
     //終了時音声
     [SerializeField] AudioSource voiceAudio;
     [SerializeField] AudioSource seAudio;
@@ -158,6 +160,8 @@ public class HintPanel : MonoBehaviour
 
     public async UniTask GameSceneAfter()
     {
+        pleaseWaitPanel.SetActive(false);
+
         //パネルとヒントを表示する
         viewHintId = Random.Range(0, hintData.Length);
         hintData[viewHintId].HintSetup(hintParent);
@@ -165,6 +169,9 @@ public class HintPanel : MonoBehaviour
         seAudio.Play();
         await hintCanvasGroup.DOFade(endValue: 1.0f, duration: 0.5f);
         voiceAudio.Play();
+
+        await UniTask.Delay(5000);
+        pleaseWaitPanel.SetActive(true);
     }
     public void GameSceneContinuation()
     {

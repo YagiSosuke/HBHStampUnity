@@ -12,8 +12,7 @@ public class Serial : MonoBehaviour
     public string portName = "COM8";
     public int baurate = 115200;
     public string stampPartsName = "頭";
-
-    //public static SerialPort serial;    //変更
+    
     public SerialPort serial;    //変更
     bool isLoop = true;
     
@@ -27,7 +26,6 @@ public class Serial : MonoBehaviour
 
     void Start()
     {
-        Debug.Log(stampPartsName + "の実行");
         if(serial == null) Open();
         
         for(int i = 0; i < 5; i++)
@@ -38,7 +36,7 @@ public class Serial : MonoBehaviour
             }
         }
     }
-
+    
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.N)){
@@ -48,17 +46,6 @@ public class Serial : MonoBehaviour
         if (cardReadF)
         {
             StartCoroutine(CardReadFlagDown());
-        }
-        for(int i = 0; i < 5; i++)
-        {
-            for(int j = 0; j < 3; j++)
-            {
-                if (PushF[i, j])
-                {
-                    IEnumerator coroutine = PushFlagDown(i, j);
-                    StartCoroutine(coroutine);
-                }
-            }
         }
     }
 
@@ -397,7 +384,23 @@ public class Serial : MonoBehaviour
                     case "4,2":
                         PushF[4, 2] = true;
                         break;
-                        #endregion
+                    #endregion
+
+                    //パネルが読み込まれていないとき
+                    #region
+                    case "notNewPanelRead":
+                        for (int i = 0; i < 5; i++)
+                        {
+                            for (int j = 0; j < 3; j++)
+                            {
+                                if (PushF[i, j])
+                                {
+                                    PushF[i, j] = false;
+                                }
+                            }
+                        }
+                        break;
+                    #endregion
                 }
 
                 StumpScript.stampPartsWord[StumpScript.TempStump] = ButtonNameChange.TempWord;  //現在設定されているパーツに対応する文字を登録
@@ -416,9 +419,7 @@ public class Serial : MonoBehaviour
 
     public void Open()
     {
-        Debug.Log(stampPartsName + "のポートを開く");
         serial = new SerialPort(portName, baurate, Parity.None, 8, StopBits.One);
-        Debug.Log("serial = " + serial);
 
         try
         {

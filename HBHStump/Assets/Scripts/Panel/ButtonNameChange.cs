@@ -15,9 +15,10 @@ public class ButtonNameChange : MonoBehaviour
     void Start()
     {
         ButtonText = this.transform.GetChild(0).gameObject.GetComponent<Text>();
-
         ButtonText.fontSize = 40;
         ButtonText.text = this.gameObject.name;
+
+        TempWord = "あ";
     }
 
     // Update is called once per frame
