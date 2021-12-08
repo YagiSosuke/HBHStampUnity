@@ -6,6 +6,7 @@ using System.IO.Ports;
 using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
+using Cysharp.Threading.Tasks;
 
 public class Serial : MonoBehaviour
 {
@@ -26,11 +27,21 @@ public class Serial : MonoBehaviour
 
     void Start()
     {
-        if(serial == null) Open();
-        
-        for(int i = 0; i < 5; i++)
+        //シリアルを開く
+        if (SerialCheck.instance)
         {
-            for(int j = 0; j < 3; j++)
+            portName = SerialCheck.instance.comNumber.ToString();
+        }
+        while (serial == null)
+        {
+            Open();
+        }
+        Debug.Log("Open done");
+        SerialReadWordAndParts();
+
+        for (int i = 0; i < 5; i++)
+        {
+            for (int j = 0; j < 3; j++)
             {
                 PushF[i, j] = false;
             }
@@ -56,10 +67,11 @@ public class Serial : MonoBehaviour
         {
             string message = serial.ReadLine();
             Debug.Log("message:" + message);
-            
+
 
             //設定 - おそらくいらない
             #region
+            /*
             if (true) {
                 switch (NowWordButton)
                 {
@@ -95,6 +107,7 @@ public class Serial : MonoBehaviour
                         break;
                 }
             }
+            */
             #endregion
 
             if (NowWordButton == "endz")
@@ -410,11 +423,8 @@ public class Serial : MonoBehaviour
 
     //アプリケーション終了時呼び出し
     private void OnApplicationQuit()
-    //void OnDestroy()
     {
-        this.isLoop = false;
-        Close();
-        //this.serial.Close();
+        if (serial != null) Close();
     }
 
     public void Open()
@@ -425,9 +435,11 @@ public class Serial : MonoBehaviour
         {
             serial.Open();
             Scheduler.ThreadPool.Schedule(() => ReadData()).AddTo(this);
+            Debug.Log("port open correct!");
         }
         catch (Exception e)
         {
+            serial = null;
             Debug.Log("can not open serial port");
             Debug.LogException(e);
         }
@@ -435,10 +447,18 @@ public class Serial : MonoBehaviour
 
     public void Close()
     {
-        if (serial != null && serial.IsOpen)
+        try
         {
-            serial.Close();
-            serial.Dispose();
+            serial.ReadTimeout = 5000;
+            this.isLoop = false;
+            this.serial.Close();
+            this.serial = null;
+            Debug.Log("port close correct!");
+        }
+        catch (Exception e)
+        {
+            Debug.Log("can not close serial port");
+            Debug.LogException(e);
         }
     }
 
@@ -569,6 +589,13 @@ public class Serial : MonoBehaviour
         serial.Write("wz");
     }
     #endregion
+
+    //TODO: M5Stack側でも読む
+    //現在デバイスに設定されている文字と部位をを取得する
+    public void SerialReadWordAndParts()
+    {
+        serial.Write("NowDataz");
+    }
 
     //言葉を設定したとき
     public void SetWordSub(string message)

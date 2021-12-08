@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Cysharp.Threading.Tasks;
 
 /*キー入力*/
 
@@ -13,15 +14,15 @@ public class GameEnd : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Canvas2Alpha();
+        if (Canvas2) Canvas2.SetActive(CanvasF);
     }
 
     // Update is called once per frame
     void Update()
     {
         if(Input.GetKey(KeyCode.Escape)){
-            #if UNITY_EDITOR
-                            UnityEditor.EditorApplication.isPlaying = false;
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
 #elif UNITY_STANDALONE
                   UnityEngine.Application.Quit();
 #endif
@@ -33,12 +34,7 @@ public class GameEnd : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.C))
         {
             CanvasF = !CanvasF;
-            Canvas2Alpha();
+            if(Canvas2) Canvas2.SetActive(CanvasF);
         }
-    }
-
-    void Canvas2Alpha()
-    {
-        Canvas2.SetActive(CanvasF);
     }
 }

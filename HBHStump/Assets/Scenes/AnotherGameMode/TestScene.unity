@@ -261,6 +261,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Canvas2: {fileID: 2032332504}
+  serial: {fileID: 547029802}
 --- !u!81 &3742963
 AudioListener:
   m_ObjectHideFlags: 0
@@ -12606,6 +12607,7 @@ MonoBehaviour:
   tutorialCharactorScript: {fileID: 1068681136}
   touchInstructionImage: {fileID: 1633169521}
   touchInstructionAnimator: {fileID: 1633169519}
+  goodText: {fileID: 0}
 --- !u!225 &1046151997
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -16223,6 +16225,8 @@ MonoBehaviour:
   intervalTime: 0.05
   messageFinish: 0
   pushF: 0
+  talkAudio: {fileID: 0}
+  talkAudioClip: {fileID: 0}
 --- !u!1 &1445943235
 GameObject:
   m_ObjectHideFlags: 0
@@ -17104,11 +17108,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   screenMode: 0
   transitionMode: 0
-  ScoreText: {fileID: 859870654}
   masterData: {fileID: 1601770336}
   titleCharImageMove: {fileID: 857225089}
   charactorChangePos: {fileID: 291779945}
   resultPanelControl: {fileID: 1601770335}
+  hintPanel: {fileID: 0}
   serialScript: {fileID: 547029802}
 --- !u!114 &1601770335
 MonoBehaviour:
@@ -17122,8 +17126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a59e503b7863482408ec3e8481e9c2fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  masterData: {fileID: 1601770336}
-  resultPanel: {fileID: 525772580}
+  serialScript: {fileID: 0}
   scoreText: {fileID: 1800832586}
   characterImages:
   - {fileID: 1414699886}
@@ -17176,6 +17179,14 @@ MonoBehaviour:
   - {fileID: 1037474020}
   - {fileID: 1013962704}
   - {fileID: 190773940}
+  redPaper: {fileID: 0}
+  yellowPaper: {fileID: 0}
+  audio: {fileID: 0}
+  drumRoll: {fileID: 0}
+  drumFinish: {fileID: 0}
+  rankNum: 0
+  pleaseTouchText: {fileID: 0}
+  pleaseTouchText_ranking: {fileID: 0}
 --- !u!114 &1601770336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17188,6 +17199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa52da4039dee6e49ba46213125dd2d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recordPlayData: {fileID: 0}
   remainingTime: 180
   remainingTimeTemp: 0
   score: 0
@@ -20112,6 +20124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Dic: []
   audio: {fileID: 0}
+  SerchF: 0
   pos_x: 0
   pos_y: 0
 --- !u!114 &1995560959
