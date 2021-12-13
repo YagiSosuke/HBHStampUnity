@@ -30,6 +30,8 @@ public class SerialCheck : MonoBehaviour
     public COMNumber comNumber = COMNumber.COM0;
     [SerializeField] Dropdown comNumDropdown;       //COM番号を指定するドロップダウンメニュー
 
+    [SerializeField] GameObject connectingPanel;    //接続中に表示するパネル
+
     public int baurate = 115200;
 
     public SerialPort serial;
@@ -57,8 +59,12 @@ public class SerialCheck : MonoBehaviour
         if (serial != null) Close();
     }
 
-    public void Open()
+    public async UniTask Open()
     {
+        connectingPanel.SetActive(true);
+
+        await UniTask.DelayFrame(1, cancellationToken: this.GetCancellationTokenOnDestroy());
+
         string portName = comNumber.ToString();
         serial = new SerialPort(portName, baurate, Parity.None, 8, StopBits.One);
 
@@ -66,7 +72,7 @@ public class SerialCheck : MonoBehaviour
         {
             serial.Open();
             isLoop = true;
-            serial.ReadTimeout = 5000;          //タイムアウトするまでの時間(ms) - 終了時に必要
+            serial.ReadTimeout = 2000;          //タイムアウトするまでの時間(ms) - 終了時に必要
                                                 //操作しないと勝手にタイムアウトする
             Debug.Log($"serial.ReadTimeout = {serial.ReadTimeout}");
             connectionTextControler.Clear();
@@ -78,17 +84,20 @@ public class SerialCheck : MonoBehaviour
         {
             serial = null;
             connectionTextControler.Clear();
-            connectionTextControler.DesplayErrorMessage(e);
+            connectionTextControler.DisplayErrorMessage(e);
             Debug.Log("can not open serial port");
             Debug.LogException(e);
         }
+        connectingPanel.SetActive(false);
     }
     public void Close()
     {
         try
         {
+            //serial.ReadTimeout = 5000;
             this.isLoop = false;
             this.serial.Close();
+            this.serial.Dispose();
             this.serial = null;
             Debug.Log("port close correct!");
         }
@@ -110,7 +119,7 @@ public class SerialCheck : MonoBehaviour
     }
     private void Start()
     {
-        if(connectionButton)
+        if (connectionButton)
             connectionButton.interactable = true;
         if (disconnectionButton)
             disconnectionButton.interactable = false;
@@ -118,19 +127,23 @@ public class SerialCheck : MonoBehaviour
             startButton.interactable = false;
     }
 
+
     //ボタンクリック時接続、切断、スタート
     public void OnConnection()
     {
-        if (serial == null)
+        UniTask.Void(async () =>
         {
-            Open();
-            if (serial != null)
+            if (serial == null)
             {
-                connectionButton.interactable = false;
-                disconnectionButton.interactable = true;
-                startButton.interactable = true;
+                await Open();
+                if (serial != null)
+                {
+                    connectionButton.interactable = false;
+                    disconnectionButton.interactable = true;
+                    startButton.interactable = true;
+                }
             }
-        }
+        });
     }
     public void OnDisconnection()
     {
@@ -156,15 +169,6 @@ public class SerialCheck : MonoBehaviour
     public void OnCOMNumberChange()
     {
         comNumber = (COMNumber)comNumDropdown.value;
-    }
-
-    //ロードイメージを動かす
-    public async UniTask DisplayLoadImage()
-    {
-        LoadingImage.SetActive(true);
-        //await Open();
-
-        LoadingImage.SetActive(false);
     }
 }
 public enum COMNumber

@@ -24,6 +24,7 @@ public class Serial : MonoBehaviour
     public static bool cardReadF = false;
 
     [SerializeField] StumpImageScript stumpImageScript;     //現在のパーツを視覚的に表示するスクリプト
+    [SerializeField] GameObject disconnectPanel;            //切断されたことを示すパネル
 
     void Start()
     {
@@ -46,6 +47,8 @@ public class Serial : MonoBehaviour
                 PushF[i, j] = false;
             }
         }
+
+        ConnectCheck().Forget();
     }
     
     void Update()
@@ -67,58 +70,37 @@ public class Serial : MonoBehaviour
         {
             string message = serial.ReadLine();
             Debug.Log("message:" + message);
-
-
-            //設定 - おそらくいらない
-            #region
-            /*
-            if (true) {
-                switch (NowWordButton)
-                {
-                    case "az":
-                        SetWordSub(message);
-                        break;
-                    case "kz":
-                        SetWordSub(message);
-                        break;
-                    case "sz":
-                        SetWordSub(message);
-                        break;
-                    case "tz":
-                        SetWordSub(message);
-                        break;
-                    case "nz":
-                        SetWordSub(message);
-                        break;
-                    case "hz":
-                        SetWordSub(message);
-                        break;
-                    case "mz":
-                        SetWordSub(message);
-                        break;
-                    case "yz":
-                        SetWordSub(message);
-                        break;
-                    case "rz":
-                        SetWordSub(message);
-                        break;
-                    case "wz":
-                        SetWordSub(message);
-                        break;
-                }
-            }
-            */
-            #endregion
+            
 
             if (NowWordButton == "endz")
             {
                 //文字、座標入力をセット
                 switch (message)
                 {
+                    //接続済みか確認
+                    case "connect":
+                        break;
+
                     //カードの読み込み
                     case "CardRead":
                         cardReadF = true;
                         break;
+
+                    //カードやパネルが読み込まれていないとき
+                    #region
+                    case "notNewPanelRead":
+                        for (int i = 0; i < 5; i++)
+                        {
+                            for (int j = 0; j < 3; j++)
+                            {
+                                if (PushF[i, j])
+                                {
+                                    PushF[i, j] = false;
+                                }
+                            }
+                        }
+                        break;
+                    #endregion
 
                     //パーツの設定
                     #region
@@ -398,22 +380,6 @@ public class Serial : MonoBehaviour
                         PushF[4, 2] = true;
                         break;
                     #endregion
-
-                    //パネルが読み込まれていないとき
-                    #region
-                    case "notNewPanelRead":
-                        for (int i = 0; i < 5; i++)
-                        {
-                            for (int j = 0; j < 3; j++)
-                            {
-                                if (PushF[i, j])
-                                {
-                                    PushF[i, j] = false;
-                                }
-                            }
-                        }
-                        break;
-                    #endregion
                 }
 
                 StumpScript.stampPartsWord[StumpScript.TempStump] = ButtonNameChange.TempWord;  //現在設定されているパーツに対応する文字を登録
@@ -434,8 +400,13 @@ public class Serial : MonoBehaviour
         try
         {
             serial.Open();
+            isLoop = true;
+            serial.ReadTimeout = 1000;          //タイムアウトするまでの時間(ms) - 終了時に必要
+                                                //操作しないと勝手にタイムアウトする
             Scheduler.ThreadPool.Schedule(() => ReadData()).AddTo(this);
             Debug.Log("port open correct!");
+
+            disconnectPanel.SetActive(false);
         }
         catch (Exception e)
         {
@@ -444,12 +415,25 @@ public class Serial : MonoBehaviour
             Debug.LogException(e);
         }
     }
+    public void OpenCheck()
+    {
+        serial = new SerialPort(portName, baurate, Parity.None, 8, StopBits.One);
+
+        serial.Open();
+        isLoop = true;
+        serial.ReadTimeout = 1000;          //タイムアウトするまでの時間(ms) - 終了時に必要
+                                            //操作しないと勝手にタイムアウトする
+        Scheduler.ThreadPool.Schedule(() => ReadData()).AddTo(this);
+        Debug.Log("port open correct!");
+        SerialReadWordAndParts();
+
+        disconnectPanel.SetActive(false);
+    }
 
     public void Close()
     {
         try
         {
-            serial.ReadTimeout = 5000;
             this.isLoop = false;
             this.serial.Close();
             this.serial = null;
@@ -469,128 +453,24 @@ public class Serial : MonoBehaviour
     }
 
 
+    //タイムアウトしないように定期的に接続されているか確認する処理
+    public async UniTask ConnectCheck()
+    {
+        while (true)
+        {
+            await UniTask.Delay(500, cancellationToken: this.GetCancellationTokenOnDestroy());
+            try
+            {
+                serial.Write("Checkz");
+            }
+            catch
+            {
+                disconnectPanel.SetActive(true);
+                Debug.Log("noConnect");
+            }
+        }
+    }
 
-    //設定スクリプト
-    //たぶんいらない
-    #region
-    public void AButton()
-    {
-        if (GameObject.Find("AToggle").GetComponent<Toggle>().isOn)
-        {
-            if (NowWordButton != "az")
-            {
-               serial.Write("az");
-            }
-            NowWordButton = "az";
-        }
-    }
-    public void KButton()
-    {
-        if (GameObject.Find("KToggle").GetComponent<Toggle>().isOn)
-        {
-            if (NowWordButton != "kz")
-            {
-                serial.Write("kz");
-            }
-            NowWordButton = "kz";
-        }
-    }
-    public void SButton()
-    {
-        if (GameObject.Find("SToggle").GetComponent<Toggle>().isOn)
-        {
-            if (NowWordButton != "sz")
-            {
-                serial.Write("sz");
-            }
-            NowWordButton = "sz";
-        }
-    }
-    public void TButton()
-    {
-        if (GameObject.Find("TToggle").GetComponent<Toggle>().isOn)
-        {
-            if (NowWordButton != "tz")
-            {
-                serial.Write("tz");
-            }
-            NowWordButton = "tz";
-        }
-    }
-    public void NButton()
-    {
-        if (GameObject.Find("NToggle").GetComponent<Toggle>().isOn)
-        {
-            if (NowWordButton != "nz")
-            {
-                serial.Write("nz");
-            }
-            NowWordButton = "nz";
-        }
-    }
-    public void HButton()
-    {
-        if (GameObject.Find("HToggle").GetComponent<Toggle>().isOn)
-        {
-            if (NowWordButton != "hz")
-            {
-                serial.Write("hz");
-            }
-            NowWordButton = "hz";
-        }
-    }
-    public void MButton()
-    {
-        if (GameObject.Find("MToggle").GetComponent<Toggle>().isOn)
-        {
-            if (NowWordButton != "mz")
-            {
-                serial.Write("mz");
-            }
-            NowWordButton = "mz";
-        }
-    }
-    public void YButton()
-    {
-        if (GameObject.Find("YToggle").GetComponent<Toggle>().isOn)
-        {
-            if (NowWordButton != "yz")
-            {
-                serial.Write("yz");
-            }
-            NowWordButton = "yz";
-        }
-    }
-    public void RButton()
-    {
-        if (GameObject.Find("RToggle").GetComponent<Toggle>().isOn)
-        {
-            if (NowWordButton != "rz")
-            {
-                serial.Write("rz");
-            }
-            NowWordButton = "rz";
-        }
-    }
-    public void WButton()
-    {
-        if (GameObject.Find("WToggle").GetComponent<Toggle>().isOn)
-        {
-            if (NowWordButton != "wz")
-            {
-                serial.Write("wz");
-            }
-            NowWordButton = "wz";
-        }
-    }
-    public void EndButton()
-    {
-        NowWordButton = "endz";
-        serial.Write("wz");
-    }
-    #endregion
-
-    //TODO: M5Stack側でも読む
     //現在デバイスに設定されている文字と部位をを取得する
     public void SerialReadWordAndParts()
     {

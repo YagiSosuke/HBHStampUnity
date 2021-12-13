@@ -25,7 +25,7 @@ public class ConnectionTextControler : MonoBehaviour
     {
         nowConnectionDeviceText.text = comNum.ToString() + " のデバイスに接続されています";
     }
-    public void DesplayErrorMessage(System.Exception e)
+    public void DisplayErrorMessage(System.Exception e)
     {
         if (e.ToString().IndexOf("IOException: デバイスが接続されていません。")             >= 0 ||
             e.ToString().IndexOf("System.IO.IOException: セマフォがタイムアウトしました。") >= 0)
