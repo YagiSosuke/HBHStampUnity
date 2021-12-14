@@ -20,7 +20,7 @@ public class Serial : MonoBehaviour
     string NowWordButton = "endz";      //現在の言葉ボタンの選択状態を示す
     Text[] IDGroup = new Text[10];                     //IDを表示するテキストたち
 
-    public static bool[,] PushF = new bool[5, 3];
+    public static bool[,] PushF = new bool[6, 3];
     public static bool cardReadF = false;
 
     [SerializeField] StumpImageScript stumpImageScript;     //現在のパーツを視覚的に表示するスクリプト
@@ -40,7 +40,7 @@ public class Serial : MonoBehaviour
         Debug.Log("Open done");
         SerialReadWordAndParts();
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 6; i++)
         {
             for (int j = 0; j < 3; j++)
             {
@@ -89,7 +89,7 @@ public class Serial : MonoBehaviour
                     //カードやパネルが読み込まれていないとき
                     #region
                     case "notNewPanelRead":
-                        for (int i = 0; i < 5; i++)
+                        for (int i = 0; i < 6; i++)
                         {
                             for (int j = 0; j < 3; j++)
                             {
@@ -349,6 +349,9 @@ public class Serial : MonoBehaviour
                     case "4,0":
                         PushF[4, 0] = true;
                         break;
+                    case "5,0":
+                        PushF[5, 0] = true;
+                        break;
                     case "0,1":
                         PushF[0, 1] = true;
                         break;
@@ -363,6 +366,9 @@ public class Serial : MonoBehaviour
                         break;
                     case "4,1":
                         PushF[4, 1] = true;
+                        break;
+                    case "5,1":
+                        PushF[5, 1] = true;
                         break;
                     case "0,2":
                         PushF[0, 2] = true;
@@ -379,7 +385,10 @@ public class Serial : MonoBehaviour
                     case "4,2":
                         PushF[4, 2] = true;
                         break;
-                    #endregion
+                    case "5,2":
+                        PushF[5, 2] = true;
+                        break;
+                        #endregion
                 }
 
                 StumpScript.stampPartsWord[StumpScript.TempStump] = ButtonNameChange.TempWord;  //現在設定されているパーツに対応する文字を登録
@@ -503,9 +512,9 @@ public class Serial : MonoBehaviour
 
     public bool pushCheck()
     {
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 18; i++)
         {
-            if (Serial.PushF[i % 5, i / 5])
+            if (Serial.PushF[i % 6, i / 6])
             {
                 return true;
             }

@@ -139,7 +139,7 @@ public class TutorialMessage : MonoBehaviour
     void TutorialVerification()
     {
         if (verificationPanelScript.yesF || 
-            (serialScipt.enabled == true && Serial.PushF[1, 1]))
+            (serialScipt.enabled == true && Serial.PushF[2, 1]))
         {
             TransitionChange();
         }

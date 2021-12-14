@@ -32,8 +32,8 @@ public class CharactorChangePos : MonoBehaviour
         bool lookDirection;
 
         //オブジェクトを配置する位置
-        float[] posXPosition = { -750.0f, -350.0f, 0.0f, 350.0f, 750.0f };
-        float[] posYPosition = { 225.0f, -175.0f, -475.0f };
+        float[] posXPosition = { -780.0f, -470.0f, -155.0f, 155.0f, 470.0f, 780.0f };
+        float[] posYPosition = { 225.0f, -125.0f, -475.0f };
         
 
         //コンストラクタ
@@ -55,7 +55,7 @@ public class CharactorChangePos : MonoBehaviour
             else
             {
                 lookDirection = false;
-                posX = 4;
+                posX = 5;
             }
             nowTime = 0.0f;
             changePosTime = Random.Range(OperationCharctor.getInstance().minTimeRange, OperationCharctor.getInstance().maxTimeRange);
@@ -71,7 +71,7 @@ public class CharactorChangePos : MonoBehaviour
             {
                 charObj.transform.localPosition = new Vector2(-1200, posYPosition[posY]);
             }
-            else if (!lookDirection && posX == 4)
+            else if (!lookDirection && posX == 5)
             {
                 charObj.transform.localPosition = new Vector2(1200, posYPosition[posY]);
             }
@@ -92,7 +92,7 @@ public class CharactorChangePos : MonoBehaviour
             {
                 if (lookDirection)
                 {
-                    if (posX < 4)
+                    if (posX < 5)
                     {
                         //前に進める
                         posX++;
