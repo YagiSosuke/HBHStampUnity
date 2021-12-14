@@ -32,8 +32,6 @@ public class StumpImageScript : MonoBehaviour
         Image.transform.position = MousePos;
 
         NowParts.text = StumpScript.TempStump;
-        //以下を修正
-        //NowWord.text = ButtonNameChange.TempWord;
         NowWord.text = StumpScript.stampPartsWord[StumpScript.TempStump];
     }
 
