@@ -95,7 +95,7 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
         if (Serial.PushF[pos_x, pos_y])
         {
             ChangeF = true;
-            Serial.PushF[pos_x, pos_y] = false;
+            //Serial.PushF[pos_x, pos_y] = false;
         }
 
         //キャラクターを変身させる
