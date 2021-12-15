@@ -74,46 +74,41 @@ public class TutorialMessage : MonoBehaviour
     #region
     string[] message_BearGreeting = { "くま", "こんにちは、ぼくはくま！\nモジプラスタンプの世界にようこそ！",
                                       "くま", "モジプラスタンプのあそびかたを\nせつめいするよ",
-                                      "くま", "モジプラスタンプはキャラクターの名前に文字をくわえて\n別のキャラクターに変身させるゲームだよ"
+                                      "くま", "モジプラスタンプはキャラクターの名前に\n文字をくわえて\n別のキャラクターに変身させるゲームだよ"
                                     };
-    string[] message_BearGreeting_Mikan = { "くま", "たとえば、『かん』のあたまに『み』をつけると『みかん』"
+    string[] message_BearGreeting_Mikan = { "くま", "たとえば、『かん』のあたまに『み』をつけると\n『みかん』"
                                     };
-    string[] message_BearGreeting_Kamen = { "くま", "『かん』のまんなかに『め』をつけると『かめん』"
+    string[] message_BearGreeting_Kamen = { "くま", "『かん』のまんなかに『め』をつけると\n『かめん』"
                                     };
-    string[] message_BearGreeting_Kannna = { "くま", "『かん』のおしりに『な』をつけると『かんな』に変身するよ",
+    string[] message_BearGreeting_Kannna = { "くま", "『かん』のおしりに『な』をつけると\n『かんな』に変身するよ",
                                     };
-    string[] message_StampOperation_GrapStamp = { "くま", "次に文字の追加方法を説明するよ",
-                                                  "くま", "文字の追加にはスタンプを使用するよ"
+    string[] message_StampOperation_GrapStamp = { "くま", "次に文字の追加について説明するよ",
+                                                  "くま", "文字の追加にはスタンプをつかうよ"
                                     };
-    string[] message_StampOperation_RightButton = { "くま", "右のボタンで母音(あ, い, う……)を変えられるよ",
-                                                    "くま", "早速やってみよう！"
+    string[] message_StampOperation_RightButton = { "くま", "右のボタンで母音\n(あ, い, う……)を変えられるよ\n早速やってみよう！"
                                     };
     string[] message_StampOperation_RightButtonDoes = { "くま", "いいね！その調子！"
                                     };
-    string[] message_StampOperation_LeftButton = { "くま", "左のボタンで反対向きに母音(お, え, う……)を変えられるよ",
-                                                   "くま", "早速やってみよう！"
+    string[] message_StampOperation_LeftButton = { "くま", "左のボタンではんたいに母音\n(お, え, う……)を変えられるよ\n早速やってみよう！"
                                     };
     string[] message_StampOperation_LeftButtonDoes = { "くま", "いいね！その調子！"
                                     };
-    string[] message_StampOperation_MiddleButton = { "くま", "真ん中のボタンで文字を加える場所(頭, 体, お尻)を変えられるよ",
-                                                     "くま", "早速やってみよう！",
+    string[] message_StampOperation_MiddleButton = { "くま", "真ん中のボタンで文字をくわえる場所\n(頭, 体, お尻)を変えられるよ\n早速やってみよう！"
                                     };
     string[] message_StampOperation_MiddleButtonDoes = { "くま", "いいね！その調子！"
                                     };
-    string[] message_StampOperation_CardRead = { "くま", "カードにスタンプを押すとスタンプに文字を読み込むことができるよ",
-                                                 "くま", "早速やってみよう！",
+    string[] message_StampOperation_CardRead = { "くま", "カードにスタンプを押すとスタンプに文字を\n読み込むことができるよ\n早速やってみよう！"
                                     };
     string[] message_StampOperation_CardReadDoes = { "くま", "いいね！その調子！",
-                                                   "くま", "スタンプの操作説明は以上だよ"
+                                                   "くま", "スタンプの説明は以上だよ"
                                     };
-    string[] message_StampOperation_TutorialMikan1 = { "くま", "それじゃあ、試しに『かん』を『みかん』に変身させてみよう！",
+    string[] message_StampOperation_TutorialMikan1 = { "くま", "それじゃあ、『かん』を『みかん』\nに変身させてみよう！",
                                     };
-    string[] message_StampOperation_TutorialMikan2 = { "くま", "変身させるまでのステップはここに表示しておくよ",
-                                                       "くま", "文字をセットしたら、みかんにスタンプを打ってね！",
-                                                       "くま", "早速やってみよう！"
+    string[] message_StampOperation_TutorialMikan2 = { "くま", "変身させるまでのステップはここに\n表示しておくよ",
+                                                       "くま", "文字をセットしたら、みかんにスタンプを\n打ってね！\n早速やってみよう！"
                                     };
     string[] message_StampOperation_TutorialMikanDoes = { "くま", "いいね！その調子！",
-                                                        "くま", "本番では制限時間のうちに\nたくさんキャラクターを変身させてね！",
+                                                        "くま", "本番は3分でたくさんキャラクターを\n変身させてね！",
                                                         "くま", "本番もがんばってね！"
                                     };
     #endregion
