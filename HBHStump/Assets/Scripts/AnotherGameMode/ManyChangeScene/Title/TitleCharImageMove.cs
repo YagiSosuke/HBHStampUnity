@@ -73,12 +73,14 @@ public class TitleCharImageMove : MonoBehaviour
             //左下に言ったオブジェクトを右上に移動させる
             for (int i = 0; i < OneObject.Length; i++)
             {
-                if (OneObject[i].transform.position.y == -300)
+                if (OneObject[i].transform.position.y <= -300)
                 {
+                    Debug.Log("move");
                     OneObject[i].transform.position = new Vector2(OneObject[i].transform.position.x + 600, 1500);
                 }
-                else if (OneObject[i].transform.position.x == -240)
+                else if (OneObject[i].transform.position.x <= -240)
                 {
+                    Debug.Log("move");
                     OneObject[i].transform.position = new Vector2(2160, OneObject[i].transform.position.y + 300);
                 }
             }
@@ -126,24 +128,6 @@ public class TitleCharImageMove : MonoBehaviour
     {
         StartCoroutine(NonDisplayTitlePanel(interval));
     }
-
-
-    //テスト用 - コルーチンが止まるか確認
-    void sStopCoroutine()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (titleCharacterMove != null)
-            {
-                StopCoroutine(titleCharacterMove);
-                titleCharacterMove = null;
-            }
-            else
-            {
-            }
-        }
-    }
-
 
 
     // Start is called before the first frame update

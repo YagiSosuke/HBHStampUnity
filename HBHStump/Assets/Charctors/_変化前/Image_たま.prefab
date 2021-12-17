@@ -198,7 +198,18 @@ MonoBehaviour:
     AfterObject: {fileID: 1167987026786762050, guid: c7649b97341f364448834f73ac2bc55f,
       type: 3}
     Flag: 0
+  - Parts: 1
+    Word: "\u3044"
+    AfterObject: {fileID: 5437761546663593437, guid: ff3000a099ebb994786bb1b29ae5f189,
+      type: 3}
+    Flag: 0
+  - Parts: 1
+    Word: "\u306B"
+    AfterObject: {fileID: 5437761546663593437, guid: 1ca3a9b6fb8fbc346b5d76a66b68244e,
+      type: 3}
+    Flag: 0
   audio: {fileID: 0}
+  SerchF: 0
   pos_x: 1
   pos_y: 2
 --- !u!1 &9028481882194868616

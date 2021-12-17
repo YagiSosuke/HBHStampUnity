@@ -248,6 +248,22 @@ MonoBehaviour:
     AfterObject: {fileID: 8821047720997311790, guid: 4f5e4cc5e149ce44e9326c4a5135530d,
       type: 3}
     Flag: 1
+  - Parts: 0
+    Word: "\u3069"
+    AfterObject: {fileID: 3360202660411452169, guid: 62f2fec8e2ac3dc488f08570fb977ee4,
+      type: 3}
+    Flag: 1
+  - Parts: 2
+    Word: "\u3061"
+    AfterObject: {fileID: 6921810225224703001, guid: 9b8914898d5b0f641b19f7e702ad4991,
+      type: 3}
+    Flag: 1
+  - Parts: 2
+    Word: "\u3066"
+    AfterObject: {fileID: 6921810225224703001, guid: 923e92a09b318804eacb03ac3d72c263,
+      type: 3}
+    Flag: 1
   audio: {fileID: 0}
+  SerchF: 0
   pos_x: 3
   pos_y: 1

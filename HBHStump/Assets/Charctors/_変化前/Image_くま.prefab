@@ -228,6 +228,12 @@ MonoBehaviour:
     AfterObject: {fileID: 4008646362730876023, guid: 1b07f167c4b2624419d4bea880ba684e,
       type: 3}
     Flag: 1
+  - Parts: 2
+    Word: "\u3067"
+    AfterObject: {fileID: 4008646362730876023, guid: 673e65ce95e5ee44a8402360e23076b5,
+      type: 3}
+    Flag: 1
   audio: {fileID: 0}
+  SerchF: 0
   pos_x: 0
   pos_y: 2
