@@ -167,7 +167,168 @@ MonoBehaviour:
     AfterObject: {fileID: 1623080838577036421, guid: d6b37ccbc29811d41ba400d7cee55925,
       type: 3}
     Flag: 1
+  - Parts: 0
+    Word: "\u304D"
+    AfterObject: {fileID: 8211995434004881850, guid: c0b0734d821cfc746bdd5183d62a1f9e,
+      type: 3}
+    Flag: 1
+  - Parts: 0
+    Word: "\u304F"
+    AfterObject: {fileID: 8211995434004881850, guid: 90ea2962e015f7142be9b1bc46a7665f,
+      type: 3}
+    Flag: 1
+  - Parts: 0
+    Word: "\u3053"
+    AfterObject: {fileID: 8211995434004881850, guid: 4d869158b2fbae7468adfcd5e16ec3a3,
+      type: 3}
+    Flag: 1
+  - Parts: 0
+    Word: "\u3054"
+    AfterObject: {fileID: 8211995434004881850, guid: 237ebddd5dd5af8429cb1324e2380c57,
+      type: 3}
+    Flag: 1
+  - Parts: 0
+    Word: "\u3061"
+    AfterObject: {fileID: 1164244716289268646, guid: 16c7829cb3e3ff043ba9628f9368823b,
+      type: 3}
+    Flag: 1
+  - Parts: 0
+    Word: "\u3072"
+    AfterObject: {fileID: 1164244716289268646, guid: bd09bbb6e57a2ee4c8f7a171e9a07e33,
+      type: 3}
+    Flag: 1
+  - Parts: 0
+    Word: "\u3075"
+    AfterObject: {fileID: 1164244716289268646, guid: 1f65652e9a8bb8645bcc3a1809280d77,
+      type: 3}
+    Flag: 1
+  - Parts: 0
+    Word: "\u3076"
+    AfterObject: {fileID: 1164244716289268646, guid: e23b25fcc851fe644b44bf8da965d243,
+      type: 3}
+    Flag: 1
+  - Parts: 0
+    Word: "\u307C"
+    AfterObject: {fileID: 1164244716289268646, guid: abc76ee76edd4a845924504b6b1ab4e8,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3048"
+    AfterObject: {fileID: 3089415837107624098, guid: 0aaaab8e7f5c5204db74f2a4abb5add0,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u304D"
+    AfterObject: {fileID: 3089415837107624098, guid: 9f3febf88460a3f46878c1076c328a88,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3052"
+    AfterObject: {fileID: 3089415837107624098, guid: aadc2ebec14b6a843b892edd3c848305,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3055"
+    AfterObject: {fileID: 3089415837107624098, guid: 0993249a8ece2df448afb3069d022f3a,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3057"
+    AfterObject: {fileID: 3089415837107624098, guid: 7a31f3114f2cd9246b9c17b74722193b,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u305B"
+    AfterObject: {fileID: 363827021432146012, guid: ab5caeb8a1f993846800be1b8a8916ec,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3056"
+    AfterObject: {fileID: 363827021432146012, guid: 621fc3c9bca771d48b6452320003c98f,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3058"
+    AfterObject: {fileID: 3089415837107624098, guid: b691b3fff76aaa948afc75b260fdbb52,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u305F"
+    AfterObject: {fileID: 363827021432146012, guid: bab9feabd936c6243beaeed37fc22040,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3067"
+    AfterObject: {fileID: 363827021432146012, guid: c229c8de66c86c64b908fb15d519d957,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3068"
+    AfterObject: {fileID: 363827021432146012, guid: 5b3d32b976acf2c4da312e1c4ac39f37,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3060"
+    AfterObject: {fileID: 363827021432146012, guid: 94db3573d39e9ed4ca554708656323c5,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u306D"
+    AfterObject: {fileID: 3089415837107624098, guid: ba053db20f88047478054b8c2ea25f40,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3072"
+    AfterObject: {fileID: 363827021432146012, guid: 108525554ef143a41844579ab2da98f0,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3078"
+    AfterObject: {fileID: 3089415837107624098, guid: e98b62afa672ed34b8bb24ad8fb9b9a2,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3070"
+    AfterObject: {fileID: 363827021432146012, guid: 1861487cbcd78ce49b9d5fdbded46ba3,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3073"
+    AfterObject: {fileID: 363827021432146012, guid: d647bcc16db00ef4ea73cc1b8a02e969,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3079"
+    AfterObject: {fileID: 3089415837107624098, guid: 139489252c40f7d4f93fbc3642d89d9d,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u307F"
+    AfterObject: {fileID: 3089415837107624098, guid: e6a660f7cb9f91846831c4c7ad9aabba,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3082"
+    AfterObject: {fileID: 3089415837107624098, guid: fa45211204de02e4da28a0eeae8850c6,
+      type: 3}
+    Flag: 1
+  - Parts: 1
+    Word: "\u3066"
+    AfterObject: {fileID: 3089415837107624098, guid: 67b04f37e4178f340ac0974d77cd83f9,
+      type: 3}
+    Flag: 1
+  - Parts: 2
+    Word: "\u307A"
+    AfterObject: {fileID: 1623080838577036421, guid: 5a361ff13a0c02644980a0a0cd031307,
+      type: 3}
+    Flag: 1
+  - Parts: 2
+    Word: "\u307F"
+    AfterObject: {fileID: 1623080838577036421, guid: 7463f2eeac27aaf45ba9991ee1137667,
+      type: 3}
+    Flag: 1
   audio: {fileID: 0}
+  SerchF: 0
   pos_x: 4
   pos_y: 1
 --- !u!114 &6248626779589423254

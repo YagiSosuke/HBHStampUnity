@@ -193,7 +193,33 @@ MonoBehaviour:
     AfterObject: {fileID: 5567098291018388099, guid: 207a8c5fd0edf144e9ff92bc2dbfafd7,
       type: 3}
     Flag: 0
+  - Parts: 0
+    Word: "\u3059"
+    AfterObject: {fileID: 6707975210496867149, guid: 2d39b5e5e0a1fa34dba98bff40726737,
+      type: 3}
+    Flag: 0
+  - Parts: 0
+    Word: "\u3060"
+    AfterObject: {fileID: 5567098291018388099, guid: 4098c22ce9bfb27438d1a84ef8401730,
+      type: 3}
+    Flag: 0
+  - Parts: 0
+    Word: "\u306A"
+    AfterObject: {fileID: 5567098291018388099, guid: afba3dda0c7187c4c87cb61298b48a77,
+      type: 3}
+    Flag: 0
+  - Parts: 0
+    Word: "\u307C"
+    AfterObject: {fileID: 5567098291018388099, guid: e514b965abc8ddd4eae1ed41b933549d,
+      type: 3}
+    Flag: 0
+  - Parts: 1
+    Word: "\u3048"
+    AfterObject: {fileID: 1969490849163233419, guid: f5fa6bb168128c5408c41fb04bd9398e,
+      type: 3}
+    Flag: 0
   audio: {fileID: 0}
+  SerchF: 0
   pos_x: 1
   pos_y: 0
 --- !u!1 &8658376335223589891

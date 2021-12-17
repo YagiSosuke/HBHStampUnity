@@ -168,7 +168,23 @@ MonoBehaviour:
     AfterObject: {fileID: 2395223667562784722, guid: 17cf9975a70ba844ab7e5a2c9d656588,
       type: 3}
     Flag: 1
+  - Parts: 0
+    Word: "\u304A"
+    AfterObject: {fileID: 102647198497174299, guid: e30924ab3dc043f49a7150aad71cb0d3,
+      type: 3}
+    Flag: 1
+  - Parts: 2
+    Word: "\u304A"
+    AfterObject: {fileID: 5461318849337128742, guid: 842b495904fdbb64584238b94eefddfc,
+      type: 3}
+    Flag: 1
+  - Parts: 2
+    Word: "\u3084"
+    AfterObject: {fileID: 2395223667562784722, guid: e36af7d3a59997f4895f3e063688ece1,
+      type: 3}
+    Flag: 1
   audio: {fileID: 0}
+  SerchF: 0
   pos_x: 2
   pos_y: 0
 --- !u!1 &4579210980009501965
