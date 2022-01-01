@@ -35,7 +35,8 @@ public class HintPanel : MonoBehaviour
             }
             else if(hintGoup.Length == 1)
             {
-                returnHint.Add(Instantiate(hintGoup[Random.Range(0, hintGoup.Length)]));
+                var ins = Instantiate(hintGoup[Random.Range(0, hintGoup.Length)]);
+                returnHint.Add(ins);
 
                 return returnHint;
             }
@@ -47,8 +48,10 @@ public class HintPanel : MonoBehaviour
                 {
                     tempNum2 = Random.Range(0, hintGoup.Length);
                 } while (tempNum1 == tempNum2);
-                returnHint.Add(Instantiate(hintGoup[tempNum1]));
-                returnHint.Add(Instantiate(hintGoup[tempNum2]));
+                var ins = Instantiate(hintGoup[tempNum1]);
+                returnHint.Add(ins);
+                ins = Instantiate(hintGoup[tempNum2]);
+                returnHint.Add(ins);
 
                 return returnHint;
             }
@@ -62,6 +65,7 @@ public class HintPanel : MonoBehaviour
             //変化させるキャラクターを表示
             sampleObjView = Instantiate(sampleObj, Vector3.zero, Quaternion.identity, parent.transform);
             sampleObjView.transform.localPosition = Vector2.zero;
+            sampleObjView.transform.localScale = Vector2.one;
 
             //表示用のヒント
             headHintView = instantiateHint(headHint);
@@ -72,14 +76,17 @@ public class HintPanel : MonoBehaviour
             foreach(GameObject obj in headHintView)
             {
                 obj.transform.SetParent(parent.transform);
+                obj.transform.localScale = Vector2.one;
             }
             foreach (GameObject obj in bodyHintView)
             {
                 obj.transform.SetParent(parent.transform);
+                obj.transform.localScale = Vector2.one;
             }
             foreach (GameObject obj in hipHintView)
             {
                 obj.transform.SetParent(parent.transform);
+                obj.transform.localScale = Vector2.one;
             }
             //位置を設定する
             if (headHintView.Count >= 1)
@@ -145,6 +152,22 @@ public class HintPanel : MonoBehaviour
             bodyHintView.Clear();
             hipHintView.Clear();
         }
+        
+        //臨時 - スケール設定
+        public void ScaleSet()
+        {
+            foreach(GameObject obj in headHint) {
+                obj.transform.localScale = Vector2.one;
+            }
+            foreach (GameObject obj in bodyHint)
+            {
+                obj.transform.localScale = Vector2.one;
+            }
+            foreach (GameObject obj in hipHint)
+            {
+                obj.transform.localScale = Vector2.one;
+            }
+        }
     }
     [SerializeField] HintData[] hintData;
     int viewHintId = 0;
@@ -165,12 +188,13 @@ public class HintPanel : MonoBehaviour
         //パネルとヒントを表示する
         viewHintId = Random.Range(0, hintData.Length);
         hintData[viewHintId].HintSetup(hintParent);
+        hintData[viewHintId].ScaleSet();
 
         seAudio.Play();
         await hintCanvasGroup.DOFade(endValue: 1.0f, duration: 0.5f);
         voiceAudio.Play();
 
-        await UniTask.Delay(5000);
+        await UniTask.Delay(2000);
         pleaseWaitPanel.SetActive(true);
     }
     public void GameSceneContinuation()

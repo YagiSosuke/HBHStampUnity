@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Cysharp.Threading.Tasks;
+using System.Threading;
 
 /*
 説明パネルをコントロール
@@ -34,6 +36,10 @@ public class ExplainPanel : MonoBehaviour
     [SerializeField] GameObject wordPanelImg;
     //「みかん」への変身を説明するオブジェクト群
     [SerializeField] CanvasGroup tryMikanChangeImages;
+
+    //カード部分の照明
+    [SerializeField] Image wordPanelPlaceImage;
+    [SerializeField] CanvasGroup wordSupportArrowGroups;
     #endregion
 
     //パネルがフェードする時間
@@ -158,6 +164,12 @@ public class ExplainPanel : MonoBehaviour
 
             wordPanelImg.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
             wordPanelImg.GetComponent<Animator>().SetBool("AnimationF", true);
+
+            WordPanelAnimation().Forget();
+        }
+        else if(tutorialMessage.transitionMode == TutorialMessage.TransitionMode.beforeSwitching)
+        {
+            wordPanelPlaceCt.Cancel();
         }
     }
     //みかん説明補助パネルの説明
@@ -180,8 +192,23 @@ public class ExplainPanel : MonoBehaviour
     }
     #endregion
 
-    // Start is called before the first frame update
-    void Start()
+    //カード読むときのパネル部分アニメーション
+    CancellationTokenSource wordPanelPlaceCt;
+    async UniTask WordPanelAnimation()
+    {
+        wordPanelPlaceCt = new CancellationTokenSource();
+        wordSupportArrowGroups.DOFade(endValue: 1.0f, duration: 1.0f);
+        while (!wordPanelPlaceCt.IsCancellationRequested)
+        {
+            wordPanelPlaceImage.DOFade(endValue: 0.3f, duration: 1.0f);
+            await UniTask.Delay(1000);
+            wordPanelPlaceImage.DOFade(endValue: 1.0f, duration: 1.0f);
+            await UniTask.Delay(1000);
+        }
+        wordSupportArrowGroups.DOFade(endValue: 0.0f, duration: 1.0f);
+    }
+
+    public void PanelsInit()
     {
         //説明するためのパネル
         VerificationPanel.alpha = 0;
@@ -206,11 +233,11 @@ public class ExplainPanel : MonoBehaviour
         wordPanelImg.GetComponent<CanvasGroup>().alpha = 0;
         wordPanelImg.GetComponent<Animator>().SetBool("AnimationF", false);
         tryMikanChangeImages.alpha = 0;
+        wordSupportArrowGroups.alpha = 0;
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    void Awake()
     {
-        
+        PanelsInit();
     }
 }

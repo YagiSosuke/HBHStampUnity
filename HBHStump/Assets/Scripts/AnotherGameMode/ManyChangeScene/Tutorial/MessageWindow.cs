@@ -18,7 +18,6 @@ public class MessageWindow : MonoBehaviour
 
     //表示するメッセージ
     string messageLine;
-    string messageView;
 
     //メッセージ番号(何行目か)
     public int messageNum;
@@ -45,6 +44,7 @@ public class MessageWindow : MonoBehaviour
     [SerializeField] AudioSource talkAudio;
     [SerializeField] AudioClip talkAudioClip;
     #endregion
+
 
     //メッセージ列を読み込む
     //加えて、初期化もする

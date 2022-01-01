@@ -152,6 +152,7 @@ public class SceneControl : MonoBehaviour
                 {
                     stateChangeInterval = 1.0f;
                     titleCharImageMove.TitleSceneBefore(stateChangeInterval);
+                    Debug.Log("statechange");
                     StateChange(stateChangeInterval).Forget();
                 }
             }
@@ -265,7 +266,6 @@ public class SceneControl : MonoBehaviour
         }
         else if (screenMode == ScreenMode.Hint)
         {
-            #region
             if (transitionMode == TransitionMode.afterSwitching)
             {
                 if (!onceDoF)
@@ -290,7 +290,7 @@ public class SceneControl : MonoBehaviour
                     UniTask.Void(async () =>
                     {
                         onceDoF = true;
-                        await UniTask.Delay(10000);
+                        await UniTask.Delay(6000);
                         onceDoF = false;
                         StateChange();
                     });
@@ -310,7 +310,6 @@ public class SceneControl : MonoBehaviour
                     });
                 }
             }
-            #endregion
         }
     }
 }

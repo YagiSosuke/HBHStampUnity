@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
+using System.Threading;
 
 /*
 チュートリアルのメッセージを管理する
@@ -21,8 +22,8 @@ using Cysharp.Threading.Tasks;
     かんを変身（自由変身）
     自由にやってみよう！(〇〇秒でたくさん変身させてね！)
 */
-//ステップごとに実行 enumを使おうか
 
+    //TODO: タイムアウトの実装
 public class TutorialMessage : MonoBehaviour
 {
     //シーンを管理する
@@ -97,7 +98,7 @@ public class TutorialMessage : MonoBehaviour
                                     };
     string[] message_StampOperation_MiddleButtonDoes = { "くま", "いいね！その調子！"
                                     };
-    string[] message_StampOperation_CardRead = { "くま", "カードにスタンプを押すとスタンプに文字を\n読み込むことができるよ\n早速やってみよう！"
+    string[] message_StampOperation_CardRead = { "くま", "カードにスタンプを押すとスタンプに文字を\n読み込むことができるよ\n下にあるカードを読んでみよう！"
                                     };
     string[] message_StampOperation_CardReadDoes = { "くま", "いいね！その調子！",
                                                    "くま", "スタンプの説明は以上だよ"
@@ -108,10 +109,12 @@ public class TutorialMessage : MonoBehaviour
                                                        "くま", "文字をセットしたら、みかんにスタンプを\n打ってね！\n早速やってみよう！"
                                     };
     string[] message_StampOperation_TutorialMikanDoes = { "くま", "いいね！その調子！",
-                                                        "くま", "本番は3分でたくさんキャラクターを\n変身させてね！",
+                                                        "くま", "本番は90秒でたくさんキャラクターを\n変身させてね！",
                                                         "くま", "本番もがんばってね！"
                                     };
     #endregion
+
+
 
     //Transitionmodeを変化させる
     public void TransitionChange()
@@ -141,6 +144,7 @@ public class TutorialMessage : MonoBehaviour
         else if (verificationPanelScript.noF ||
                  (serialScipt.enabled == true && Serial.PushF[3, 1]))
         {
+            ct.Cancel();
             sceneControl.screenMode = (SceneControl.ScreenMode)((int)sceneControl.screenMode + 1);
             transitionMode = TransitionMode.afterSwitching;
             explainPanel.VerificationPanelFO();
@@ -152,11 +156,12 @@ public class TutorialMessage : MonoBehaviour
     //transitionMode変更もまとめている
     //文字送り以外の処理を呼び出す場合は、この関数は最後に描く(transitionMode の Update も兼ねているため)
     #region
-    void ViewingMessage(string[] message)
+    void ViewingMessage(string[] message, float time_sec)
     {
         if (transitionMode == TransitionMode.afterSwitching)
         {
             messageWindow.LoadMessage(new List<string>(message));
+            WaitForTimeout(time_sec).Forget();
             TransitionChange();
         }
         else if (transitionMode == TransitionMode.continuation)
@@ -171,17 +176,19 @@ public class TutorialMessage : MonoBehaviour
         else if (transitionMode == TransitionMode.beforeSwitching)
         {
             UndisplayTouchInstruction();
+            ct.Cancel();
             TransitionChange();
         }
     }
-    //文字送りの条件がメッセージの完全表示でない場合
+    //文字送りのためにタスクを達成する必要がある場合
     //stepChangeConditions にて別途条件を設定
-    void ViewingMessage(string[] message, StepChangeConditions stepChangeConditions)
+    void ViewingMessage(string[] message, StepChangeConditions stepChangeConditions, float time_sec)
     {
         if (transitionMode == TransitionMode.afterSwitching)
         {
             messageWindow.LoadMessage(new List<string>(message));
             stepChangeConditions.setNowData();
+            WaitForTimeout(time_sec).Forget();
             TransitionChange();
         }
         else if (transitionMode == TransitionMode.continuation)
@@ -204,47 +211,18 @@ public class TutorialMessage : MonoBehaviour
         else if (transitionMode == TransitionMode.beforeSwitching)
         {
             UndisplayTouchInstruction();
-            TransitionChange();
-        }
-    }
-    //メッセージを最後まで表示したら自動的に次の transition へ移行するメソッド
-    void ViewingMessageSkip(string[] message)
-    {
-        if (transitionMode == TransitionMode.afterSwitching)
-        {
-            messageWindow.LoadMessage(new List<string>(message));
-            TransitionChange();
-        }
-        else if (transitionMode == TransitionMode.continuation)
-        {
-            messageWindow.MessageWindowUpdate();
-
-            if (messageWindow.messageNum * 2 + 2 < message.Length && messageWindow.messageCount >= messageWindow.messageLength)
-            {
-                DisplayTouchInstruction();
-            }
-            else
-            {
-                UndisplayTouchInstruction();
-            }
-            if (messageWindow.messageNum*2+2 >= message.Length && messageWindow.messageCount >= messageWindow.messageLength)
-            {
-                TransitionChange();
-            }
-        }
-        else if (transitionMode == TransitionMode.beforeSwitching)
-        {
-            UndisplayTouchInstruction();
+            ct.Cancel();
             TransitionChange();
         }
     }
     //タスクの実行で transition を変更するメソッド
-    void ExececutionTask(string[] message, StepChangeConditions stepChangeConditions)
+    void ExececutionTask(string[] message, StepChangeConditions stepChangeConditions, float time_sec)
     {
         if (transitionMode == TransitionMode.afterSwitching)
         {
             messageWindow.LoadMessage(new List<string>(message));
             stepChangeConditions.setNowData();
+            WaitForTimeout(time_sec).Forget();
             TransitionChange();
         }
         else if (transitionMode == TransitionMode.continuation)
@@ -276,6 +254,7 @@ public class TutorialMessage : MonoBehaviour
         }
         else if (transitionMode == TransitionMode.beforeSwitching)
         {
+            ct.Cancel();
             TransitionChange();
         }
     }
@@ -519,8 +498,44 @@ public class TutorialMessage : MonoBehaviour
     [Header("タスク後にGoodと表示する画像")]
     [SerializeField] GoodText goodText;
 
+    //タイムアウト関連
+    CancellationTokenSource ct = new CancellationTokenSource();
+    float verificationTimeout_sec = 30.0f;
+    float tutorialTimeout_sec = 60.0f;
+    float taskTimeout_sec = 120.0f;
+    
+    public async UniTask WaitForTimeout(float time_sec)
+    {
+        TutorialStep _step = tutorialStep;
 
-    // Start is called before the first frame update
+        ct = new CancellationTokenSource();
+
+        await UniTask.Delay((int)(time_sec * 1000), cancellationToken: ct.Token);
+
+        if (_step == tutorialStep)
+        {
+            //全てのパネルを非表示
+            TutorialPanelFO().Forget();
+            tutorialStep = TutorialStep.TutorialVerification;
+            transitionMode = TransitionMode.afterSwitching;
+
+            //タイトルへ
+            sceneControl.screenMode = SceneControl.ScreenMode.Title;
+            sceneControl.transitionMode = SceneControl.TransitionMode.afterSwitching;
+        }
+    }
+    void TutorialPanelFI()
+    {
+        tutorialPanelRay.DOFade(endValue: 1.0f, duration: 1.0f);
+    }
+    async UniTask TutorialPanelFO()
+    {
+        tutorialPanelRay.DOFade(endValue: 0.0f, duration: 1.0f);
+        await UniTask.Delay(1000, cancellationToken: this.GetCancellationTokenOnDestroy());
+        explainPanel.PanelsInit();
+    }
+    
+
     void Start()
     {
         rightChangeConditions = new LRChangeConditions("right");
@@ -528,11 +543,12 @@ public class TutorialMessage : MonoBehaviour
         middleChangeConditions = new MiddleChangeConditions();
         cardReadConditions = new CardReadConditions(serialScipt);
         mikanChangeConditions = new MikanChangeConditions(tutorialCharactorScript);
+        ct = new CancellationTokenSource();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        Debug.Log($"changeTiming2: {ct.IsCancellationRequested}");
         if (sceneControl.screenMode == SceneControl.ScreenMode.Tutorial)
         {
             tutorialPanelRay.blocksRaycasts = true;
@@ -542,8 +558,10 @@ public class TutorialMessage : MonoBehaviour
                 explainPanel.TutorialVerification();
                 if (transitionMode == TransitionMode.afterSwitching)
                 {
+                    TutorialPanelFI();
                     touchInstructionImage.alpha = 0;
                     verificationPanelScript.SetUp();
+                    WaitForTimeout(verificationTimeout_sec).Forget();
                     TransitionChange();
                 }
                 else if (transitionMode == TransitionMode.continuation)
@@ -552,83 +570,83 @@ public class TutorialMessage : MonoBehaviour
                 }
                 else if (transitionMode == TransitionMode.beforeSwitching)
                 {
+                    ct.Cancel();
+                    Debug.Log($"changeTiming1: {ct.IsCancellationRequested}");
                     TransitionChange();
                 }
             }
-            if (tutorialStep == TutorialStep.BearGreeting)
+            else if (tutorialStep == TutorialStep.BearGreeting)
             {
                 explainPanel.ExplainBearOn();
-                ViewingMessage(message_BearGreeting);
+                ViewingMessage(message_BearGreeting, tutorialTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.BearGreeting_Mikan)
             {
                 explainPanel.ExplainMikan();
-                ViewingMessage(message_BearGreeting_Mikan);
+                ViewingMessage(message_BearGreeting_Mikan, tutorialTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.BearGreeting_Kamen)
             {
                 explainPanel.ExplainKamen();
-                ViewingMessage(message_BearGreeting_Kamen);
+                ViewingMessage(message_BearGreeting_Kamen, tutorialTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.BearGreeting_Kannna)
             {
                 explainPanel.ExplainKanna();
-                ViewingMessage(message_BearGreeting_Kannna);
+                ViewingMessage(message_BearGreeting_Kannna, tutorialTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_GrapStamp)
             {
                 explainPanel.ExplainGrapDevice();
-                ViewingMessage(message_StampOperation_GrapStamp);
+                ViewingMessage(message_StampOperation_GrapStamp, tutorialTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_RightButton)
             {
                 explainPanel.ExplainRightButton();
-                ExececutionTask(message_StampOperation_RightButton, rightChangeConditions);
-                //TransitionChange();
+                ExececutionTask(message_StampOperation_RightButton, rightChangeConditions, taskTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_RightButtonDoes)
             {
-                ViewingMessage(message_StampOperation_RightButtonDoes);
+                ViewingMessage(message_StampOperation_RightButtonDoes, tutorialTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_LeftButton)
             {
                 explainPanel.ExplainLeftButton();
-                ExececutionTask(message_StampOperation_LeftButton, leftChangeConditions);
-                //ViewingMessageSkip(message_StampOperation_LeftButton);
+                ExececutionTask(message_StampOperation_LeftButton, leftChangeConditions, taskTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_LeftButtonDoes)
             {
-                ViewingMessage(message_StampOperation_LeftButtonDoes);
+                ViewingMessage(message_StampOperation_LeftButtonDoes, tutorialTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_MiddleButton)
             {
                 explainPanel.ExplainMiddleButton();
-                ExececutionTask(message_StampOperation_MiddleButton, middleChangeConditions);
+                ExececutionTask(message_StampOperation_MiddleButton, middleChangeConditions, taskTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_MiddleButtonDoes)
             {
-                ViewingMessage(message_StampOperation_MiddleButtonDoes);
+                ViewingMessage(message_StampOperation_MiddleButtonDoes, tutorialTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_CardRead)
             {
                 explainPanel.ExplainCardRead();
-                ExececutionTask(message_StampOperation_CardRead, cardReadConditions);
+                ExececutionTask(message_StampOperation_CardRead, cardReadConditions, taskTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_CardReadDoes)
             {
-                ViewingMessage(message_StampOperation_CardReadDoes);
+                ViewingMessage(message_StampOperation_CardReadDoes, tutorialTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_TutorialMikan1)
             {
                 tutorialCharactorScript.KanSetup();
                 trySupportCheck.CheckBoxSetup();
                 explainPanel.ExplainTryMikanPanel();
-                ViewingMessage(message_StampOperation_TutorialMikan1);
+                ViewingMessage(message_StampOperation_TutorialMikan1, tutorialTimeout_sec);
                 tutorialCharactorScript.ChangeF = false;
             }
             else if (tutorialStep == TutorialStep.StampOperation_TutorialMikan2)
             {
-                ExececutionTask(message_StampOperation_TutorialMikan2, mikanChangeConditions);
+                ExececutionTask(message_StampOperation_TutorialMikan2, mikanChangeConditions, taskTimeout_sec);
                 trySupportCheck.CheckBoxCondition();
                 tutorialCharactorScript.PushStamp();
             }
@@ -636,7 +654,7 @@ public class TutorialMessage : MonoBehaviour
             {
                 trySupportCheck.CheckBoxCondition();
                 tutorialCharactorScript.PushStamp();
-                ViewingMessage(message_StampOperation_TutorialMikanDoes);
+                ViewingMessage(message_StampOperation_TutorialMikanDoes, tutorialTimeout_sec);
             }
             else if(tutorialStep == TutorialStep.EndStep)
             {

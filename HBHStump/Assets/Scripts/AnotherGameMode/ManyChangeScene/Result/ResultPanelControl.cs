@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
+using System.Threading;
 
 /*
 リザルトパネルを操作する
@@ -108,6 +109,36 @@ public class ResultPanelControl : MonoBehaviour
             0.0f,
             interval);
     }
+
+
+    //タイムアウト関連
+    CancellationTokenSource ct = new CancellationTokenSource();
+    float resultTimeout_sec = 30.0f;
+
+    public async UniTask WaitForTimeout(float time_sec)
+    {
+
+        ct = new CancellationTokenSource();
+
+        await UniTask.Delay((int)(time_sec * 1000), cancellationToken: ct.Token);
+        
+        //TODO: ヒントへ
+        //ランキングパネル等が適切に遷移するか
+        //音も心配
+
+    }
+    /*FI FO 類
+    void TutorialPanelFI()
+    {
+        tutorialPanelRay.DOFade(endValue: 1.0f, duration: 1.0f);
+    }
+    async UniTask TutorialPanelFO()
+    {
+        tutorialPanelRay.DOFade(endValue: 0.0f, duration: 1.0f);
+        await UniTask.Delay(1000, cancellationToken: this.GetCancellationTokenOnDestroy());
+        explainPanel.PanelsInit();
+    }
+    */
 
     //他スクリプトで呼び出し用の変数
     public async UniTask ResultSceneAfter(float num)

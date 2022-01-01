@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Cysharp.Threading.Tasks;
+using System.Threading;
 
 /*
 タイトル画面
@@ -15,7 +17,7 @@ public class TitleCharImageMove : MonoBehaviour
     [SerializeField] Sprite[] ImageSample;
 
     //各キャラクターのゲームオブジェクト
-    GameObject[] OneObject;
+    [SerializeField] GameObject[] OneObject;
     Vector2[] OneObjectPosition;
     Image[] OneObjectImage;
 
@@ -24,6 +26,14 @@ public class TitleCharImageMove : MonoBehaviour
 
     //コルーチン
     public Coroutine titleCharacterMove;
+
+    CancellationTokenSource ct;
+
+
+    private void OnDestroy()
+    {
+        ct.Cancel();
+    }
 
 
     //各キャラクターを全てキャッシュ
@@ -60,28 +70,34 @@ public class TitleCharImageMove : MonoBehaviour
     void SetSprite(Image charObj) {
         charObj.sprite = ImageSample[Random.Range(0, ImageSample.Length)];
     }
-           
+
     //キャラクターオブジェクトをまとめた親を動かす
-    public IEnumerator TitleCharacterMove()
+    //キャラクターオブジェク1つずつを動かす
+    public async UniTask TitleCharacterMove()
     {
-        while (true)
+        while (!ct.IsCancellationRequested)
         {
             float moveTime = 3.0f;
-            transform.DOLocalMove(new Vector2(transform.localPosition.x - 300, transform.localPosition.y - 300), moveTime).SetEase(Ease.Linear);
-            yield return new WaitForSeconds(moveTime);
-
-            //左下に言ったオブジェクトを右上に移動させる
-            for (int i = 0; i < OneObject.Length; i++)
+            foreach (GameObject obj in OneObject)
             {
-                if (OneObject[i].transform.position.y <= -300)
+                obj.transform.DOLocalMove(
+                    new Vector2(obj.transform.localPosition.x - 300,
+                                obj.transform.localPosition.y - 300), moveTime).SetEase(Ease.Linear);
+            }
+            await UniTask.Delay((int)(moveTime * 1000), cancellationToken: ct.Token);
+            await UniTask.DelayFrame(1);
+
+            //左下に行ったオブジェクトを右上に移動させる
+            foreach(GameObject obj in OneObject) { 
+                if (obj.transform.localPosition.y <= -900)
                 {
                     Debug.Log("move");
-                    OneObject[i].transform.position = new Vector2(OneObject[i].transform.position.x + 600, 1500);
+                    obj.transform.localPosition = new Vector2(obj.transform.localPosition.x + 600, 900);
                 }
-                else if (OneObject[i].transform.position.x <= -240)
+                else if (obj.transform.localPosition.x <= -1200)
                 {
                     Debug.Log("move");
-                    OneObject[i].transform.position = new Vector2(2160, OneObject[i].transform.position.y + 300);
+                    obj.transform.localPosition = new Vector2(1200, obj.transform.localPosition.y + 300);
                 }
             }
         }
@@ -106,8 +122,6 @@ public class TitleCharImageMove : MonoBehaviour
             num     //どれくらいの時間
         );
         yield return new WaitForSeconds(num);   //TitleCharacterMove()のインターバルに合わせて変更すること
-        //タイトル画面の動きを停止、初期位置に戻す
-        StopCoroutine(titleCharacterMove);
         yield return new WaitForSeconds(3.0f);   //TitleCharacterMove()のインターバルに合わせて変更すること
         StartSetPosition();
     }
@@ -118,7 +132,8 @@ public class TitleCharImageMove : MonoBehaviour
     {
         DisplayTitlePanel(num);
         StartSetPosition();
-        titleCharacterMove = StartCoroutine(TitleCharacterMove());
+        ct = new CancellationTokenSource();
+        TitleCharacterMove().Forget();
     }
     public void TitleSceneContinuation()
     {
@@ -127,6 +142,7 @@ public class TitleCharImageMove : MonoBehaviour
     public void TitleSceneBefore(float interval)
     {
         StartCoroutine(NonDisplayTitlePanel(interval));
+        ct.Cancel();
     }
 
 

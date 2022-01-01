@@ -32,13 +32,15 @@ public class TutorialCharactorNameSet : MonoBehaviour
 
         //枠組みを形成
         Frame = Instantiate(FramePrefab, new Vector3(transform.position.x, transform.position.y + NamePosY, transform.position.z), Quaternion.identity, this.gameObject.transform.parent.gameObject.transform);
+        Frame.transform.localPosition = new Vector3(0, NamePosY, transform.position.z);
+        Frame.transform.localScale = Vector2.one;
         Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length) * 100, 100);        //枠のサイズを決定
 
         //文字を指定
         for (int i = 0; i < Name.Length; i++)
         {
             FrameChild = Instantiate(FrameChildPrefab, Frame.transform.position, Quaternion.identity, Frame.transform);
-            FrameChild.transform.GetChild(0).GetComponent<Text>().text = Name.Substring(i, 1);
+            FrameChild.transform.GetChild(1).GetComponent<Text>().text = Name.Substring(i, 1);
 
             if (i == 0)
             {
@@ -90,7 +92,8 @@ public class TutorialCharactorNameSet : MonoBehaviour
             else
             {
                 //Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length) * 100, 100);        //枠のサイズを決定
-                AddFrame.transform.localScale = Vector3.one;
+                AddFrame.transform.localScale = Vector2.one;
+                //AddFrame.transform.localPosition = Vector2.one;
                 Frame.GetComponent<AudioSource>().Play();
                 count = 10;
             }

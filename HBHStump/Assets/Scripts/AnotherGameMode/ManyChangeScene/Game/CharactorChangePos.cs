@@ -11,6 +11,11 @@ using Cysharp.Threading.Tasks;
 
 public class CharactorChangePos : MonoBehaviour
 {
+    public static CharactorChangePos Instance;
+
+    public CharactorChangePos() { Instance = this; }
+
+
     //キャラクターのクラス
     //要変更
     //  ゲームオブジェクトが被らないようにする
@@ -42,20 +47,36 @@ public class CharactorChangePos : MonoBehaviour
         }
 
         //各データを設定する
-        public void SetData(int posY, GameObject charObj, GameObject parent)
+        public void SetData(int posY, GameObject charObj, GameObject parent, int beforePosX = -1)
         {
             this.posY = posY;
             this.charObj = Instantiate(charObj);
             this.charObj.transform.SetParent(parent.transform);
-            if (Random.Range(0, 2) == 0)
-            {
-                lookDirection = true;
-                posX = 0;
-            }
-            else
+            this.charObj.transform.localScale = Vector2.one;
+            
+            if(beforePosX == 0)
             {
                 lookDirection = false;
                 posX = 5;
+            }
+            else if(beforePosX == 5)
+            {
+                lookDirection = true;
+                posX = 0;
+
+            }
+            else
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    lookDirection = true;
+                    posX = 0;
+                }
+                else
+                {
+                    lookDirection = false;
+                    posX = 5;
+                }
             }
             nowTime = 0.0f;
             changePosTime = Random.Range(OperationCharctor.getInstance().minTimeRange, OperationCharctor.getInstance().maxTimeRange);
@@ -131,14 +152,7 @@ public class CharactorChangePos : MonoBehaviour
                 nowTime = 0.0f;
             }
         }
-
-        //オブジェクトを破棄する
-        //OperationCharctorでしか呼び出さない
-        public void DestroyObject()
-        {
-            //Destroy(charObj.gameObject);
-            //charObj.gameObject.transform.localPosition = new Vector2(1200, 0);
-        }
+        
         //変化後のオブジェクトを破棄する
         public async UniTask DestroyNewObj()
         {
@@ -242,8 +256,6 @@ public class CharactorChangePos : MonoBehaviour
         //オブジェクトを破棄し、新たなオブジェクトを生成する
         public void DeathBornObject(int posY)
         {
-            charClass[posY].DestroyObject();
-
             OccupancyCharctor[posY] = -1;
             int tempCharNum = 0;
             do
@@ -257,7 +269,7 @@ public class CharactorChangePos : MonoBehaviour
         //キャラクター変化があった時
         //新規オブジェクトを作り出す
         //変化後オブジェクトを変数に記憶する
-        public void ChangeCharctor(int posY, GameObject newObj)
+        public void ChangeCharctor(int posX, int posY, GameObject newObj)
         {
             OccupancyCharctor[posY] = -1;
             int tempCharNum = 0;
@@ -265,7 +277,7 @@ public class CharactorChangePos : MonoBehaviour
             {
                 tempCharNum = (int)Random.Range(0, charactorIns.Length);
             } while (tempCharNum == OccupancyCharctor[0] || tempCharNum == OccupancyCharctor[1] || tempCharNum == OccupancyCharctor[2]);
-            charClass[posY].SetData(posY, charactorIns[tempCharNum], GameObject.Find("Charctors"));
+            charClass[posY].SetData(posY, charactorIns[tempCharNum], GameObject.Find("Charctors"), posX);
             OccupancyCharctor[posY] = tempCharNum;
 
             charClass[posY].SetNewObj(newObj);

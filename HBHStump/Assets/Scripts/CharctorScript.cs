@@ -17,11 +17,6 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
         Body,
         Hip
     }
-    public enum ClareFlag
-    {
-        Clare,
-        Failed
-    }
 
     //辞書クラス
     [System.Serializable]
@@ -30,7 +25,6 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
         public PartsType Parts = PartsType.Head;        //パーツ部分
         public string Word;       //言葉
         public GameObject AfterObject;      //変化後のオブジェクト
-        public ClareFlag Flag = ClareFlag.Failed;       //このオブジェクトがクリア条件であるか
     };
 
 
@@ -58,8 +52,6 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
     [SerializeField] int pos_x;     //自分の今いる座標
     [SerializeField] int pos_y;     //自分の今いる座標
     
-    ClareConditions clare;          //クリア条件を組み込んでいるスクリプト
-
 
     MasterData masterData;
     
@@ -82,9 +74,7 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
         //audio = GameObject.Find("StumpImage").GetComponent<AudioSource>();
 
         SerchF = false;
-
-        clare = GameObject.Find("Main Camera").GetComponent<ClareConditions>();
-
+        
         masterData = GameObject.Find("GameControler").GetComponent<MasterData>();
     }
 
@@ -166,8 +156,7 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
                     //新ゲームモード用の処理
                     if (SceneManager.GetActiveScene().name == "ManyChangeScene")
                     {
-                        CharactorChangePos ccp = GameObject.Find("Charctors").GetComponent<CharactorChangePos>();
-                        ccp.opChar.ChangeCharctor(pos_y, NewObj);
+                        CharactorChangePos.Instance.opChar.ChangeCharctor(pos_x, pos_y, NewObj);
                     }
                     
                     //FogUI.transform.SetParent(NewObj.transform, true);
@@ -175,11 +164,6 @@ public class CharctorScript : MonoBehaviour, IPointerClickHandler
                     Destroy(this.gameObject.GetComponent<Image>());
                     Destroy(this.gameObject.transform.parent.transform.Find("WordFlame(Clone)").gameObject);
                     
-                    ClareConditions.ChangeCharctor++;     //変化したキャラ数をプラスする
-                    if (Dic[ChangeNum].Flag == ClareFlag.Clare)
-                    {
-                        ClareConditions.ClareCharctor++;
-                    }
                 }
             }
             else if(count > 5.0f)
