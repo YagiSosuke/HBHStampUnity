@@ -61,6 +61,42 @@ public class DeviceReconnectPanel : MonoBehaviour
         serial.portName = "COM3";
         TryConnection().Forget();
     }
+    public void OnPushCom4Button()
+    {
+        if (serial.serial != null) serial.Close();
+        serial.portName = "COM4";
+        TryConnection().Forget();
+    }
+    public void OnPushCom5Button()
+    {
+        if (serial.serial != null) serial.Close();
+        serial.portName = "COM5";
+        TryConnection().Forget();
+    }
+    public void OnPushCom6Button()
+    {
+        if (serial.serial != null) serial.Close();
+        serial.portName = "COM6";
+        TryConnection().Forget();
+    }
+    public void OnPushCom7Button()
+    {
+        if (serial.serial != null) serial.Close();
+        serial.portName = "COM7";
+        TryConnection().Forget();
+    }
+    public void OnPushCom8Button()
+    {
+        if (serial.serial != null) serial.Close();
+        serial.portName = "COM8";
+        TryConnection().Forget();
+    }
+    public void OnPushCom9Button()
+    {
+        if (serial.serial != null) serial.Close();
+        serial.portName = "COM9";
+        TryConnection().Forget();
+    }
 
     private void Start()
     {
@@ -82,6 +118,30 @@ public class DeviceReconnectPanel : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
         {
             OnPushCom3Button();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4))
+        {
+            OnPushCom4Button();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5))
+        {
+            OnPushCom5Button();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6))
+        {
+            OnPushCom6Button();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Keypad7))
+        {
+            OnPushCom7Button();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha8) || Input.GetKeyDown(KeyCode.Keypad8))
+        {
+            OnPushCom8Button();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha9) || Input.GetKeyDown(KeyCode.Keypad9))
+        {
+            OnPushCom9Button();
         }
     }
 }

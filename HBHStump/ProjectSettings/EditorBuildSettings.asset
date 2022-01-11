@@ -23,7 +23,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Stage/Toy.unity
     guid: 6f7351a0117714642a78940b0f1babda
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/AnotherGameMode/M5StackConnectionCheckScene.unity
     guid: c9dfdb681efe0174582e1c58d937f60d
   - enabled: 1
