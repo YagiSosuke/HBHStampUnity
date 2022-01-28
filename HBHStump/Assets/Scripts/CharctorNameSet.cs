@@ -2,98 +2,66 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+using Cysharp.Threading.Tasks;
 
 /*キャラクタの名前を自動でセットする*/
 
 public class CharctorNameSet : MonoBehaviour
 {
-    string Name;        //オブジェクトの名前
-    [SerializeField] GameObject FramePrefab;        //フレーム
-    GameObject Frame;        //フレームの実体
+    GameObject flamePrefab;        //フレーム表示領域
+    GameObject flame;        //フレームの実体
 
-    [SerializeField] GameObject FrameChildPrefab;   //フレーム1つ
-    GameObject FrameChild;   //フレーム1つの実体
+    GameObject flameChildPrefab;   //フレーム1つ
+    GameObject flameChild;   //フレーム1つの実体
 
-    GameObject AddFrame;        //追加した文字
+    GameObject newFlame;        //追加した文字のフレーム
+    
+    float namePosY = 150;
 
-    float count = 0;            //カウントする
 
-    float NamePosY = 150;
-
-    // Start is called before the first frame update
-    void Start()
+    //スタンプ打たれたキャラの場合、文字追加アニメーションの再生
+    async UniTask AddFlameAnimation()
     {
-        Name = this.gameObject.name.Replace("Image_", "").Replace("(Clone)", "");      //名前取得
-        //Name += " ";
-        Debug.Log(Name);
-
-        //枠組みを形成
-        Frame = Instantiate(FramePrefab, new Vector3(transform.position.x, transform.position.y+NamePosY, transform.position.z), Quaternion.identity, this.gameObject.transform.parent.gameObject.transform);
-        Frame.transform.localPosition = new Vector3(0, NamePosY, transform.position.z);
-        Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length) * 100, 100);        //枠のサイズを決定
-
-        //文字を指定
-        for(int i = 0; i < Name.Length; i++)
+        if ((gameObject.tag == "Head" || gameObject.tag == "Body" || gameObject.tag == "Hip"))
         {
-            FrameChild = Instantiate(FrameChildPrefab, Frame.transform.position, Quaternion.identity, Frame.transform);
-            FrameChild.transform.GetChild(1).GetComponent<Text>().text = Name.Substring(i, 1);
-
-            if (i == 0)
-            {
-                if (gameObject.tag == "Head" || gameObject.tag == "HeadSample")
-                {
-                    AddFrame = FrameChild;
-                    FrameChild.GetComponent<Image>().color = Color.green;
-                    //Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length - 1) * 100, 100);
-                }
-            }
-            else if (i == (Name.Length) / 2)
-            {
-                if (gameObject.tag == "Body" || gameObject.tag == "BodySample")
-                {
-                    AddFrame = FrameChild;
-                    FrameChild.GetComponent<Image>().color = Color.green;
-                    //Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length - 1) * 100, 100);
-                }
-            }
-            else if (i == Name.Length - 1)
-            {
-                if (gameObject.tag == "Hip" || gameObject.tag == "HipSample")
-                {
-                    AddFrame = FrameChild;
-                    FrameChild.GetComponent<Image>().color = Color.green;
-                    //Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length - 1) * 100, 100);
-                }
-            }
+            newFlame.transform.localScale = Vector3.zero;
+            
+            newFlame.transform.localScale = Vector2.one * 3;
+            newFlame.transform.DOScale(Vector2.one, 1.0f).SetEase(Ease.InCubic);
+            await UniTask.Delay(1000, cancellationToken: this.GetCancellationTokenOnDestroy());
+            
+            flame.GetComponent<AudioSource>().Play();
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        //スタンプ 打つとき
-        if ((gameObject.tag == "Head" || gameObject.tag == "Body" || gameObject.tag == "Hip") && count < 3)
-        {
-            if(count == 0)
-            {
-                //Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length-1) * 100, 100);        //枠のサイズを決定
-                AddFrame.transform.localScale = Vector3.zero;
-            }
-            else if(count < 1)
-            {
-                float lerp = (count) * (count) * (count) * (count);
-                //Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length - 1) * 100 + (lerp * 100), 100);        //枠のサイズを決定
-                AddFrame.transform.localScale = new Vector3(3 - lerp*2,3 - lerp*2,3 - lerp*2);
-            }
-            else
-            {
-                //Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length) * 100, 100);        //枠のサイズを決定
-                AddFrame.transform.localScale = Vector3.one;
-                Frame.GetComponent<AudioSource>().Play();
-                count = 10;
-            }
+        var objName = gameObject.name.Replace("Image_", "").Replace("(Clone)", "");
 
-            count += Time.deltaTime;
+        flamePrefab = (GameObject)Resources.Load("Prefabs/WordFlame/WordFlame");
+        flameChildPrefab = (GameObject)Resources.Load("Prefabs/WordFlame/Flame");
+
+        //枠組みを形成
+        flame = Instantiate(flamePrefab, new Vector3(transform.position.x, transform.position.y+ namePosY, transform.position.z), Quaternion.identity, this.gameObject.transform.parent.gameObject.transform);
+        flame.transform.localPosition = new Vector3(0, namePosY, transform.position.z);
+        flame.GetComponent<RectTransform>().sizeDelta = new Vector2((objName.Length) * 100, 100);        //枠のサイズを決定
+
+        //追加された文字枠についての処理
+        for(int i = 0; i < objName.Length; i++)
+        {
+            flameChild = Instantiate(flameChildPrefab, flame.transform.position, Quaternion.identity, flame.transform);
+            flameChild.transform.GetChild(1).GetComponent<Text>().text = objName.Substring(i, 1);
+
+            if ((i == 0 && (gameObject.tag == "Head" || gameObject.tag == "HeadSample")) ||
+                (i == 1 && (gameObject.tag == "Body" || gameObject.tag == "BodySample")) ||
+                (i == 2 && (gameObject.tag == "Hip" || gameObject.tag == "HipSample")))
+            {
+                newFlame = flameChild;
+                flameChild.GetComponent<Image>().color = Color.green;
+
+                AddFlameAnimation().Forget();
+            }
         }
     }
 }

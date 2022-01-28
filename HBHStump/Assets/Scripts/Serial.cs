@@ -59,7 +59,7 @@ public class Serial : MonoBehaviour
         }
         if (cardReadF)
         {
-            StartCoroutine(CardReadFlagDown());
+            CardReadFlagDown().Forget();
         }
     }
 
@@ -105,230 +105,230 @@ public class Serial : MonoBehaviour
                     //パーツの設定
                     #region
                     case "Head":
-                        setParts("頭");
+                        Stamp.Instance.SetParts(Parts.Head);
                         break;
                     case "Body":
-                        setParts("体");
+                        Stamp.Instance.SetParts(Parts.Body);
                         break;
                     case "Hip":
-                        setParts("尻");
+                        Stamp.Instance.SetParts(Parts.Hip);
                         break;
                     #endregion
 
                     //文字の判定
                     #region
                     case "a.png":
-                        ButtonNameChange.TempWord = "あ";
+                        Stamp.Instance.SetWord("あ");
                         break;
                     case "i.png":
-                        ButtonNameChange.TempWord = "い";
+                        Stamp.Instance.SetWord("い");
                         break;
                     case "u.png":
-                        ButtonNameChange.TempWord = "う";
+                        Stamp.Instance.SetWord("う");
                         break;
                     case "e.png":
-                        ButtonNameChange.TempWord = "え";
+                        Stamp.Instance.SetWord("え");
                         break;
                     case "o.png":
-                        ButtonNameChange.TempWord = "お";
+                        Stamp.Instance.SetWord("お");
                         break;
                     case "ka.png":
-                        ButtonNameChange.TempWord = "か";
+                        Stamp.Instance.SetWord("か");
                         break;
                     case "ki.png":
-                        ButtonNameChange.TempWord = "き";
+                        Stamp.Instance.SetWord("き");
                         break;
                     case "ku.png":
-                        ButtonNameChange.TempWord = "く";
+                        Stamp.Instance.SetWord("く");
                         break;
                     case "ke.png":
-                        ButtonNameChange.TempWord = "け";
+                        Stamp.Instance.SetWord("け");
                         break;
                     case "ko.png":
-                        ButtonNameChange.TempWord = "こ";
+                        Stamp.Instance.SetWord("こ");
                         break;
                     case "sa.png":
-                        ButtonNameChange.TempWord = "さ";
+                        Stamp.Instance.SetWord("さ");
                         break;
                     case "si.png":
-                        ButtonNameChange.TempWord = "し";
+                        Stamp.Instance.SetWord("し");
                         break;
                     case "su.png":
-                        ButtonNameChange.TempWord = "す";
+                        Stamp.Instance.SetWord("す");
                         break;
                     case "se.png":
-                        ButtonNameChange.TempWord = "せ";
+                        Stamp.Instance.SetWord("せ");
                         break;
                     case "so.png":
-                        ButtonNameChange.TempWord = "そ";
+                        Stamp.Instance.SetWord("そ");
                         break;
                     case "ta.png":
-                        ButtonNameChange.TempWord = "た";
+                        Stamp.Instance.SetWord("た");
                         break;
                     case "ti.png":
-                        ButtonNameChange.TempWord = "ち";
+                        Stamp.Instance.SetWord("ち");
                         break;
                     case "tu.png":
-                        ButtonNameChange.TempWord = "つ";
+                        Stamp.Instance.SetWord("つ");
                         break;
                     case "te.png":
-                        ButtonNameChange.TempWord = "て";
+                        Stamp.Instance.SetWord("て");
                         break;
                     case "to.png":
-                        ButtonNameChange.TempWord = "と";
+                        Stamp.Instance.SetWord("と");
                         break;
                     case "na.png":
-                        ButtonNameChange.TempWord = "な";
+                        Stamp.Instance.SetWord("な");
                         break;
                     case "ni.png":
-                        ButtonNameChange.TempWord = "に";
+                        Stamp.Instance.SetWord("に");
                         break;
                     case "nu.png":
-                        ButtonNameChange.TempWord = "ぬ";
+                        Stamp.Instance.SetWord("ぬ");
                         break;
                     case "ne.png":
-                        ButtonNameChange.TempWord = "ね";
+                        Stamp.Instance.SetWord("ね");
                         break;
                     case "no.png":
-                        ButtonNameChange.TempWord = "の";
+                        Stamp.Instance.SetWord("の");
                         break;
                     case "ha.png":
-                        ButtonNameChange.TempWord = "は";
+                        Stamp.Instance.SetWord("は");
                         break;
                     case "hi.png":
-                        ButtonNameChange.TempWord = "ひ";
+                        Stamp.Instance.SetWord("ひ");
                         break;
                     case "hu.png":
-                        ButtonNameChange.TempWord = "ふ";
+                        Stamp.Instance.SetWord("ふ");
                         break;
                     case "he.png":
-                        ButtonNameChange.TempWord = "へ";
+                        Stamp.Instance.SetWord("へ");
                         break;
                     case "ho.png":
-                        ButtonNameChange.TempWord = "ほ";
+                        Stamp.Instance.SetWord("ほ");
                         break;
                     case "ma.png":
-                        ButtonNameChange.TempWord = "ま";
+                        Stamp.Instance.SetWord("ま");
                         break;
                     case "mi.png":
-                        ButtonNameChange.TempWord = "み";
+                        Stamp.Instance.SetWord("み");
                         break;
                     case "mu.png":
-                        ButtonNameChange.TempWord = "む";
+                        Stamp.Instance.SetWord("む");
                         break;
                     case "me.png":
-                        ButtonNameChange.TempWord = "め";
+                        Stamp.Instance.SetWord("め");
                         break;
                     case "mo.png":
-                        ButtonNameChange.TempWord = "も";
+                        Stamp.Instance.SetWord("も");
                         break;
                     case "ya.png":
-                        ButtonNameChange.TempWord = "や";
+                        Stamp.Instance.SetWord("や");
                         break;
                     case "yu.png":
-                        ButtonNameChange.TempWord = "ゆ";
+                        Stamp.Instance.SetWord("ゆ");
                         break;
                     case "yo.png":
-                        ButtonNameChange.TempWord = "よ";
+                        Stamp.Instance.SetWord("よ");
                         break;
                     case "ra.png":
-                        ButtonNameChange.TempWord = "ら";
+                        Stamp.Instance.SetWord("ら");
                         break;
                     case "ri.png":
-                        ButtonNameChange.TempWord = "り";
+                        Stamp.Instance.SetWord("り");
                         break;
                     case "ru.png":
-                        ButtonNameChange.TempWord = "る";
+                        Stamp.Instance.SetWord("る");
                         break;
                     case "re.png":
-                        ButtonNameChange.TempWord = "れ";
+                        Stamp.Instance.SetWord("れ");
                         break;
                     case "ro.png":
-                        ButtonNameChange.TempWord = "ろ";
+                        Stamp.Instance.SetWord("ろ");
                         break;
                     case "wa.png":
-                        ButtonNameChange.TempWord = "わ";
+                        Stamp.Instance.SetWord("わ");
                         break;
                     case "wo.png":
-                        ButtonNameChange.TempWord = "を";
+                        Stamp.Instance.SetWord("を");
                         break;
                     case "nn.png":
-                        ButtonNameChange.TempWord = "ん";
+                        Stamp.Instance.SetWord("ん");
                         break;
                     case "ga.png":
-                        ButtonNameChange.TempWord = "が";
+                        Stamp.Instance.SetWord("が");
                         break;
                     case "gi.png":
-                        ButtonNameChange.TempWord = "ぎ";
+                        Stamp.Instance.SetWord("ぎ");
                         break;
                     case "gu.png":
-                        ButtonNameChange.TempWord = "ぐ";
+                        Stamp.Instance.SetWord("ぐ");
                         break;
                     case "ge.png":
-                        ButtonNameChange.TempWord = "げ";
+                        Stamp.Instance.SetWord("げ");
                         break;
                     case "go.png":
-                        ButtonNameChange.TempWord = "ご";
+                        Stamp.Instance.SetWord("ご");
                         break;
                     case "za.png":
-                        ButtonNameChange.TempWord = "ざ";
+                        Stamp.Instance.SetWord("ざ");
                         break;
                     case "zi.png":
-                        ButtonNameChange.TempWord = "じ";
+                        Stamp.Instance.SetWord("じ");
                         break;
                     case "zu.png":
-                        ButtonNameChange.TempWord = "ず";
+                        Stamp.Instance.SetWord("ず");
                         break;
                     case "ze.png":
-                        ButtonNameChange.TempWord = "ぜ";
+                        Stamp.Instance.SetWord("ぜ");
                         break;
                     case "zo.png":
-                        ButtonNameChange.TempWord = "ぞ";
+                        Stamp.Instance.SetWord("ぞ");
                         break;
                     case "da.png":
-                        ButtonNameChange.TempWord = "だ";
+                        Stamp.Instance.SetWord("だ");
                         break;
                     case "di.png":
-                        ButtonNameChange.TempWord = "ぢ";
+                        Stamp.Instance.SetWord("ぢ");
                         break;
                     case "du.png":
-                        ButtonNameChange.TempWord = "づ";
+                        Stamp.Instance.SetWord("づ");
                         break;
                     case "de.png":
-                        ButtonNameChange.TempWord = "で";
+                        Stamp.Instance.SetWord("で");
                         break;
                     case "do.png":
-                        ButtonNameChange.TempWord = "ど";
+                        Stamp.Instance.SetWord("ど");
                         break;
                     case "ba.png":
-                        ButtonNameChange.TempWord = "ば";
+                        Stamp.Instance.SetWord("ば");
                         break;
                     case "bi.png":
-                        ButtonNameChange.TempWord = "び";
+                        Stamp.Instance.SetWord("び");
                         break;
                     case "bu.png":
-                        ButtonNameChange.TempWord = "ぶ";
+                        Stamp.Instance.SetWord("ぶ");
                         break;
                     case "be.png":
-                        ButtonNameChange.TempWord = "べ";
+                        Stamp.Instance.SetWord("べ");
                         break;
                     case "bo.png":
-                        ButtonNameChange.TempWord = "ぼ";
+                        Stamp.Instance.SetWord("ぼ");
                         break;
                     case "pa.png":
-                        ButtonNameChange.TempWord = "ぱ";
+                        Stamp.Instance.SetWord("ぱ");
                         break;
                     case "pi.png":
-                        ButtonNameChange.TempWord = "ぴ";
+                        Stamp.Instance.SetWord("ぴ");
                         break;
                     case "pu.png":
-                        ButtonNameChange.TempWord = "ぷ";
+                        Stamp.Instance.SetWord("ぷ");
                         break;
                     case "pe.png":
-                        ButtonNameChange.TempWord = "ぺ";
+                        Stamp.Instance.SetWord("ぺ");
                         break;
                     case "po.png":
-                        ButtonNameChange.TempWord = "ぽ";
+                        Stamp.Instance.SetWord("ぽ");
                         break;
                     #endregion
 
@@ -390,8 +390,6 @@ public class Serial : MonoBehaviour
                         break;
                         #endregion
                 }
-
-                StumpScript.stampPartsWord[StumpScript.TempStump] = ButtonNameChange.TempWord;  //現在設定されているパーツに対応する文字を登録
             }
         }
     }
@@ -454,13 +452,7 @@ public class Serial : MonoBehaviour
             Debug.LogException(e);
         }
     }
-
-    public void setParts(string parts)
-    {
-        Debug.Log("実行" + parts);
-        StumpScript.TempStump = parts;
-    }
-
+    
 
     //タイムアウトしないように定期的に接続されているか確認する処理
     public async UniTask ConnectCheck()
@@ -498,16 +490,10 @@ public class Serial : MonoBehaviour
     }
 
     //カードで文字を読み込んだフラグを下げたいとき
-    private IEnumerator CardReadFlagDown()
+    async UniTask CardReadFlagDown()
     {
-        yield return null;
+        await UniTask.DelayFrame(1);
         cardReadF = false;
-    }
-    //スタンプを押したフラグを下げたいとき
-    private IEnumerator PushFlagDown(int x, int y)
-    {
-        yield return null;
-        PushF[x, y] = false;
     }
 
     public bool pushCheck()

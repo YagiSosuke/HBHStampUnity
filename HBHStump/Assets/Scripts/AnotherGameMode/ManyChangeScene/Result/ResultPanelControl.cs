@@ -12,7 +12,7 @@ using System.Threading;
 
 public class ResultPanelControl : MonoBehaviour
 {
-    MasterData masterData;
+    MasterData MasterData => MasterData.Instance;
     RankingControl rankCtrl;
     CanvasGroup resultPanel;
     [SerializeField] Serial serialScript;
@@ -58,7 +58,6 @@ public class ResultPanelControl : MonoBehaviour
     [SerializeField] GameObject pleaseTouchText_ranking;
 
     void Start() {
-        masterData = GameObject.Find("GameControler").GetComponent<MasterData>();
         rankCtrl = GameObject.Find("RankPanel").GetComponent<RankingControl>();
         resultPanel = GameObject.Find("ResultPanel").GetComponent<CanvasGroup>();
         
@@ -80,12 +79,12 @@ public class ResultPanelControl : MonoBehaviour
     //スコアを表示する
     public void DisplayScore()
     {
-        scoreText.text = masterData.score.ToString();
+        scoreText.text = MasterData.score.ToString();
     }
     //変化させたキャラクター一覧を表示する
     public void DisplayCharacter()
     {        
-        for(int i=0; i<masterData.newObjects.Count; i++)
+        for(int i=0; i< MasterData.newObjects.Count; i++)
         {
             DisplayOneCharacter(i).Forget();
         }
@@ -96,7 +95,7 @@ public class ResultPanelControl : MonoBehaviour
         await UniTask.Delay((int)(interval*1000));
         characterImages[num].SetActive(true);
         characterImages[num].transform.localScale = new Vector2(1.5f, 1.5f);
-        characterImages[num].GetComponent<Image>().sprite = masterData.newObjects[num];
+        characterImages[num].GetComponent<Image>().sprite = MasterData.newObjects[num];
         characterImages[num].transform.DOScale(Vector2.one, 0.5f);
     }
 
@@ -127,24 +126,12 @@ public class ResultPanelControl : MonoBehaviour
         //音も心配
 
     }
-    /*FI FO 類
-    void TutorialPanelFI()
-    {
-        tutorialPanelRay.DOFade(endValue: 1.0f, duration: 1.0f);
-    }
-    async UniTask TutorialPanelFO()
-    {
-        tutorialPanelRay.DOFade(endValue: 0.0f, duration: 1.0f);
-        await UniTask.Delay(1000, cancellationToken: this.GetCancellationTokenOnDestroy());
-        explainPanel.PanelsInit();
-    }
-    */
 
     //他スクリプトで呼び出し用の変数
     public async UniTask ResultSceneAfter(float num)
     {
         //ランキング更新
-        rankNum = rankCtrl.rankUpdate(masterData.score);
+        rankNum = rankCtrl.rankUpdate(MasterData.score);
         if (rankNum != -1)
         {
             pleaseTouchText.SetActive(false);
@@ -164,7 +151,7 @@ public class ResultPanelControl : MonoBehaviour
         //紙吹雪表示
         UniTask.Void(async () =>
         {
-            await UniTask.Delay(masterData.score * 100);
+            await UniTask.Delay(MasterData.score * 100);
             redPaper.Play();
             yellowPaper.Play();
         });
@@ -173,7 +160,7 @@ public class ResultPanelControl : MonoBehaviour
         UniTask.Void(async () =>
         {
             audio.PlayOneShot(drumRoll);
-            await UniTask.Delay(masterData.score * 100);
+            await UniTask.Delay(MasterData.score * 100);
             audio.Stop();
             audio.PlayOneShot(drumFinish);
         });

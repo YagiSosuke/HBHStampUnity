@@ -37,8 +37,8 @@ public class SceneControl : MonoBehaviour
     float stateChangeInterval = -1.0f;
     
     //別スクリプトからメソッド呼び出し用
+    MasterData MasterData => MasterData.Instance;
     [Header("別スクリプトからメソッド呼び出し用")]
-    [SerializeField] MasterData masterData;
     [SerializeField] TitleCharImageMove titleCharImageMove;
     [SerializeField] CharactorChangePos charactorChangePos;
     [SerializeField] ResultPanelControl resultPanelControl;
@@ -121,7 +121,6 @@ public class SceneControl : MonoBehaviour
 
         if (screenMode == ScreenMode.Title)
         {
-            #region
             if (transitionMode == TransitionMode.afterSwitching)
             {
                 if (stateChangeInterval == -1)
@@ -156,17 +155,12 @@ public class SceneControl : MonoBehaviour
                     StateChange(stateChangeInterval).Forget();
                 }
             }
-            #endregion
         }
         else if(screenMode == ScreenMode.Tutorial)
         {
-            #region
-
-            #endregion
         }
         else if(screenMode == ScreenMode.GameSetting)
         {
-            #region
             if (transitionMode == TransitionMode.afterSwitching)
             {
                 GameSetupCount().Forget();
@@ -179,14 +173,12 @@ public class SceneControl : MonoBehaviour
             {
                 StateChange();
             }
-            #endregion
         }
         else if (screenMode == ScreenMode.Game)
         {
-            #region
             if (transitionMode == TransitionMode.afterSwitching)
             {
-                masterData.StatusInitialization();
+                MasterData.StatusInitialization();
                 charactorChangePos.GameSceneAfter();
                 
                 StateChange();
@@ -194,13 +186,13 @@ public class SceneControl : MonoBehaviour
             else if (transitionMode == TransitionMode.continuation)
             {
                 //制限時間を減らしていく
-                masterData.remainingTime -= Time.deltaTime;
+                MasterData.remainingTime -= Time.deltaTime;
 
                 //キャラクター変化全般を操作する
                 charactorChangePos.GameSceneContinuation();
 
                 //時間が無くなったら状態遷移
-                if (masterData.remainingTime <= 0)
+                if (MasterData.remainingTime <= 0)
                 {
                     StateChange();
                 }
@@ -211,11 +203,9 @@ public class SceneControl : MonoBehaviour
                 
                 StateChange();
             }
-            #endregion
         }
         else if (screenMode == ScreenMode.GameFinish)
         {
-            #region
             if (transitionMode == TransitionMode.afterSwitching)
             {
                 GameFinishCount().Forget();
@@ -228,12 +218,9 @@ public class SceneControl : MonoBehaviour
             {
                 StateChange();
             }
-
-            #endregion
         }
         else if (screenMode == ScreenMode.Result)
         {
-            #region
             if (transitionMode == TransitionMode.afterSwitching)
             {
                 if (stateChangeInterval == -1)
@@ -241,7 +228,7 @@ public class SceneControl : MonoBehaviour
                     stateChangeInterval = 1.0f;
 
                     resultPanelControl.ResultSceneAfter(stateChangeInterval).Forget();
-                    StateChange(masterData.score * 0.1f + 1.0f).Forget();
+                    StateChange(MasterData.score * 0.1f + 1.0f).Forget();
                 }
             }
             else if (transitionMode == TransitionMode.continuation)
@@ -262,7 +249,6 @@ public class SceneControl : MonoBehaviour
                 resultPanelControl.ResultSceneBefore(1.0f);
                 StateChange();
             }
-            #endregion
         }
         else if (screenMode == ScreenMode.Hint)
         {

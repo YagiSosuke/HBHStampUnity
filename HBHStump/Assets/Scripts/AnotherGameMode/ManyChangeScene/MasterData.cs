@@ -10,6 +10,9 @@ csv書込みも行う予定
 
 public class MasterData : MonoBehaviour
 {
+    public static MasterData Instance;
+    MasterData() { if (!Instance) Instance = this; }
+
     public RecordPlayData recordPlayData;
 
     //ゲームのステータス
@@ -53,7 +56,7 @@ public class MasterData : MonoBehaviour
     }
 
     //ボタンを押した時に変化する文字を取得する
-    public static string getNextWord(string str, string direction)
+    public string getNextWord(string str, string direction)
     {
         if (direction == "right")
         {
@@ -117,8 +120,6 @@ public class MasterData : MonoBehaviour
         }
     }
 
-
-    // Start is called before the first frame update
     void Start()
     {
         remainingTimeTemp = remainingTime;

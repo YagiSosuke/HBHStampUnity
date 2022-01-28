@@ -8,19 +8,11 @@ using UnityEngine.EventSystems;
 
 public class TutorialCharactorScript : MonoBehaviour, IPointerClickHandler
 {
-    //パーツの種類
-    public enum PartsType
-    {
-        Head,
-        Body,
-        Hip
-    }
-    
     //辞書クラス
     [System.Serializable]
     class DictionaryClass
     {
-        public PartsType Parts = PartsType.Head;        //パーツ部分
+        public Parts Parts = Parts.Head;        //パーツ部分
         public string Word;       //言葉
         public GameObject AfterObject;      //変化後のオブジェクト
     };
@@ -35,8 +27,7 @@ public class TutorialCharactorScript : MonoBehaviour, IPointerClickHandler
 
     [SerializeField]
     DictionaryClass[] Dic;     //辞書クラス
-
-    string PartsJap;            //部分名を日本語で言ったら?
+    
     public bool ChangeF;               //キャラクターを変身させるフラグ
 
     GameObject FogParticle;        //煙のオブジェクト
@@ -78,32 +69,11 @@ public class TutorialCharactorScript : MonoBehaviour, IPointerClickHandler
     [SerializeField] TutorialMessage tutorialMessage;
 
     
-    // Start is called before the first frame update
     void Start()
     {
         CharName = this.gameObject.name.Replace("Image_", "");
-        
-        PartsJap = "";
-        
-
         FogParticle = (GameObject)Resources.Load("Prefabs/CFX2_WWExplosion_C_Copy");
-        /*
-        string objName = pos_x + "-" + pos_y + "Effect";
-        */
-        //FogUI = GameObject.Find(objName);
-        //FogUI.transform.SetParent(this.gameObject.transform.parent.transform, true);
-
-        //audio = GameObject.Find("StumpImage").GetComponent<AudioSource>();
-
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //PushStamp();
-    }
-
-
 
     //スタンプが押されたときの処理
     public void PushStamp()
@@ -125,20 +95,8 @@ public class TutorialCharactorScript : MonoBehaviour, IPointerClickHandler
             //何に変身させるか
             for (int i = 0; i < Dic.Length; i++)
             {
-                switch (Dic[i].Parts)
-                {
-                    case PartsType.Head:
-                        PartsJap = "頭";
-                        break;
-                    case PartsType.Body:
-                        PartsJap = "体";
-                        break;
-                    case PartsType.Hip:
-                        PartsJap = "尻";
-                        break;
-                }
                 //辞書と言葉、部位が同じかどうか検索
-                if (ButtonNameChange.TempWord == Dic[i].Word && StumpScript.TempStump == PartsJap)
+                if (Stamp.Instance.Word == Dic[i].Word && Stamp.Instance.Parts == Dic[i].Parts)
                 {
                     SerchF = true;
                     ChangeNum = i;

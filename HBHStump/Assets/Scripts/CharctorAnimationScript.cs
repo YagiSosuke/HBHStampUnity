@@ -11,26 +11,20 @@ public class CharctorAnimationScript : MonoBehaviour
 
     public enum AnimType
     {
-        NULL,
-        InorganicObject,
-        AnimalObject,
-        BallObject,
-        SpringObject,
-        FallDownObject,
-        UpUpObject
+        NULL = 0,
+        InorganicObject = 1,
+        AnimalObject = 2,
+        BallObject = 3,
+        SpringObject = 4,
+        FallDownObjec = 5,
+        UpUpObject = 6
     }
     public AnimType animtype = AnimType.NULL;       //アニメーションのタイプ
 
-    // Start is called before the first frame update
     void Start()
     {
+        //TODO: 直せる
         anim = GetComponent<Animator>();
         anim.SetInteger("AnimMode", (int)animtype);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

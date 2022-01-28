@@ -13,16 +13,10 @@ public class RecordPlayData : MonoBehaviour
     float startTime;
 
     [SerializeField] SceneControl sceneControl;
-    SceneControl.ScreenMode nowScene;
-    [SerializeField] MasterData masterData;
+    SceneControl.ScreenMode nowScene = SceneControl.ScreenMode.Title;
+    MasterData MasterData => MasterData.Instance;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        //Init();
-
-        nowScene = SceneControl.ScreenMode.Title;
-    }
+    
 
     //記録データのセットアップ　
     void Init()
@@ -42,21 +36,18 @@ public class RecordPlayData : MonoBehaviour
     }
 
     //情報をファイルに追加 上は別クラスで呼び出し
-    public void writeChangeData(string beforeName, string afterName, string partsName)
+    public void WriteChangeData(string beforeName, string afterName, string partsName)
     {
         var changeTime = Time.time;
         var text = $"{beforeName},{afterName},{partsName},{changeTime - startTime}\n";
-
-        //File.AppendAllText(filePass, text, Encoding.GetEncoding("Shift_JIS"));
+        
         File.AppendAllText(filePass, text);
     }
-    void writeResultData()
+    void WriteResultData()
     {
-        File.AppendAllText(filePass, $"{masterData.score}");
+        File.AppendAllText(filePass, $"{MasterData.score}");
     }
 
-
-    // Update is called once per frame
     void Update()
     {
         if(sceneControl.screenMode == SceneControl.ScreenMode.Game)
@@ -70,7 +61,7 @@ public class RecordPlayData : MonoBehaviour
         {
             if (nowScene != sceneControl.screenMode)
             {
-                writeResultData();
+                WriteResultData();
                 nowScene = sceneControl.screenMode;
             }
         }

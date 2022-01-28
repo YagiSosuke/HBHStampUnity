@@ -14,12 +14,11 @@ public class DeisplayTimer : MonoBehaviour
     //タイマーがスライドインするまでの時間
     float slideTime = 0.5f;
 
-    MasterData masterData;
+    MasterData MasterData => MasterData.Instance;
     SceneControl sceneControl;
 
     private void Start()
     {
-        masterData = GameObject.Find("GameControler").GetComponent<MasterData>();
         sceneControl = GameObject.Find("GameControler").GetComponent<SceneControl>();
     }
 
@@ -29,10 +28,9 @@ public class DeisplayTimer : MonoBehaviour
     {
         if(sceneControl.screenMode == SceneControl.ScreenMode.GameSetting)
         {
-            #region
             if (sceneControl.transitionMode == SceneControl.TransitionMode.afterSwitching)
             {
-                remainingTimeText.text = masterData.remainingTimeTemp.ToString();
+                remainingTimeText.text = MasterData.remainingTimeTemp.ToString();
                 timerCountImage.fillAmount = 1.0f;
                 transform.DOLocalMoveY(480, slideTime).SetEase(Ease.OutCubic);
             }
@@ -41,18 +39,16 @@ public class DeisplayTimer : MonoBehaviour
 
             }
             if (sceneControl.transitionMode == SceneControl.TransitionMode.beforeSwitching) { }
-            #endregion
         }
         if (sceneControl.screenMode == SceneControl.ScreenMode.Game)
         {
-            #region
             if (sceneControl.transitionMode == SceneControl.TransitionMode.afterSwitching)
             {
             }
             if (sceneControl.transitionMode == SceneControl.TransitionMode.continuation)
             {
-                remainingTimeText.text = masterData.remainingTime.ToString("0");
-                timerCountImage.fillAmount = (masterData.remainingTime / masterData.remainingTimeTemp);
+                remainingTimeText.text = MasterData.remainingTime.ToString("0");
+                timerCountImage.fillAmount = (MasterData.remainingTime / MasterData.remainingTimeTemp);
             }
             if(sceneControl.transitionMode == SceneControl.TransitionMode.beforeSwitching)
             {
@@ -60,7 +56,6 @@ public class DeisplayTimer : MonoBehaviour
                 timerCountImage.fillAmount = 0.0f;
                 transform.DOLocalMoveY(700, slideTime).SetEase(Ease.OutCubic);
             }
-            #endregion
         }
     }
 }

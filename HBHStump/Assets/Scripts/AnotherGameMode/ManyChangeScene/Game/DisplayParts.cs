@@ -14,33 +14,30 @@ public class DisplayParts : MonoBehaviour
 {
     [SerializeField] Image partsImage;
     [SerializeField] List<Sprite> partsSample = new List<Sprite>();
-    MasterData masterdata;
     SceneControl sceneControl;
     
     //現在のパーツを表示する
     void DisplayPartsUpdate()
     {
-        switch (StumpScript.TempStump) {
-            case "頭":
+        switch (Stamp.Instance.Parts) {
+            case Parts.Head:
                 partsImage.sprite = partsSample[0];
                 break;
-            case "体":
+            case Parts.Body:
                 partsImage.sprite = partsSample[1];
                 break;
-            case "尻":
+            case Parts.Hip:
                 partsImage.sprite = partsSample[2];
                 break;
         }
     }
 
-    // Start is called before the first frame update
+
     void Start()
     {
-        masterdata = GameObject.Find("GameControler").GetComponent<MasterData>();
         sceneControl = GameObject.Find("GameControler").GetComponent<SceneControl>();
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         if (sceneControl.screenMode == SceneControl.ScreenMode.GameSetting)

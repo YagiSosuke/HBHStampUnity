@@ -260,19 +260,19 @@ public class TutorialMessage : MonoBehaviour
     }
 
     //文字送りメソッドで Step を変更させる為の条件を示すクラス群
-    public interface StepChangeConditions
+    interface StepChangeConditions
     {
         //現在のデータをセット
         void setNowData();
         //状態を変化させるフラグ
         bool StepChangeF();
     }
-    public class LRChangeConditions : StepChangeConditions
+    class LRChangeConditions : StepChangeConditions
     {   
         //現在記憶されてる文字、目的の変化形
-        public string nowWord;
-        public string nextWord;
-        public string direction;
+        string nowWord;
+        string nextWord;
+        string direction;
 
         //コンストラクタ directionをセット
         public LRChangeConditions(string dir)
@@ -280,13 +280,13 @@ public class TutorialMessage : MonoBehaviour
             direction = dir;
         }
 
-        private void setNowWord()
+        void setNowWord()
         {
-            nowWord = StumpScript.stampPartsWord[StumpScript.TempStump];
+            nowWord = Stamp.Instance.Word;
         }
-        private void setNextWord()
+        void setNextWord()
         {
-            nextWord = MasterData.getNextWord(nowWord, direction);
+            nextWord = MasterData.Instance.getNextWord(nowWord, direction);
         }
 
         //現在のデータをセット
@@ -299,7 +299,7 @@ public class TutorialMessage : MonoBehaviour
         //状態を変化させるフラグ
         public bool StepChangeF()
         {
-            if (nowWord != StumpScript.stampPartsWord[StumpScript.TempStump])
+            if (nowWord != Stamp.Instance.Word)
             {
                 setNowWord();
                 if (nowWord != nextWord)
@@ -318,28 +318,28 @@ public class TutorialMessage : MonoBehaviour
             }
         }
     }
-    public class MiddleChangeConditions : StepChangeConditions
+    class MiddleChangeConditions : StepChangeConditions
     {
         //現在記憶されてるパーツ、目的の変化形
-        public string nowParts;
-        public string nextParts;
+        Parts nowParts;
+        Parts nextParts;
             
         private void setNowParts()
         {
-            nowParts = StumpScript.TempStump;
+            nowParts = Stamp.Instance.Parts;
         }
         private void setNextParts()
         {
             switch (nowParts)
             {
-                case "頭":
-                    nextParts = "体";
+                case Parts.Head:
+                    nextParts = Parts.Body;
                     break;
-                case "体":
-                    nextParts = "尻";
+                case Parts.Body:
+                    nextParts = Parts.Hip;
                     break;
-                case "尻":
-                    nextParts = "頭";
+                case Parts.Hip:
+                    nextParts = Parts.Head;
                     break;
             }
         }
@@ -354,7 +354,7 @@ public class TutorialMessage : MonoBehaviour
         //状態を変化させるフラグ
         public bool StepChangeF()
         {
-            if (nowParts != StumpScript.TempStump)
+            if (nowParts != Stamp.Instance.Parts)
             {
                 setNowParts();
             }
@@ -369,7 +369,7 @@ public class TutorialMessage : MonoBehaviour
             }
         }
     }
-    public class CardReadConditions : StepChangeConditions
+    class CardReadConditions : StepChangeConditions
     {
         Serial serialScript;
         string nowWord;
@@ -381,7 +381,7 @@ public class TutorialMessage : MonoBehaviour
 
         //現在のデータをセット
         public void setNowData() {
-            nowWord = StumpScript.stampPartsWord[StumpScript.TempStump];
+            nowWord = Stamp.Instance.Word;
         }
 
         //状態を変化させるフラグ
@@ -400,18 +400,18 @@ public class TutorialMessage : MonoBehaviour
             }
             else
             {
-                if(nowWord != StumpScript.stampPartsWord[StumpScript.TempStump])
+                if(nowWord != Stamp.Instance.Word)
                 {
-                    if(StumpScript.stampPartsWord[StumpScript.TempStump] == "あ" ||
-                        StumpScript.stampPartsWord[StumpScript.TempStump] == "か" ||
-                        StumpScript.stampPartsWord[StumpScript.TempStump] == "さ" ||
-                        StumpScript.stampPartsWord[StumpScript.TempStump] == "た" ||
-                        StumpScript.stampPartsWord[StumpScript.TempStump] == "な" ||
-                        StumpScript.stampPartsWord[StumpScript.TempStump] == "は" ||
-                        StumpScript.stampPartsWord[StumpScript.TempStump] == "ま" ||
-                        StumpScript.stampPartsWord[StumpScript.TempStump] == "や" ||
-                        StumpScript.stampPartsWord[StumpScript.TempStump] == "ら" ||
-                        StumpScript.stampPartsWord[StumpScript.TempStump] == "わ")
+                    if( Stamp.Instance.Word == "あ" ||
+                        Stamp.Instance.Word == "か" ||
+                        Stamp.Instance.Word == "さ" ||
+                        Stamp.Instance.Word == "た" ||
+                        Stamp.Instance.Word == "な" ||
+                        Stamp.Instance.Word == "は" ||
+                        Stamp.Instance.Word == "ま" ||
+                        Stamp.Instance.Word == "や" ||
+                        Stamp.Instance.Word == "ら" ||
+                        Stamp.Instance.Word == "わ")
                     {
                         return true;
                     }
@@ -420,7 +420,7 @@ public class TutorialMessage : MonoBehaviour
             }
         }
     }
-    public class MikanChangeConditions : StepChangeConditions
+    class MikanChangeConditions : StepChangeConditions
     {
         TutorialCharactorScript tutorialCharactorScript;
         string nowWord;
@@ -449,11 +449,11 @@ public class TutorialMessage : MonoBehaviour
         }
     }
 
-    public StepChangeConditions rightChangeConditions;
-    public StepChangeConditions leftChangeConditions;
-    public StepChangeConditions middleChangeConditions;
-    public StepChangeConditions cardReadConditions;
-    public StepChangeConditions mikanChangeConditions;
+    StepChangeConditions rightChangeConditions;
+    StepChangeConditions leftChangeConditions;
+    StepChangeConditions middleChangeConditions;
+    StepChangeConditions cardReadConditions;
+    StepChangeConditions mikanChangeConditions;
     #endregion
 
     //シリアル通信のスクリプト

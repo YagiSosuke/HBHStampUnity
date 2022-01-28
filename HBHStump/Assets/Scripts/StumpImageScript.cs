@@ -7,37 +7,44 @@ using UnityEngine.UI;
 
 public class StumpImageScript : MonoBehaviour
 {
-    GameObject Image;       //スタンプのイメージ
+    [SerializeField] GameObject Image;       //スタンプのイメージ
     Vector3 MousePos;       //マウスの位置
 
     [SerializeField]
     Text NowParts;          //現在の部位
     [SerializeField]
     Text NowWord;           //現在の言葉
-    //public static Text NowParts;          //現在の部位
-    //public static Text NowWord;           //現在の言葉
+    
 
-
-    // Start is called before the first frame update
-    void Start()
+    //スタンプ画像に付いているパーツテキストをセット
+    public void NowPartsTextSet(string parts)
     {
-        Image = GameObject.Find("StumpImage");
+        NowParts.text = parts;
     }
 
-    // Update is called once per frame
+    string PartsConversionJapanese(Parts _parts)
+    {
+        switch (_parts)
+        {
+            case Parts.Head:
+                return "頭";
+            case Parts.Body:
+                return "体";
+            case Parts.Hip:
+                return "尻";
+            default:
+                return "";
+        }
+    }
+
     void Update()
     {
         MousePos = Input.mousePosition;
         MousePos.z = 0;
         Image.transform.position = MousePos;
 
-        NowParts.text = StumpScript.TempStump;
-        NowWord.text = StumpScript.stampPartsWord[StumpScript.TempStump];
-    }
-
-    //スタンプ画像に付いているパーツテキストをセット
-    public void NowPartsTextSet(string parts)
-    {
-        NowParts.text = parts;
+        //TODO: 改良できる
+        NowParts.text = PartsConversionJapanese(Stamp.Instance.Parts);
+        NowWord.text = Stamp.Instance.Word;
     }
 }

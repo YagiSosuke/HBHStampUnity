@@ -13,38 +13,33 @@ public class CharactorChangePos : MonoBehaviour
 {
     public static CharactorChangePos Instance;
 
-    public CharactorChangePos() { Instance = this; }
+    public CharactorChangePos() { if (!Instance) Instance = this; }
 
 
     //キャラクターのクラス
-    //要変更
-    //  ゲームオブジェクトが被らないようにする
     [System.Serializable]
-    public class CharctorClass {
+    public class CharctorClass
+    {
         [SerializeField] int posX;
         [SerializeField] int posY;
-        //該当するゲームオブジェクト
-        [SerializeField] GameObject charObj;
-        //画面外へと向かうオブジェクト
-        GameObject outObj;
-        //変化後のオブジェクト
-        GameObject newObj;
+        
+        [SerializeField] GameObject charObj;    //該当するゲームオブジェクト        
+        GameObject outObj;                      //画面外へと向かうオブジェクト        
+        GameObject newObj;                      //変化後のオブジェクト
 
         //位置を変えるまでの時間
         [SerializeField] float changePosTime;
         [SerializeField] float nowTime;
-        //進む方向  T:right F:left
-        bool lookDirection;
+        
+        bool lookDirection;                 //進む方向  T:right F:left
 
         //オブジェクトを配置する位置
         float[] posXPosition = { -780.0f, -470.0f, -155.0f, 155.0f, 470.0f, 780.0f };
         float[] posYPosition = { 225.0f, -125.0f, -475.0f };
-        
+
 
         //コンストラクタ
-        public CharctorClass(){
-
-        }
+        public CharctorClass() { }
 
         //各データを設定する
         public void SetData(int posY, GameObject charObj, GameObject parent, int beforePosX = -1)
@@ -53,13 +48,13 @@ public class CharactorChangePos : MonoBehaviour
             this.charObj = Instantiate(charObj);
             this.charObj.transform.SetParent(parent.transform);
             this.charObj.transform.localScale = Vector2.one;
-            
-            if(beforePosX == 0)
+
+            if (beforePosX == 0)
             {
                 lookDirection = false;
                 posX = 5;
             }
-            else if(beforePosX == 5)
+            else if (beforePosX == 5)
             {
                 lookDirection = true;
                 posX = 0;
@@ -86,7 +81,8 @@ public class CharactorChangePos : MonoBehaviour
         }
 
         //オブジェクト位置を設定する
-        public void SetPos() {
+        public void SetPos()
+        {
             //新たに生み出した場合は画面外に初期位置を設定する
             if (lookDirection && posX == 0)
             {
@@ -107,7 +103,8 @@ public class CharactorChangePos : MonoBehaviour
         }
 
         //時間を測ってオブジェクトを前へ進める
-        public void GoFront() {
+        public void GoFront()
+        {
             nowTime += Time.deltaTime;
             if (nowTime >= changePosTime)
             {
@@ -118,7 +115,8 @@ public class CharactorChangePos : MonoBehaviour
                         //前に進める
                         posX++;
                     }
-                    else {
+                    else
+                    {
                         //ここから
                         //今あるオブジェクトは画面外へ
                         outObj = charObj.gameObject;
@@ -152,7 +150,7 @@ public class CharactorChangePos : MonoBehaviour
                 nowTime = 0.0f;
             }
         }
-        
+
         //変化後のオブジェクトを破棄する
         public async UniTask DestroyNewObj()
         {
@@ -160,24 +158,22 @@ public class CharactorChangePos : MonoBehaviour
             //画面外へ移動
             if (newObj.transform.position.x > 0)
             {
-                //数秒待機
                 await UniTask.Delay(2000);
-                await newObj.transform.DOLocalMove(new Vector2(1200, posY), 1.0f);
-            }else
+                newObj.transform.DOLocalMove(new Vector2(1200, posY), 1.0f);
+            }
+            else
             {
-                //数秒待機
                 await UniTask.Delay(2000);
-                await newObj.transform.DOLocalMove(new Vector2(-1200, posY), 1.0f);
+                newObj.transform.DOLocalMove(new Vector2(-1200, posY), 1.0f);
             }
             //オブジェクトを削除
-            Destroy(obj.gameObject, 0.5f);
+            Destroy(obj.gameObject, 1.5f);
         }
         //ゲームモード終了時各オブジェクトを縮小する
-        public IEnumerator objShrink()
+        public void ObjShrink()
         {
             charObj.transform.DOScale(Vector2.zero, 0.9f).SetEase(Ease.InBack);
-            yield return new WaitForSeconds(0.9f);
-            Destroy(charObj.gameObject);
+            Destroy(charObj.gameObject, 0.9f);
         }
     }
 
@@ -200,53 +196,50 @@ public class CharactorChangePos : MonoBehaviour
         public float maxTimeRange = 5.0f;
 
         //マスターデータ操作用オブジェクト
-        MasterData masterData;
-
-        //コルーチンを実行用のオブジェクト
-        MyMonobehaviour myMonobehaviour;
-
-
+        MasterData MasterData => MasterData.Instance;
+        
         //Singleton用
         private static OperationCharctor operationCharctor = new OperationCharctor();
 
 
         //コンストラクタ
         //オブジェクトをステージに3つ配置
-        public OperationCharctor() {  }
+        public OperationCharctor() { }
 
         //Singleton用
         //インスタンスを返す
-        public static OperationCharctor getInstance() {
+        public static OperationCharctor getInstance()
+        {
             return operationCharctor;
         }
         //インスタンスに代入する
-        public static void loadInstance(OperationCharctor opr) {
+        public static void loadInstance(OperationCharctor opr)
+        {
             operationCharctor = opr;
         }
 
 
         //Startで実行
         public void OperatonCharctorStart()
-        { 
-            int tempCharNum = 0;            
+        {
+            int tempCharNum = 0;
             for (int i = 0; i < 3; i++)
             {
                 do
                 {
                     tempCharNum = Random.Range(0, charactorIns.Length);
                 } while (tempCharNum == OccupancyCharctor[0] || tempCharNum == OccupancyCharctor[1] || tempCharNum == OccupancyCharctor[2]);
-
+                
                 charClass[i].SetData(i, charactorIns[tempCharNum], GameObject.Find("Charctors"));
                 OccupancyCharctor[i] = tempCharNum;
             }
-            myMonobehaviour = GameObject.Find("CoroutineSystem").GetComponent<MyMonobehaviour>();
-            masterData = GameObject.Find("GameControler").GetComponent<MasterData>();
         }
-        
-        //Updateで実行
-        public void OperatonCharctorUpdate() {
 
-            for(int i = 0; i < 3; i++)
+        //Updateで実行
+        public void OperatonCharctorUpdate()
+        {
+
+            for (int i = 0; i < 3; i++)
             {
                 charClass[i].GoFront();
             }
@@ -283,22 +276,22 @@ public class CharactorChangePos : MonoBehaviour
             charClass[posY].SetNewObj(newObj);
 
             //得点をプラスする
-            masterData.AddScore(newObj);
+            MasterData.AddScore(newObj);
 
             //changeObjを一定時間でFOさせる
-            charClass[posY].DestroyNewObj().Forget();           
+            charClass[posY].DestroyNewObj().Forget();
         }
 
         //ゲームモード終了時各オブジェクトを縮小する
         public void GameFinish()
         {
-            for(int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++)
             {
-                myMonobehaviour.CallStartCoroutine(charClass[i].objShrink());
+                charClass[i].ObjShrink();
             }
         }
     }
-
+    public OperationCharctor operationCharctor = new OperationCharctor();
 
     //他スクリプトで呼び出し用の変数
     public void GameSceneAfter()
@@ -315,18 +308,8 @@ public class CharactorChangePos : MonoBehaviour
     }
 
 
-    public OperationCharctor opChar = new OperationCharctor();
-
-
-
-    
     void Start()
     {
-        OperationCharctor.loadInstance(opChar);
-    }
-    
-    void Update()
-    {
-        //OperationCharctor.getInstance().OperatonCharctorUpdate();
+        OperationCharctor.loadInstance(operationCharctor);
     }
 }

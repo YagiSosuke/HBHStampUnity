@@ -54,11 +54,11 @@ public class TrySupportCheck : MonoBehaviour
         public Check1(Slider slider) : base(slider) { }
         public override void CheckBoxConditions()
         {
-            if(StumpScript.stampPartsWord[StumpScript.TempStump] == "ま" ||
-               StumpScript.stampPartsWord[StumpScript.TempStump] == "み" ||
-               StumpScript.stampPartsWord[StumpScript.TempStump] == "む" ||
-               StumpScript.stampPartsWord[StumpScript.TempStump] == "め" ||
-               StumpScript.stampPartsWord[StumpScript.TempStump] == "も")
+            if(Stamp.Instance.Word == "ま" ||
+               Stamp.Instance.Word == "み" ||
+               Stamp.Instance.Word == "む" ||
+               Stamp.Instance.Word == "め" ||
+               Stamp.Instance.Word == "も")
             {
                 Check_On();
             }
@@ -76,7 +76,7 @@ public class TrySupportCheck : MonoBehaviour
         public Check2(Slider slider) : base(slider) { }
         public override void CheckBoxConditions()
         {
-            if (StumpScript.stampPartsWord[StumpScript.TempStump] == "み")
+            if (Stamp.Instance.Word == "み")
             {
                 Check_On();
             }
@@ -94,7 +94,7 @@ public class TrySupportCheck : MonoBehaviour
         public Check3(Slider slider) : base(slider) { }
         public override void CheckBoxConditions()
         {
-            if (StumpScript.TempStump == "頭")
+            if (Stamp.Instance.Parts == Parts.Head)
             {
                 Check_On();
             }

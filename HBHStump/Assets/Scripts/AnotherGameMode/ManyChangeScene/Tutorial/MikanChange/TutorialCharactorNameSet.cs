@@ -15,7 +15,7 @@ public class TutorialCharactorNameSet : MonoBehaviour
     GameObject FrameChildPrefab;   //フレーム1つ
     GameObject FrameChild;   //フレーム1つの実体
 
-    GameObject AddFrame;        //追加した文字
+    GameObject newFrame;        //追加した文字
 
     float count = 0;            //カウントする
 
@@ -23,7 +23,6 @@ public class TutorialCharactorNameSet : MonoBehaviour
 
     [SerializeField] TutorialCharactorScript tutorialCharactorScript;
 
-    // Start is called before the first frame update
     void Start()
     {
         Name = this.gameObject.name.Replace("Image_", "").Replace("(Clone)", "");      //名前取得
@@ -46,7 +45,7 @@ public class TutorialCharactorNameSet : MonoBehaviour
             {
                 if (gameObject.tag == "Head" || gameObject.tag == "HeadSample")
                 {
-                    AddFrame = FrameChild;
+                    newFrame = FrameChild;
                     FrameChild.GetComponent<Image>().color = Color.green;
                     //Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length - 1) * 100, 100);
                 }
@@ -55,7 +54,7 @@ public class TutorialCharactorNameSet : MonoBehaviour
             {
                 if (gameObject.tag == "Body" || gameObject.tag == "BodySample")
                 {
-                    AddFrame = FrameChild;
+                    newFrame = FrameChild;
                     FrameChild.GetComponent<Image>().color = Color.green;
                     //Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length - 1) * 100, 100);
                 }
@@ -64,7 +63,7 @@ public class TutorialCharactorNameSet : MonoBehaviour
             {
                 if (gameObject.tag == "Hip" || gameObject.tag == "HipSample")
                 {
-                    AddFrame = FrameChild;
+                    newFrame = FrameChild;
                     FrameChild.GetComponent<Image>().color = Color.green;
                     //Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length - 1) * 100, 100);
                 }
@@ -81,19 +80,19 @@ public class TutorialCharactorNameSet : MonoBehaviour
             if (count == 0)
             {
                 //Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length-1) * 100, 100);        //枠のサイズを決定
-                AddFrame.transform.localScale = Vector3.zero;
+                newFrame.transform.localScale = Vector3.zero;
             }
             else if (count < 1)
             {
                 float lerp = (count) * (count) * (count) * (count);
                 //Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length - 1) * 100 + (lerp * 100), 100);        //枠のサイズを決定
-                AddFrame.transform.localScale = new Vector3(3 - lerp * 2, 3 - lerp * 2, 3 - lerp * 2);
+                newFrame.transform.localScale = new Vector3(3 - lerp * 2, 3 - lerp * 2, 3 - lerp * 2);
             }
             else
             {
                 //Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length) * 100, 100);        //枠のサイズを決定
-                AddFrame.transform.localScale = Vector2.one;
-                //AddFrame.transform.localPosition = Vector2.one;
+                newFrame.transform.localScale = Vector2.one;
+                //newFrame.transform.localPosition = Vector2.one;
                 Frame.GetComponent<AudioSource>().Play();
                 count = 10;
             }
