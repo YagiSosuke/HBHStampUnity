@@ -169,10 +169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50b8e21dfd09fba41a1a5cbbbbd66367, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FramePrefab: {fileID: 79066979534195216, guid: d94d445da8f6c27488d8ab725ef3b437,
-    type: 3}
-  FrameChildPrefab: {fileID: 7015819730844844405, guid: 824f3376aba9d11429eabd85ea71ffba,
-    type: 3}
 --- !u!95 &2457395780698250889
 Animator:
   serializedVersion: 3
@@ -222,48 +218,38 @@ MonoBehaviour:
     Word: "\u308B"
     AfterObject: {fileID: 7881330272899196167, guid: a0db2fae00131284a868bf8e20ae0b77,
       type: 3}
-    Flag: 1
   - Parts: 0
     Word: "\u306F"
     AfterObject: {fileID: 1936988365710829338, guid: 2ecb15648cf1b7d4da91484f18dc37a6,
       type: 3}
-    Flag: 1
   - Parts: 0
     Word: "\u3084"
     AfterObject: {fileID: 3360202660411452169, guid: 8ed26ddd3fa0a854c9df8e6f4fdbda44,
       type: 3}
-    Flag: 1
   - Parts: 0
     Word: "\u3086"
     AfterObject: {fileID: 7851009643604360832, guid: 24293cb0f045abc49826a64b03f0aecd,
       type: 3}
-    Flag: 0
   - Parts: 2
     Word: "\u306A"
     AfterObject: {fileID: 6921810225224703001, guid: d07ede95f54c3cf49969c559c50f90a3,
       type: 3}
-    Flag: 0
   - Parts: 2
     Word: "\u304D"
     AfterObject: {fileID: 8821047720997311790, guid: 4f5e4cc5e149ce44e9326c4a5135530d,
       type: 3}
-    Flag: 1
   - Parts: 0
     Word: "\u3069"
     AfterObject: {fileID: 3360202660411452169, guid: 62f2fec8e2ac3dc488f08570fb977ee4,
       type: 3}
-    Flag: 1
   - Parts: 2
     Word: "\u3061"
     AfterObject: {fileID: 6921810225224703001, guid: 9b8914898d5b0f641b19f7e702ad4991,
       type: 3}
-    Flag: 1
   - Parts: 2
     Word: "\u3066"
     AfterObject: {fileID: 6921810225224703001, guid: 923e92a09b318804eacb03ac3d72c263,
       type: 3}
-    Flag: 1
   audio: {fileID: 0}
-  SerchF: 0
   pos_x: 3
   pos_y: 1

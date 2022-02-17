@@ -12,7 +12,6 @@ using Cysharp.Threading.Tasks;
 public class CharactorChangePos : MonoBehaviour
 {
     public static CharactorChangePos Instance;
-
     public CharactorChangePos() { if (!Instance) Instance = this; }
 
 
@@ -307,6 +306,8 @@ public class CharactorChangePos : MonoBehaviour
         OperationCharctor.getInstance().GameFinish();
     }
 
+
+    [SerializeField] CharaCsvLoader charaCsvLoader;
 
     void Start()
     {

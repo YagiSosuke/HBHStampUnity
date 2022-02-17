@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Text;
 using System.IO;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
@@ -19,7 +20,7 @@ public class RankingControl : MonoBehaviour
     [SerializeField] List<Text> rankText = new List<Text>(10);
     [SerializeField] List<Image> rankBack = new List<Image>(10);
 
-    SceneControl sceneControl;
+    [SerializeField] SceneControl sceneControl;
 
     //現在のスコアによってランキングを更新
     public int rankUpdate(int score)
@@ -82,8 +83,6 @@ public class RankingControl : MonoBehaviour
     }
     void Start()
     {
-        sceneControl = GameObject.Find("GameControler").GetComponent<SceneControl>();
-
 #if UNITY_EDITOR
         directoryName = Path.Combine(Application.dataPath, @"File\");
 #elif UNITY_STANDALONE
