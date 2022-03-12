@@ -15,17 +15,10 @@ public class WordPanelWrite : MonoBehaviour
     Vector3 addPos;
 
 
-    void Start()
-    {
-        nomalPos = wordNomal.transform.localPosition;
-        addPos = wordAdd.transform.localPosition;
-    }
-
-    //ボタンをクリックしたら
     public void ButtonClick()
     {
         nomalModeF = !nomalModeF;       //五十音表、濁点表の描画順を変える
-        
+
         if (nomalModeF)
         {
             wordNomal.transform.localPosition = nomalPos;
@@ -41,4 +34,11 @@ public class WordPanelWrite : MonoBehaviour
             wordAdd.transform.SetSiblingIndex(1);
         }
     }
+    void Start()
+    {
+        nomalPos = wordNomal.transform.localPosition;
+        addPos = wordAdd.transform.localPosition;
+        wordNomal.transform.SetSiblingIndex(1);
+        wordAdd.transform.SetSiblingIndex(0);
+    }    
 }

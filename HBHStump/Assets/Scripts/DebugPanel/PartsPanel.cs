@@ -14,6 +14,6 @@ public class PartsPanel : MonoBehaviour
     public void SetParts()
     {
         Stamp.Instance.SetParts(parts);
-        Frame.gameObject.transform.position = this.transform.position;
+        Frame.gameObject.transform.position = transform.position;
     }
 }

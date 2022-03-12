@@ -11,7 +11,7 @@ using DG.Tweening;
 public class MenuScript : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] GameObject partsAndStampPanel;          //言葉とスタンプのパネル
-    bool menuF = true;      //メニューが展開されているか
+    bool isMenuOpen = true;      //メニューが展開されているか
     
 
     async UniTask MenuOpen()
@@ -32,9 +32,9 @@ public class MenuScript : MonoBehaviour, IPointerClickHandler
     //メニュー展開パネルをクリックしたら
     public void OnPointerClick(PointerEventData pointerData)
     {
-        menuF = !menuF;
+        isMenuOpen = !isMenuOpen;
         
-        if (menuF) MenuClose();
-        else MenuOpen();
+        if (isMenuOpen) MenuClose().Forget();
+        else MenuOpen().Forget();
     }
 }

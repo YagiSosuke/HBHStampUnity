@@ -11,7 +11,7 @@ public class Stamp : MonoBehaviour
     Stamp() { if (!Instance) Instance = this; }
 
     public string Word { get; private set; } = "あ";
-    public Parts Parts { get; private set; } = Parts.Head;
+    public Parts Parts { get; private set; } = Parts.NULL;
     
     //各パーツごとの言葉を表示するテキスト
     [SerializeField] Text[] nowWordTexts;
@@ -36,7 +36,9 @@ public class Stamp : MonoBehaviour
 }
 public enum Parts
 {
-    Head = 0,
-    Body = 1,
-    Hip = 2
+    NULL = 0,
+    Head = 1,
+    Body = 2,
+    Hip = 3
+    
 }

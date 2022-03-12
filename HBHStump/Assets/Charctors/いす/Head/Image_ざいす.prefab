@@ -88,10 +88,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50b8e21dfd09fba41a1a5cbbbbd66367, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FramePrefab: {fileID: 79066979534195216, guid: d94d445da8f6c27488d8ab725ef3b437,
-    type: 3}
-  FrameChildPrefab: {fileID: 7015819730844844405, guid: 824f3376aba9d11429eabd85ea71ffba,
-    type: 3}
+  flamePartsPrefab: {fileID: 0}
+  flamePrefab: {fileID: 0}
+  clip: {fileID: 0}
+  characterBase: {fileID: 0}
 --- !u!95 &3806989879752163793
 Animator:
   serializedVersion: 3
@@ -123,6 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85ff6730b99b82b4988e8bb36c8ecef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 0}
   animtype: 3
 --- !u!1 &6707975210496867149
 GameObject:
@@ -150,7 +151,7 @@ RectTransform:
   m_GameObject: {fileID: 6707975210496867149}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 8237791931994048412}
   m_Father: {fileID: 0}

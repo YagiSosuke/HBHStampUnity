@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.coffee.ui-particle": "file:C:/Users/1823122/Desktop/八木くん/UnityPackage/ParticleEffectForUGUI-3.3.10",
     "com.unity.ads": "2.0.8",
     "com.unity.analytics": "3.2.3",
     "com.unity.collab-proxy": "1.2.15",

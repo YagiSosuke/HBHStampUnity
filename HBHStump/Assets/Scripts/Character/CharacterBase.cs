@@ -7,25 +7,33 @@ public class CharacterBase : MonoBehaviour
 {
     //キャラクター基本データ
     public int ID { get; private set; }
-    protected string charaName;
+    public string CharaName { get; private set; }
+    public Parts Parts { get; private set; }
     AnimType animType;
     Sprite sprite;
 
     [SerializeField] Image image;
     [SerializeField] CharacterAnimationScript characterAnimationScript;
+    [SerializeField] CharacterNameSet characterNameSet;
 
     public void Initialize(CharaData _data)
     {
         SetCharaData(_data);
         SetImage();
         SetAnimation();
+        characterNameSet.Initialize();
     }
     protected void SetCharaData(CharaData _data)
     {
         ID = _data.ID;
-        charaName = _data.CharaName;
+        CharaName = _data.CharaName;
+        Parts = _data.Parts;
         animType = _data.AnimType;
         sprite = _data.Sprite;
+    }
+    public void SetCharaNameType(bool _isGameMode)
+    {
+        characterNameSet.SetGameMode(_isGameMode);
     }
     void SetImage()
     {

@@ -1,0 +1,113 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+/*
+メッセージウィンドウのクラス
+*/
+
+public class MessageWindow : MonoBehaviour
+{
+    //文字列を表示するテキスト
+    [SerializeField] Text nameText;
+    [SerializeField] Text messageText;
+
+    //メッセージ列
+    public List<string> message;
+
+    //表示するメッセージ
+    string messageLine;
+
+    //メッセージ番号(何行目か)
+    public int messageNum;
+
+    //メッセージの文字数
+    public int messageLength;
+    public int messageCount;
+
+    //経過時間
+    float elapsedTime;
+    //次の文字が表れるまでの時間
+    [SerializeField] float intervalTime = 0.5f;
+
+    //メッセージが終了したかのフラグ
+    public bool messageFinish;
+    //画面にスタンプが押されたかどうかのフラグ
+    bool isPush = false;
+    
+    [SerializeField] AudioClip talkAudioClip;
+
+
+    //メッセージ列を読み込む。加えて、初期化もする
+    public void LoadMessage(List<string> message)
+    {
+        this.message = message;
+
+        messageNum = 0;
+        messageCount = 0;
+        messageLength = this.message[messageNum*2 + 1].Length;
+        messageLine = this.message[messageNum*2 + 1];
+        elapsedTime = 0.0f;
+        messageFinish = false;
+    }
+
+    //メッセージを1文字ごとに表示する
+    public void PrintText()
+    {
+        //時間が経過するにつれ、文字が表れていく
+        if (messageCount < messageLength) {
+            elapsedTime += Time.deltaTime;
+            if(elapsedTime >= intervalTime)
+            {
+                elapsedTime -= intervalTime;
+                messageCount++;
+                AudioManager.Instance.PlaySE(talkAudioClip);
+            }
+        }
+        
+        if(nameText != null)
+        {
+            nameText.text = this.message[messageNum * 2];
+        }
+        messageText.text = this.message[messageNum*2 + 1].Substring(0, messageCount);
+    }
+    
+    //クリック or スタンプを押した時に、次のテキストを表示する
+    public void NextMessage()
+    {
+        if (message.Count > messageNum * 2 + 2)
+        {
+            messageNum++;
+            messageCount = 0;
+            messageLength = this.message[messageNum * 2 + 1].Length;
+            messageLine = this.message[messageNum * 2 + 1];
+            elapsedTime = 0.0f;
+        }else
+        {
+            //メッセージが終了
+            messageFinish = true;
+        }
+    }
+   
+    //メッセージウィンドウのUpdate
+    public void MessageWindowUpdate()
+    {
+        PrintText();
+
+        for(int i= 0; i< 15; i++)
+        {
+            if(Serial.PushF[i%5, i / 5])
+            {
+                isPush = true;
+                break;
+            }
+        }
+
+        if ((Input.GetMouseButtonDown(0) || isPush) && messageCount >= messageLength)
+        {
+            NextMessage();
+        }
+        isPush = false;
+    }
+}

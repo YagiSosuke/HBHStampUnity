@@ -6,60 +6,71 @@ using Cysharp.Threading.Tasks;
 
 public class BeforeChangeCharacter : CharacterBase
 {
-    //変化後キャラデータ
-    [SerializeField] List<CharaData> afterChangeCharaDatas;
-
-    int posX;
-    int posY;
-    bool isLookRight;                       //進む方向  T:right F:left  
-    GameObject newObj;                      //変化後のオブジェクト
-    //位置を変えるまでの時間
-    float minTimeRange = 5.0f;
-    float maxTimeRange = 10.0f;
+    [field: SerializeField] public int PosX { get; private set; }
+    [field: SerializeField] public int PosY { get; private set; }
+    bool isLookRight;       //進む方向  T:right F:left  
     
     //オブジェクトを配置する位置
-    float[] posXPosition = { -780.0f, -470.0f, -155.0f, 155.0f, 470.0f, 780.0f };
-    float[] posYPosition = { 225.0f, -125.0f, -475.0f };
+    float[] posXCoordinates = { -780.0f, -470.0f, -155.0f, 155.0f, 470.0f, 780.0f };
+    float[] posYCoordinates = { 225.0f, -125.0f, -475.0f };
+
+    //移動する時間の上限、下限
+    float minTimeRange = 2.0f;
+    float maxTimeRange = 2.0f;
+
+    [SerializeField] CharacterBase afterChangeCharaPrefab;  //TODO: クラス名要検討
+
+    CharaCsvLoader CharaCsvLoader => CharaCsvLoader.Instance;
+    CharacterController CharacterController => CharacterController.Instance;
 
 
-    //各データを設定する
-    public void Initialize(int posY, CharaData _data, int beforePosX = -1)
+    // 各データを設定する
+    public void Initialize(CharaData _data)
     {
         base.Initialize(_data);
-        InitPosX();
-        this.posY = posY;
-        
+    }
+    public void Initialize(int _posY, CharaData _data, int beforePosX = -1)
+    {
+        base.Initialize(_data);
+
         //位置設定
+        InitPosX();
+        PosY = _posY;
+        transform.localPosition = new Vector2(transform.localPosition.x, posYCoordinates[PosY]);
         SetPos();
+
         GoFront().Forget();
     }
     protected void SetCharaData(CharaData _data)
     {
         base.SetCharaData(_data);
-        afterChangeCharaDatas = new List<CharaData>(CharaCsvLoader.Instance.afterChangeCharaDatas[charaName]);
     }
     void InitPosX()
     {
         if (Random.Range(0, 2) == 0)
         {
             isLookRight = true;
-            posX = 0;
+            PosX = 0;
+            transform.localPosition = new Vector2(-1200, posYCoordinates[PosY]);
         }
         else
         {
             isLookRight = false;
-            posX = 5;
+            PosX = 5;
+            transform.localPosition = new Vector2(1200, posYCoordinates[PosY]);
         }
         /*
         if (beforePosX == 0)
         {
             lookDirection = false;
             posX = 5;
+            transform.localPosition = new Vector2(1200, posYCoordinates[posY]);
         }
         else if (beforePosX == 5)
         {
             lookDirection = true;
             posX = 0;
+            transform.localPosition = new Vector2(-1200, posYCoordinates[posY]);
 
         }
         else
@@ -68,101 +79,72 @@ public class BeforeChangeCharacter : CharacterBase
             {
                 lookDirection = true;
                 posX = 0;
+                transform.localPosition = new Vector2(-1200, posYCoordinates[posY]);
             }
             else
             {
                 lookDirection = false;
                 posX = 5;
+                transform.localPosition = new Vector2(1200, posYCoordinates[posY]);
             }
         }
         */
     }
-
     public void SetPos()
     {
-        //新たに生み出した場合は画面外に初期位置を設定する
-        if (isLookRight && posX == 0)
-        {
-            transform.localPosition = new Vector2(-1200, posYPosition[posY]);
-        }
-        else if (!isLookRight && posX == 5)
-        {
-            transform.localPosition = new Vector2(1200, posYPosition[posY]);
-        }
-
-        transform.DOLocalMove(new Vector2(posXPosition[posX], posYPosition[posY]), 0.5f);
-        transform.GetChild(0).GetComponent<CharctorScript>().SetPosition(posX, posY);
-    }
-
-    public void SetNewObj(GameObject newObj)
-    {
-        this.newObj = newObj.gameObject;
+        transform.DOLocalMoveX(posXCoordinates[PosX], 0.5f);
     }
 
     //時間を測ってオブジェクトを前へ進める
     public async UniTask GoFront()
     {
         var duration = Random.Range(minTimeRange, maxTimeRange);
+
+        int moveDistance = isLookRight ? 1 : -1;
+        bool isMovable = isLookRight ? PosX < 5 : PosX > 0;
+
         await UniTask.Delay((int)(duration * 1000), cancellationToken: this.GetCancellationTokenOnDestroy());
-        if (isLookRight)
+        
+        if (isMovable)
         {
-            if (posX < 5)
-            {
-                //前に進める
-                posX++;
-            }
-            else
-            {
-                //今あるオブジェクトは画面外へ
-                transform.DOLocalMove(new Vector2(1200, posYPosition[posY]), 0.5f);
-
-                //もう前に進めないので新しいオブジェクトを生成する
-                //TODO: 修正 OperationCharctor.getInstance().DeathBornObject(posY);
-
-                Destroy(gameObject, 1.0f);
-            }
+            //前に進める
+            PosX += moveDistance;
+            SetPos();
+            GoFront().Forget();
         }
         else
         {
-            if (posX > 0)
-            {
-                //前に進める
-                posX--;
-            }
-            else
-            {
-                //今あるオブジェクトは画面外へ
-                transform.DOLocalMove(new Vector2(-1200, posYPosition[posY]), 0.5f);
+            //今のオブジェクトは画面外へ送り、新オブジェクトを生成
+            transform.DOLocalMoveX(1200 * moveDistance, 0.5f);
+            CharacterController.CharaGenerate(PosY);
 
-                //もう前に進めないので新しいオブジェクトを生成する
-                //TODO: 修正 OperationCharctor.getInstance().DeathBornObject(posY);
-
-                Destroy(gameObject, 1.0f);
-            }
+            Destroy(gameObject, 1.0f);
         }
-        SetPos();
-        GoFront().Forget();
     }
-
-    //変化後のオブジェクトを破棄する
-    public async UniTask DestroyNewObj()
+    //オブジェクト変身
+    public async UniTask ObjChange(CharaData _afterChangeChara)
     {
-        var obj = newObj;
-        //画面外へ移動
-        if (newObj.transform.position.x > 0)
+        InstantiateChangeChara().Forget();
+        Destroy(gameObject);
+        CharacterController.CharaGenerate(PosY);
+
+        async UniTask InstantiateChangeChara()
         {
-            await UniTask.Delay(2000);
-            newObj.transform.DOLocalMove(new Vector2(1200, posY), 1.0f);
+            var afterChangeCharaObj = Instantiate(afterChangeCharaPrefab, transform.parent);
+            afterChangeCharaObj.Initialize(_afterChangeChara);
+            afterChangeCharaObj.transform.localPosition = new Vector2(posXCoordinates[PosX], posYCoordinates[PosY]);
+
+            var movingCoodinate = afterChangeCharaObj.transform.localPosition.x > 0 ? 1200 : -1200;
+
+            //画面外へ移動
+            await UniTask.Delay(2000);      //キャンセル処理は入れない
+
+            var moveDuration = 1.0f;
+            afterChangeCharaObj.transform.DOLocalMoveX(movingCoodinate, moveDuration);
+            Destroy(afterChangeCharaObj.gameObject, moveDuration);
         }
-        else
-        {
-            await UniTask.Delay(2000);
-            newObj.transform.DOLocalMove(new Vector2(-1200, posY), 1.0f);
-        }
-        //オブジェクトを削除
-        Destroy(obj.gameObject, 1.5f);
     }
-    //ゲームモード終了時各オブジェクトを縮小する
+    //ゲームモード終了時オブジェクトを縮小する
     public void ObjShrink()
     {
         transform.DOScale(Vector2.zero, 0.9f).SetEase(Ease.InBack);
