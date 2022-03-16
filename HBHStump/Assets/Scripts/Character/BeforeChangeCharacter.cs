@@ -18,7 +18,7 @@ public class BeforeChangeCharacter : CharacterBase
     float minTimeRange = 2.0f;
     float maxTimeRange = 2.0f;
 
-    [SerializeField] CharacterBase afterChangeCharaPrefab;  //TODO: クラス名要検討
+    [SerializeField] CharacterBase afterChangeCharaPrefab;
 
     CharaCsvLoader CharaCsvLoader => CharaCsvLoader.Instance;
     CharacterController CharacterController => CharacterController.Instance;

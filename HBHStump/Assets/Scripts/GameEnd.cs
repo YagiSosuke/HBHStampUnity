@@ -8,7 +8,7 @@ using Cysharp.Threading.Tasks;
 public class GameEnd : MonoBehaviour
 {
     bool isVisibleDebugCanvas = false;
-    [SerializeField] GameObject Canvas2;    //TODO: 変数名変えたほうがいい(ex.debugCanvas
+    [SerializeField] GameObject debugCamvas;
 
     async UniTask OnEscape()
     {
@@ -23,14 +23,14 @@ public class GameEnd : MonoBehaviour
     {
         await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.C), cancellationToken: this.GetCancellationTokenOnDestroy());
         isVisibleDebugCanvas = !isVisibleDebugCanvas;
-        if (Canvas2) Canvas2.SetActive(isVisibleDebugCanvas);
+        if (debugCamvas) debugCamvas.SetActive(isVisibleDebugCanvas);
 
         OnOpenDebugWindow().Forget();
     }
 
     void Start()
     {
-        if (Canvas2) Canvas2.SetActive(isVisibleDebugCanvas);
+        if (debugCamvas) debugCamvas.SetActive(isVisibleDebugCanvas);
 
         OnEscape().Forget();
         OnOpenDebugWindow().Forget();

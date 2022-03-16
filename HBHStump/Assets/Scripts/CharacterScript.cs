@@ -13,8 +13,6 @@ public class CharacterScript : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] BeforeChangeCharacter beforeChangeCharacter;
     List<CharaData> changeCharaDatas;
-      
-    [SerializeField] GameObject fogPrefab;
 
     MasterData MasterData => MasterData.Instance;
     CharacterController CharacterController => CharacterController.Instance;
@@ -48,12 +46,9 @@ public class CharacterScript : MonoBehaviour, IPointerClickHandler
     void ChangeCharacter(CharaData changeData)
     {
         Debug.Log("Coordinate = " + beforeChangeCharacter.PosX + "," + beforeChangeCharacter.PosY);
-
-        //煙を出す
+        
         EffectManager.Instance.InstantiateFogEffect(beforeChangeCharacter.PosX, beforeChangeCharacter.PosY);
-
         beforeChangeCharacter.ObjChange(changeData).Forget();
-
         MasterData.AddScore(changeData.Sprite);
     }
     

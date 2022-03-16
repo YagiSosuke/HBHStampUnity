@@ -12,7 +12,7 @@ using Cysharp.Threading.Tasks;
 public class DisplayScore : MonoBehaviour
 {
     [SerializeField] Text scoreText;
-    [SerializeField] MasterData masterdata;     //TODO: 名称変更
+    [SerializeField] MasterData masterData;
     [SerializeField] SceneControl sceneControl;
     
 
@@ -30,7 +30,7 @@ public class DisplayScore : MonoBehaviour
         {
             if (sceneControl.transitionMode == TransitionMode.continuation)
             {
-                scoreText.text = masterdata.Score.ToString();
+                scoreText.text = masterData.Score.ToString();
             }
             if (sceneControl.transitionMode == TransitionMode.beforeSwitching)
             {
