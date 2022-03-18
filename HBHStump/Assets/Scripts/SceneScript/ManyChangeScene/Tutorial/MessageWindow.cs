@@ -10,7 +10,7 @@ using Cysharp.Threading.Tasks;
 
 public class MessageWindow : MonoBehaviour
 {
-    const float duration = 0.05f;       //次の文字が表れるまでの時間
+    const float duration = 0.05f;           //次の文字が表れるまでの時間
     
     List<string> messageGroup;              //メッセージ群
     string messageLine;                     //表示するメッセージ1行

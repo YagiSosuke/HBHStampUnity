@@ -80,7 +80,7 @@ public class TutorialMessage : MonoBehaviour
     
 
     //Transitionmodeを変化させる
-    public void TransitionChange()
+    void TransitionChange()
     {
         if (tutorialStep < TutorialStep.EndStep && transitionMode < TransitionMode.beforeSwitching)
         {
@@ -97,12 +97,12 @@ public class TutorialMessage : MonoBehaviour
     void TutorialVerification()
     {
         if (verificationPanelScript.isTakeTutorial || 
-            (serialScipt.enabled == true && Serial.PushF[2, 1]))
+            (serialScipt.IsUseDevice == true && Serial.PushF[2, 1]))
         {
             TransitionChange();
         }
         else if (verificationPanelScript.isNotTakeTutorial ||
-                 (serialScipt.enabled == true && Serial.PushF[3, 1]))
+                 (serialScipt.IsUseDevice == true && Serial.PushF[3, 1]))
         {
             ct.Cancel();
             sceneControl.screenMode = (ScreenMode)((int)sceneControl.screenMode + 1);
@@ -451,7 +451,7 @@ public class TutorialMessage : MonoBehaviour
     float tutorialTimeout_sec = 60.0f;
     float taskTimeout_sec = 120.0f;
     
-    public async UniTask WaitForTimeout(float time_sec)
+    async UniTask WaitForTimeout(float time_sec)
     {
         TutorialStep _step = tutorialStep;
 
