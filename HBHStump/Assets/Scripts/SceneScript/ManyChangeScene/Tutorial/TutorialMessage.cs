@@ -154,7 +154,7 @@ public class TutorialMessage : MonoBehaviour
         {
             messageWindow.MessageWindowUpdate();
 
-            if (messageWindow.messageNum * 2 + 2 < message.Length && messageWindow.messageCount >= messageWindow.messageLength) 
+            if (!messageWindow.IsFinishMessageGroup() && messageWindow.IsFinishMessageLine()) 
             {
                 ShowTouchInstruction();
             }
@@ -186,15 +186,13 @@ public class TutorialMessage : MonoBehaviour
         }
         else if (transitionMode == TransitionMode.continuation)
         {
-            Debug.Log($"messageWindow.messageCount = {messageWindow.messageCount}\nmessageWindow.messageLength = {messageWindow.messageLength}\nmessageWindow.message.Count = {messageWindow.message.Count}\nmessageWindow.messageNum = {messageWindow.messageNum * 2}");
+            Debug.Log($"messageWindow.messageCount = {messageWindow.currentMessageLength}\nmessageWindow.messageLength = {messageWindow.totalMessageLength}\nmessageWindow.message.Count = {messageWindow.messageGroup.Count}\nmessageWindow.messageNum = {messageWindow.messageLineNum * 2}");
            //クリックでメッセージを表示する
-            if (messageWindow.messageCount < messageWindow.messageLength ||
-                messageWindow.message.Count > messageWindow.messageNum * 2 + 2)
+            if (!messageWindow.IsFinishMessageLine() || !messageWindow.IsFinishMessageGroup())
             {
                 messageWindow.MessageWindowUpdate();
             }
-            if (messageWindow.messageNum * 2 + 1 < message.Length-1 && 
-                messageWindow.messageCount >= messageWindow.messageLength)
+            if (!messageWindow.IsFinishMessageGroup() && messageWindow.IsFinishMessageLine())
             {
                 ShowTouchInstruction();
             }
@@ -426,7 +424,7 @@ public class TutorialMessage : MonoBehaviour
     [SerializeField] Animator touchInstructionAnimator;
     void ShowTouchInstruction()
     {
-        if (messageWindow.messageCount >= messageWindow.messageLength && touchInstructionImage.alpha != 1.0f)
+        if (messageWindow.IsFinishMessageLine() && touchInstructionImage.alpha != 1.0f)
         {
             touchInstructionAnimator.SetBool("AnimationF", true);
             touchInstructionImage.DOFade(endValue: 1.0f, duration: 0.2f);

@@ -9899,14 +9899,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d3ee018b10c0c64688a227249d05642, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameText: {fileID: 321966267}
-  messageText: {fileID: 1868186924}
   message: []
   messageNum: 0
   messageLength: 0
   messageCount: 0
   intervalTime: 0.05
   messageFinish: 0
+  nameText: {fileID: 321966267}
+  messageText: {fileID: 1868186924}
+  serial: {fileID: 1713773050}
   talkAudioClip: {fileID: 8300000, guid: 0a757df426744684585b2a9a6bc560a2, type: 3}
 --- !u!1 &347386850
 GameObject:

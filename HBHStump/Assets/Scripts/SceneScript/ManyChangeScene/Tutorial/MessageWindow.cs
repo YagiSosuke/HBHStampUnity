@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
 
 /*
 メッセージウィンドウのクラス
@@ -9,45 +10,38 @@ using UnityEngine.UI;
 
 public class MessageWindow : MonoBehaviour
 {
+    const float duration = 0.05f;       //次の文字が表れるまでの時間
+
+    //メッセージ列
+    public List<string> messageGroup;
+    
+    string messageLine;             //表示するメッセージ
+    public int messageLineNum;      //メッセージ番号(何行目か)      
+    
+    public int currentMessageLength;    //現在のメッセージの文字数
+    public int totalMessageLength;      //最終的に表示するのメッセージの文字数
+        
+    float elapsedTime;              //TODO: 消せそう、経過時間
+    public bool messageFinish;      //TODO: 消せそう、メッセージが終了したかのフラグ
+
     //文字列を表示するテキスト
     [SerializeField] Text nameText;
     [SerializeField] Text messageText;
-
-    //メッセージ列
-    public List<string> message;
-
-    //表示するメッセージ
-    string messageLine;
-
-    //メッセージ番号(何行目か)
-    public int messageNum;
-
-    //メッセージの文字数
-    public int messageLength;
-    public int messageCount;
-
-    //経過時間
-    float elapsedTime;
-    //次の文字が表れるまでの時間
-    [SerializeField] float intervalTime = 0.5f;
-
-    //メッセージが終了したかのフラグ
-    public bool messageFinish;
-    //画面にスタンプが押されたかどうかのフラグ
-    bool isPush = false;
-    
+    [SerializeField] Serial serial;
     [SerializeField] AudioClip talkAudioClip;
 
+    public bool IsFinishMessageLine() => currentMessageLength >= totalMessageLength;
+    public bool IsFinishMessageGroup() => messageLineNum * 2 + 2 >= messageGroup.Count;
 
     //メッセージ列を読み込む。加えて、初期化もする
     public void LoadMessage(List<string> message)
     {
-        this.message = message;
+        messageGroup = message;
 
-        messageNum = 0;
-        messageCount = 0;
-        messageLength = this.message[messageNum*2 + 1].Length;
-        messageLine = this.message[messageNum*2 + 1];
+        messageLineNum = 0;
+        currentMessageLength = 0;
+        totalMessageLength = messageGroup[messageLineNum * 2 + 1].Length;
+        messageLine = messageGroup[messageLineNum * 2 + 1];
         elapsedTime = 0.0f;
         messageFinish = false;
     }
@@ -56,32 +50,32 @@ public class MessageWindow : MonoBehaviour
     public void PrintText()
     {
         //時間が経過するにつれ、文字が表れていく
-        if (messageCount < messageLength) {
+        if (currentMessageLength < totalMessageLength) {
             elapsedTime += Time.deltaTime;
-            if(elapsedTime >= intervalTime)
+            if(elapsedTime >= duration)
             {
-                elapsedTime -= intervalTime;
-                messageCount++;
+                elapsedTime -= duration;
+                currentMessageLength++;
                 AudioManager.Instance.PlaySE(talkAudioClip);
             }
         }
         
         if(nameText != null)
         {
-            nameText.text = this.message[messageNum * 2];
+            nameText.text = messageGroup[messageLineNum * 2];
         }
-        messageText.text = this.message[messageNum*2 + 1].Substring(0, messageCount);
+        messageText.text = messageGroup[messageLineNum * 2 + 1].Substring(0, currentMessageLength);
     }
     
     //クリック or スタンプを押した時に、次のテキストを表示する
     public void NextMessage()
     {
-        if (message.Count > messageNum * 2 + 2)
+        if (!IsFinishMessageGroup())
         {
-            messageNum++;
-            messageCount = 0;
-            messageLength = this.message[messageNum * 2 + 1].Length;
-            messageLine = this.message[messageNum * 2 + 1];
+            messageLineNum++;
+            currentMessageLength = 0;
+            totalMessageLength = messageGroup[messageLineNum * 2 + 1].Length;
+            messageLine = messageGroup[messageLineNum * 2 + 1];
             elapsedTime = 0.0f;
         }else
         {
@@ -95,19 +89,9 @@ public class MessageWindow : MonoBehaviour
     {
         PrintText();
 
-        for(int i= 0; i< 15; i++)
-        {
-            if(Serial.PushF[i%5, i / 5])
-            {
-                isPush = true;
-                break;
-            }
-        }
-
-        if ((Input.GetMouseButtonDown(0) || isPush) && messageCount >= messageLength)
+        if ((Input.GetMouseButtonDown(0) || serial.pushCheck()) && currentMessageLength >= totalMessageLength)
         {
             NextMessage();
         }
-        isPush = false;
     }
 }
