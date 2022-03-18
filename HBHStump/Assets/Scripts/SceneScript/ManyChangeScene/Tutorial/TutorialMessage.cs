@@ -343,7 +343,7 @@ public class TutorialMessage : MonoBehaviour
         //状態を変化させるフラグ
         public bool StepChangeF()
         {
-            if (serialScript.enabled)
+            if (serialScript.IsUseDevice)
             {
                 if (Serial.cardReadF)
                 {

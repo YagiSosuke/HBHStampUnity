@@ -120,7 +120,7 @@ public class SceneControl : MonoBehaviour
                 {
                     StateChange();
                 }
-                else if(serialScript.enabled == true)
+                else if(serialScript.IsUseDevice == true)
                 {
                     if (serialScript.pushCheck())
                     {
@@ -222,7 +222,7 @@ public class SceneControl : MonoBehaviour
                 //ランキングパネルが出ていないときに実行
                 if (resultPanelControl.RankNum == -1)
                 {
-                    if (Input.GetMouseButtonDown(0) || (serialScript.enabled == true && serialScript.pushCheck()))
+                    if (Input.GetMouseButtonDown(0) || (serialScript.IsUseDevice == true && serialScript.pushCheck()))
                     {
                         StateChange();
                     }

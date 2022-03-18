@@ -166,7 +166,7 @@ public class ResultPanelControl : MonoBehaviour
             }
             else if (rankPanelTransition == RankPanelTransition.nowView && !isRankUpdate)
             {
-                if(Input.GetMouseButtonDown(0) || (serialScript.enabled == true && serialScript.pushCheck()))
+                if(Input.GetMouseButtonDown(0) || (serialScript.IsUseDevice == true && serialScript.pushCheck()))
                 {
                     TransitionUpdate();
                 }
