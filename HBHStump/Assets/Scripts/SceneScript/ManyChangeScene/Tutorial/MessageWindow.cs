@@ -11,24 +11,20 @@ using Cysharp.Threading.Tasks;
 public class MessageWindow : MonoBehaviour
 {
     const float duration = 0.05f;       //次の文字が表れるまでの時間
-
-    //メッセージ列
-    public List<string> messageGroup;
     
-    string messageLine;             //表示するメッセージ
-    public int messageLineNum;      //メッセージ番号(何行目か)      
-    
-    public int currentMessageLength;    //現在のメッセージの文字数
-    public int totalMessageLength;      //最終的に表示するのメッセージの文字数
-        
-    float elapsedTime;              //TODO: 消せそう、経過時間
-    public bool messageFinish;      //TODO: 消せそう、メッセージが終了したかのフラグ
-
-    //文字列を表示するテキスト
+    List<string> messageGroup;              //メッセージ群
+    string messageLine;                     //表示するメッセージ1行
+    int    messageLineNum;                  //メッセージはメッセージ群のうち何行目か      
+    int    currentMessageLength;            //現在のメッセージの文字数
+    int    totalMessageLength;              //最終的に表示するのメッセージの文字数
     [SerializeField] Text nameText;
     [SerializeField] Text messageText;
     [SerializeField] Serial serial;
     [SerializeField] AudioClip talkAudioClip;
+
+    float elapsedTime;              //TODO: 消せそう、経過時間
+    public bool messageFinish;      //TODO: 消せそう、メッセージが終了したかのフラグ
+
 
     public bool IsFinishMessageLine() => currentMessageLength >= totalMessageLength;
     public bool IsFinishMessageGroup() => messageLineNum * 2 + 2 >= messageGroup.Count;
@@ -39,15 +35,14 @@ public class MessageWindow : MonoBehaviour
         messageGroup = message;
 
         messageLineNum = 0;
+        messageLine = messageGroup[messageLineNum * 2 + 1];
         currentMessageLength = 0;
         totalMessageLength = messageGroup[messageLineNum * 2 + 1].Length;
-        messageLine = messageGroup[messageLineNum * 2 + 1];
         elapsedTime = 0.0f;
         messageFinish = false;
     }
-
     //メッセージを1文字ごとに表示する
-    public void PrintText()
+    void PrintText()
     {
         //時間が経過するにつれ、文字が表れていく
         if (currentMessageLength < totalMessageLength) {
@@ -66,9 +61,8 @@ public class MessageWindow : MonoBehaviour
         }
         messageText.text = messageGroup[messageLineNum * 2 + 1].Substring(0, currentMessageLength);
     }
-    
     //クリック or スタンプを押した時に、次のテキストを表示する
-    public void NextMessage()
+    void NextMessage()
     {
         if (!IsFinishMessageGroup())
         {
@@ -83,13 +77,12 @@ public class MessageWindow : MonoBehaviour
             messageFinish = true;
         }
     }
-   
     //メッセージウィンドウのUpdate
     public void MessageWindowUpdate()
     {
         PrintText();
 
-        if ((Input.GetMouseButtonDown(0) || serial.pushCheck()) && currentMessageLength >= totalMessageLength)
+        if ((Input.GetMouseButtonDown(0) || serial.pushCheck()) && IsFinishMessageLine())
         {
             NextMessage();
         }

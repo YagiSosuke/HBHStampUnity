@@ -186,8 +186,8 @@ public class TutorialMessage : MonoBehaviour
         }
         else if (transitionMode == TransitionMode.continuation)
         {
-            Debug.Log($"messageWindow.messageCount = {messageWindow.currentMessageLength}\nmessageWindow.messageLength = {messageWindow.totalMessageLength}\nmessageWindow.message.Count = {messageWindow.messageGroup.Count}\nmessageWindow.messageNum = {messageWindow.messageLineNum * 2}");
-           //クリックでメッセージを表示する
+            //Debug.Log($"messageWindow.messageCount = {messageWindow.currentMessageLength}\nmessageWindow.messageLength = {messageWindow.totalMessageLength}\nmessageWindow.message.Count = {messageWindow.messageGroup.Count}\nmessageWindow.messageNum = {messageWindow.messageLineNum * 2}");
+            //クリックでメッセージを表示する
             if (!messageWindow.IsFinishMessageLine() || !messageWindow.IsFinishMessageGroup())
             {
                 messageWindow.MessageWindowUpdate();
