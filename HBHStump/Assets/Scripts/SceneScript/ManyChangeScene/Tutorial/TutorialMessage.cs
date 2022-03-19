@@ -522,32 +522,32 @@ public class TutorialMessage : MonoBehaviour
             }
             else if (tutorialStep == TutorialStep.BearGreeting)
             {
-                explainPanel.ExplainBearOn();
+                explainPanel.ChangeExplainPanel();
                 ViewingMessage(message_BearGreeting, tutorialTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.BearGreeting_Mikan)
             {
-                explainPanel.ExplainMikan();
+                explainPanel.ChangeExplainPanel();
                 ViewingMessage(message_BearGreeting_Mikan, tutorialTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.BearGreeting_Kamen)
             {
-                explainPanel.ExplainKamen();
+                explainPanel.ChangeExplainPanel();
                 ViewingMessage(message_BearGreeting_Kamen, tutorialTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.BearGreeting_Kannna)
             {
-                explainPanel.ExplainKanna();
+                explainPanel.ChangeExplainPanel();
                 ViewingMessage(message_BearGreeting_Kannna, tutorialTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_GrapStamp)
             {
-                explainPanel.ExplainGrapDevice();
+                explainPanel.ChangeExplainPanel();
                 ViewingMessage(message_StampOperation_GrapStamp, tutorialTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_RightButton)
             {
-                explainPanel.ExplainRightButton();
+                explainPanel.ChangeExplainPanel();
                 ExececutionTask(message_StampOperation_RightButton, rightChangeConditions, taskTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_RightButtonDoes)
@@ -556,7 +556,7 @@ public class TutorialMessage : MonoBehaviour
             }
             else if (tutorialStep == TutorialStep.StampOperation_LeftButton)
             {
-                explainPanel.ExplainLeftButton();
+                explainPanel.ChangeExplainPanel();
                 ExececutionTask(message_StampOperation_LeftButton, leftChangeConditions, taskTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_LeftButtonDoes)
@@ -565,7 +565,7 @@ public class TutorialMessage : MonoBehaviour
             }
             else if (tutorialStep == TutorialStep.StampOperation_MiddleButton)
             {
-                explainPanel.ExplainMiddleButton();
+                explainPanel.ChangeExplainPanel();
                 ExececutionTask(message_StampOperation_MiddleButton, middleChangeConditions, taskTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_MiddleButtonDoes)
@@ -574,18 +574,19 @@ public class TutorialMessage : MonoBehaviour
             }
             else if (tutorialStep == TutorialStep.StampOperation_CardRead)
             {
-                explainPanel.ExplainCardRead();
+                explainPanel.ChangeExplainPanel();
                 ExececutionTask(message_StampOperation_CardRead, cardReadConditions, taskTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_CardReadDoes)
             {
+                explainPanel.ChangeExplainPanel();
                 ViewingMessage(message_StampOperation_CardReadDoes, tutorialTimeout_sec);
             }
             else if (tutorialStep == TutorialStep.StampOperation_TutorialMikan1)
             {
                 tutorialCharactorScript.KanSetup();
                 trySupportCheck.CheckBoxSetup();
-                explainPanel.ExplainTryMikanPanel();
+                explainPanel.ChangeExplainPanel();
                 ViewingMessage(message_StampOperation_TutorialMikan1, tutorialTimeout_sec);
                 tutorialCharactorScript.isChange = false;
             }
@@ -603,7 +604,7 @@ public class TutorialMessage : MonoBehaviour
             }
             else if(tutorialStep == TutorialStep.EndStep)
             {
-                explainPanel.ExplainFinish();
+                explainPanel.ChangeExplainPanel();
 
                 transitionMode = TransitionMode.afterSwitching;
                 tutorialStep = TutorialStep.TutorialVerification;

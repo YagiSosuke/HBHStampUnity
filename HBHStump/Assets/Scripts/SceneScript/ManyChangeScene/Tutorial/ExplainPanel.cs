@@ -122,6 +122,9 @@ public class ExplainPanel : MonoBehaviour
                     wordPanelImg.GetComponent<Animator>().SetBool("AnimationF", true);
                     WordPanelAnimation().Forget();
                     break;
+                case TutorialStep.StampOperation_CardReadDoes:
+                    wordPanelPlaceCt.Cancel();
+                    break;
                 case TutorialStep.StampOperation_TutorialMikan1:
                     wordPanelImg.GetComponent<CanvasGroup>().DOFade(endValue: 0.0f, duration: fadeTime);
                     wordPanelImg.GetComponent<Animator>().SetBool("AnimationF", false);
@@ -134,137 +137,6 @@ public class ExplainPanel : MonoBehaviour
                     break;
             }
         }
-        else if (tutorialMessage.transitionMode == TransitionMode.beforeSwitching)
-        {
-            switch (tutorialMessage.GetTutorialStep())
-            {
-                case TutorialStep.StampOperation_CardRead:
-                    wordPanelPlaceCt.Cancel();
-                    break;
-            }
-        }
-    }
-    //説明するクマを表示する
-   　public void ExplainBearOn()
-    {
-        if (tutorialMessage.transitionMode == TransitionMode.afterSwitching)
-        {
-            CharAndMessagePanel.DOFade(endValue: 1.0f, duration: fadeTime);
-        }
-    }
-
-    //みかんの説明
-    public void ExplainMikan()
-    {
-        if (tutorialMessage.transitionMode == TransitionMode.afterSwitching)
-        {
-            explainPanel.DOFade(endValue: 1.0f, duration: fadeTime);
-            kanPanel.DOFade(endValue: 1.0f, duration: fadeTime);
-            mikanPanel.DOFade(endValue: 1.0f, duration: fadeTime);
-        }
-    }
-    //かめんの説明
-    public void ExplainKamen()
-    {
-        if (tutorialMessage.transitionMode == TransitionMode.afterSwitching)
-        {
-            mikanPanel.DOFade(endValue: 0.0f, duration: fadeTime);
-            kamenPanel.DOFade(endValue: 1.0f, duration: fadeTime);
-        }
-    }
-    //かんなの説明
-    public void ExplainKanna()
-    {
-        if (tutorialMessage.transitionMode == TransitionMode.afterSwitching)
-        {
-            kamenPanel.DOFade(endValue: 0.0f, duration: fadeTime);
-            kannaPanel.DOFade(endValue: 1.0f, duration: fadeTime);
-        }
-    }
-
-    //デバイスを掴むことの説明
-    public void ExplainGrapDevice()
-    {
-        if (tutorialMessage.transitionMode == TransitionMode.afterSwitching)
-        {
-            kannaPanel.DOFade(endValue: 0.0f, duration: fadeTime);
-            kanPanel.DOFade(endValue: 0.0f, duration: fadeTime);
-            devicePanel.DOFade(endValue: 1.0f, duration: fadeTime);
-        }
-    }
-    //右ボタンの説明
-    public void ExplainRightButton()
-    {
-        if (tutorialMessage.transitionMode == TransitionMode.afterSwitching)
-        {
-            buttonCoverObj.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
-            buttonCoverObj.GetComponent<Animator>().SetBool("AnimationF", true);
-            buttonCoverObj.transform.localPosition = new Vector2(39.0f, 60.0f);
-            BtnWindowImg.DOFade(endValue: 1.0f, duration: fadeTime);
-            rightBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
-            rightBtnExImg.GetComponent<Animator>().SetBool("AnimationF", true);
-        }
-    }
-    //左ボタンの説明
-    public void ExplainLeftButton()
-    {
-        if (tutorialMessage.transitionMode == TransitionMode.afterSwitching)
-        {
-            buttonCoverObj.transform.localPosition = new Vector2(-39.0f, 60.0f);
-            rightBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 0.0f, duration: fadeTime);
-            rightBtnExImg.GetComponent<Animator>().SetBool("AnimationF", false);
-            leftBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
-            leftBtnExImg.GetComponent<Animator>().SetBool("AnimationF", true);
-        }
-    }
-    //真ん中ボタンの説明
-    public void ExplainMiddleButton()
-    {
-        if (tutorialMessage.transitionMode == TransitionMode.afterSwitching)
-        {
-            buttonCoverObj.transform.localPosition = new Vector2(0.0f, 60.0f);
-            BtnWindowImg.DOFade(endValue: 0.0f, duration: fadeTime);
-            leftBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 0.0f, duration: fadeTime);
-            leftBtnExImg.GetComponent<Animator>().SetBool("AnimationF", false);
-            middleBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
-            middleBtnExImg.GetComponent<Animator>().SetBool("AnimationF", true);
-        }
-    }
-    //言葉パネルの説明
-    public void ExplainCardRead()
-    {
-        if (tutorialMessage.transitionMode == TransitionMode.afterSwitching)
-        {
-            devicePanel.DOFade(endValue: 0.0f, duration: fadeTime);
-            middleBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 0.0f, duration: fadeTime);
-            middleBtnExImg.GetComponent<Animator>().SetBool("AnimationF", false);
-            wordPanelImg.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
-            wordPanelImg.GetComponent<Animator>().SetBool("AnimationF", true);
-
-            WordPanelAnimation().Forget();
-        }
-        else if(tutorialMessage.transitionMode == TransitionMode.beforeSwitching)
-        {
-            wordPanelPlaceCt.Cancel();
-        }
-    }
-    //みかん説明補助パネルの説明
-    public void ExplainTryMikanPanel()
-    {
-        if (tutorialMessage.transitionMode == TransitionMode.afterSwitching)
-        {
-            wordPanelImg.GetComponent<CanvasGroup>().DOFade(endValue: 0.0f, duration: fadeTime);
-            wordPanelImg.GetComponent<Animator>().SetBool("AnimationF", false);
-            explainPanel.DOFade(endValue: 0.0f, duration: fadeTime);
-
-            tryMikanChangeImages.DOFade(endValue: 1.0f, duration: fadeTime);
-        }
-    }
-    //チュートリアル終了時、パネルを不可視にする
-    public void ExplainFinish()
-    {
-        tryMikanChangeImages.DOFade(endValue: 0.0f, duration: fadeTime);
-        CharAndMessagePanel.DOFade(endValue: 0.0f, duration: fadeTime);
     }
     #endregion
 
