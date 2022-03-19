@@ -41,29 +41,27 @@ public class ExplainPanel : MonoBehaviour
     [SerializeField] CanvasGroup wordSupportArrowGroups;
     
 
-    #region チュートリアルの段階でパネルを開く、閉じるメソッド
     //チュートリアルを受けるか確認
     public void TutorialVerification()
     {
-        if (tutorialMessage.transitionMode == TransitionMode.afterSwitching)
+        switch (tutorialMessage.transitionMode)
         {
-            VerificationPanel.blocksRaycasts = true;
-            VerificationPanel.DOFade(endValue: 1.0f, duration: fadeTime);
-        }
-        else if(tutorialMessage.transitionMode == TransitionMode.beforeSwitching)
-        {
-            VerificationPanelFO();
+            case TransitionMode.afterSwitching:
+                VerificationPanel.blocksRaycasts = true;
+                VerificationPanel.DOFade(endValue: 1.0f, duration: fadeTime);
+                break;
+            case TransitionMode.beforeSwitching:
+                VerificationPanelFadeOut();
+                break;
         }
     }
-    //確認パネルをFOさせる
-    public void VerificationPanelFO()
+    public void VerificationPanelFadeOut()
     {
         VerificationPanel.blocksRaycasts = false;
         VerificationPanel.DOFade(endValue: 0.0f, duration: fadeTime);
     }
-
-
-    //以下の処理をまとめるようにリファクタリングする
+    
+    //説明パネルの内容を変更するメソッド
     public void ChangeExplainPanel()
     {
         if (tutorialMessage.transitionMode == TransitionMode.afterSwitching)
@@ -138,7 +136,6 @@ public class ExplainPanel : MonoBehaviour
             }
         }
     }
-    #endregion
 
     //カード読むときのパネル部分アニメーション
     CancellationTokenSource wordPanelPlaceCt;

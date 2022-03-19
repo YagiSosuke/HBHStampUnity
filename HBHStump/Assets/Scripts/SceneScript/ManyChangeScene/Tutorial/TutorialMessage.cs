@@ -25,6 +25,9 @@ using System.Threading;
     //TODO: タイムアウトの実装
 public class TutorialMessage : MonoBehaviour
 {
+    readonly Vector2 verificationYesPosition = new Vector2(2, 1);
+    readonly Vector2 verificationNoPosition = new Vector2(3, 1);
+
     //シーンを管理する
     [SerializeField] SceneControl sceneControl;
 
@@ -98,17 +101,17 @@ public class TutorialMessage : MonoBehaviour
     void TutorialVerification()
     {
         if (verificationPanelScript.isTakeTutorial || 
-            (serialScipt.IsUseDevice == true && Serial.PushF[2, 1]))
+            (serialScipt.IsUseDevice == true && Serial.PushF[(int)verificationYesPosition.x, (int)verificationYesPosition.y]))
         {
             TransitionChange();
         }
         else if (verificationPanelScript.isNotTakeTutorial ||
-                 (serialScipt.IsUseDevice == true && Serial.PushF[3, 1]))
+                 (serialScipt.IsUseDevice == true && Serial.PushF[(int)verificationNoPosition.x, (int)verificationNoPosition.y]))
         {
             ct.Cancel();
             sceneControl.screenMode = (ScreenMode)((int)sceneControl.screenMode + 1);
             transitionMode = TransitionMode.afterSwitching;
-            explainPanel.VerificationPanelFO();
+            explainPanel.VerificationPanelFadeOut();
         }
     }
 
@@ -118,111 +121,109 @@ public class TutorialMessage : MonoBehaviour
     //文字送り以外の処理を呼び出す場合は、この関数は最後に描く(transitionMode の Update も兼ねているため)
     void ViewingMessage(string[] message, float time_sec)
     {
-        if (transitionMode == TransitionMode.afterSwitching)
+        switch (transitionMode)
         {
-            messageWindow.LoadMessage(new List<string>(message));
-            WaitForTimeout(time_sec).Forget();
-            TransitionChange();
-        }
-        else if (transitionMode == TransitionMode.continuation)
-        {
-            messageWindow.MessageWindowUpdate();
-            ShowTouchInstruction();
-            if (messageWindow.messageFinish)
-            {
+            case TransitionMode.afterSwitching:
+                messageWindow.LoadMessage(new List<string>(message));
+                WaitForTimeout(time_sec).Forget();
                 TransitionChange();
-            }
-        }
-        else if (transitionMode == TransitionMode.beforeSwitching)
-        {
-            HideTouchInstruction();
-            ct.Cancel();
-            TransitionChange();
+                break;
+            case TransitionMode.continuation:
+                messageWindow.ShowMessage();
+                ShowTouchInstruction();
+                if (messageWindow.messageFinish)
+                {
+                    TransitionChange();
+                }
+                break;
+            case TransitionMode.beforeSwitching:
+                HideTouchInstruction();
+                ct.Cancel();
+                TransitionChange();
+                break;
         }
     }
     //文字送りのためにタスクを達成する必要がある場合
     //stepChangeConditions にて別途条件を設定
     void ViewingMessage(string[] message, StepChangeConditions stepChangeConditions, float time_sec)
     {
-        if (transitionMode == TransitionMode.afterSwitching)
-        {
-            messageWindow.LoadMessage(new List<string>(message));
-            stepChangeConditions.setNowData();
-            WaitForTimeout(time_sec).Forget();
-            TransitionChange();
-        }
-        else if (transitionMode == TransitionMode.continuation)
-        {
-            messageWindow.MessageWindowUpdate();
-
-            if (!messageWindow.IsFinishMessageGroup() && messageWindow.IsFinishMessageLine()) 
-            {
-                ShowTouchInstruction();
-            }
-            else
-            {
-                HideTouchInstruction();
-            }
-            if (stepChangeConditions.StepChangeF())
-            {
+        switch (transitionMode) {
+            case TransitionMode.afterSwitching:
+                messageWindow.LoadMessage(new List<string>(message));
+                stepChangeConditions.setNowData();
+                WaitForTimeout(time_sec).Forget();
                 TransitionChange();
-            }
-        }
-        else if (transitionMode == TransitionMode.beforeSwitching)
-        {
-            HideTouchInstruction();
-            ct.Cancel();
-            TransitionChange();
+                break;
+            case TransitionMode.continuation:
+                messageWindow.ShowMessage();
+
+                if (!messageWindow.IsFinishMessageGroup() && messageWindow.IsFinishMessageLine()) 
+                {
+                    ShowTouchInstruction();
+                }
+                else
+                {
+                    HideTouchInstruction();
+                }
+                if (stepChangeConditions.StepChangeF())
+                {
+                    TransitionChange();
+                }
+                break;
+            case TransitionMode.beforeSwitching:
+                HideTouchInstruction();
+                ct.Cancel();
+                TransitionChange();
+                break;
         }
     }
     //タスクの実行で transition を変更するメソッド
     void ExececutionTask(string[] message, StepChangeConditions stepChangeConditions, float time_sec)
     {
-        if (transitionMode == TransitionMode.afterSwitching)
+        switch (transitionMode)
         {
-            messageWindow.LoadMessage(new List<string>(message));
-            stepChangeConditions.setNowData();
-            WaitForTimeout(time_sec).Forget();
-            TransitionChange();
-        }
-        else if (transitionMode == TransitionMode.continuation)
-        {
-            //Debug.Log($"messageWindow.messageCount = {messageWindow.currentMessageLength}\nmessageWindow.messageLength = {messageWindow.totalMessageLength}\nmessageWindow.message.Count = {messageWindow.messageGroup.Count}\nmessageWindow.messageNum = {messageWindow.messageLineNum * 2}");
-            //クリックでメッセージを表示する
-            if (!messageWindow.IsFinishMessageLine() || !messageWindow.IsFinishMessageGroup())
-            {
-                messageWindow.MessageWindowUpdate();
-            }
-            if (!messageWindow.IsFinishMessageGroup() && messageWindow.IsFinishMessageLine())
-            {
-                ShowTouchInstruction();
-            }
-            else
-            {
-                HideTouchInstruction();
-            }
-
-            //ステップを更新するフラグが立った場合
-            if (stepChangeConditions.StepChangeF())
-            {
-                Debug.Log("実行された");
+            case TransitionMode.afterSwitching:
+                messageWindow.LoadMessage(new List<string>(message));
+                stepChangeConditions.setNowData();
+                WaitForTimeout(time_sec).Forget();
                 TransitionChange();
-                goodText.displayGoodText().Forget();
-            }
-        }
-        else if (transitionMode == TransitionMode.beforeSwitching)
-        {
-            ct.Cancel();
-            TransitionChange();
+                break;
+            case TransitionMode.continuation:
+                //Debug.Log($"messageWindow.messageCount = {messageWindow.currentMessageLength}\nmessageWindow.messageLength = {messageWindow.totalMessageLength}\nmessageWindow.message.Count = {messageWindow.messageGroup.Count}\nmessageWindow.messageNum = {messageWindow.messageLineNum * 2}");
+                //クリックでメッセージを表示する
+                if (!messageWindow.IsFinishMessageLine() || !messageWindow.IsFinishMessageGroup())
+                {
+                    messageWindow.ShowMessage();
+                }
+                if (!messageWindow.IsFinishMessageGroup() && messageWindow.IsFinishMessageLine())
+                {
+                    ShowTouchInstruction();
+                }
+                else
+                {
+                    HideTouchInstruction();
+                }
+
+                //ステップを更新するフラグが立った場合
+                if (stepChangeConditions.StepChangeF())
+                {
+                    Debug.Log("実行された");
+                    TransitionChange();
+                    goodText.displayGoodText().Forget();
+                }
+                break;
+            case TransitionMode.beforeSwitching:
+                ct.Cancel();
+                TransitionChange();
+                break;
         }
     }
 
     //文字送りメソッドで Step を変更させる為の条件を示すクラス群
     interface StepChangeConditions
     {
-        void setNowData();
-        //状態を変化させるフラグ
-        bool StepChangeF();
+        void setNowData();        
+        bool StepChangeF();     //状態を変化させるフラグ
     }
     class LRChangeConditions : StepChangeConditions
     {   
@@ -413,11 +414,10 @@ public class TutorialMessage : MonoBehaviour
     
     [SerializeField] Serial serialScipt;
 
-    //みかんの変身補助パネルのチェックのアニメ
-    [SerializeField] TrySupportCheck trySupportCheck;
-    //チュートリアルにて、みかんに変身できたかどうかを判断する
-    [SerializeField] TutorialCharactorScript tutorialCharactorScript;
     
+    [SerializeField] TrySupportCheck trySupportCheck;   //みかんの変身時のチェックボックスのアニメ
+    [SerializeField] TutorialCharactorScript tutorialCharactorScript;   //みかんに変身できたか判断
+
     [Header("メッセージを表示しきった時にタッチを促す画像")]
     [SerializeField] CanvasGroup touchInstructionImage;
     [SerializeField] Animator touchInstructionAnimator;
@@ -461,7 +461,7 @@ public class TutorialMessage : MonoBehaviour
         if (_step == tutorialStep)
         {
             //全てのパネルを非表示
-            TutorialPanelFO().Forget();
+            TutorialPanelFO();
             tutorialStep = TutorialStep.TutorialVerification;
             transitionMode = TransitionMode.afterSwitching;
 
@@ -474,13 +474,122 @@ public class TutorialMessage : MonoBehaviour
     {
         tutorialPanelCanvasGroup.DOFade(endValue: 1.0f, duration: 1.0f);
     }
-    async UniTask TutorialPanelFO()
+    void TutorialPanelFO()
     {
-        tutorialPanelCanvasGroup.DOFade(endValue: 0.0f, duration: 1.0f);
-        await UniTask.Delay(1000, cancellationToken: this.GetCancellationTokenOnDestroy());
-        explainPanel.PanelsInit();
+        tutorialPanelCanvasGroup.DOFade(endValue: 0.0f, duration: 1.0f).OnComplete(() =>
+        {
+            explainPanel.PanelsInit();
+        });
     }
-    
+    async UniTask ShowMessage()
+    {
+        await UniTask.WaitUntil(() => sceneControl.screenMode == ScreenMode.Tutorial, cancellationToken: this.GetCancellationTokenOnDestroy());
+        while (sceneControl.screenMode == ScreenMode.Tutorial)
+        {
+            tutorialPanelCanvasGroup.blocksRaycasts = true;
+
+            switch (tutorialStep)
+            {
+                case TutorialStep.TutorialVerification:
+                    explainPanel.TutorialVerification();
+                    if (transitionMode == TransitionMode.afterSwitching)
+                    {
+                        TutorialPanelFI();
+                        touchInstructionImage.alpha = 0;
+                        verificationPanelScript.SetUp();
+                        WaitForTimeout(verificationTimeout_sec).Forget();
+                        TransitionChange();
+                    }
+                    else if (transitionMode == TransitionMode.continuation)
+                    {
+                        TutorialVerification();
+                    }
+                    else if (transitionMode == TransitionMode.beforeSwitching)
+                    {
+                        ct.Cancel();
+                        Debug.Log($"changeTiming1: {ct.IsCancellationRequested}");
+                        TransitionChange();
+                    }
+                    break;
+                case TutorialStep.BearGreeting:
+                    explainPanel.ChangeExplainPanel();
+                    ViewingMessage(message_BearGreeting, tutorialTimeout_sec);
+                    break;
+                case TutorialStep.BearGreeting_Mikan:
+                    explainPanel.ChangeExplainPanel();
+                    ViewingMessage(message_BearGreeting_Mikan, tutorialTimeout_sec);
+                    break;
+                case TutorialStep.BearGreeting_Kamen:
+                    explainPanel.ChangeExplainPanel();
+                    ViewingMessage(message_BearGreeting_Kamen, tutorialTimeout_sec);
+                    break;
+                case TutorialStep.BearGreeting_Kannna:
+                    explainPanel.ChangeExplainPanel();
+                    ViewingMessage(message_BearGreeting_Kannna, tutorialTimeout_sec);
+                    break;
+                case TutorialStep.StampOperation_GrapStamp:
+                    explainPanel.ChangeExplainPanel();
+                    ViewingMessage(message_StampOperation_GrapStamp, tutorialTimeout_sec);
+                    break;
+                case TutorialStep.StampOperation_RightButton:
+                    explainPanel.ChangeExplainPanel();
+                    ExececutionTask(message_StampOperation_RightButton, rightChangeConditions, taskTimeout_sec);
+                    break;
+                case TutorialStep.StampOperation_RightButtonDoes:
+                    ViewingMessage(message_StampOperation_RightButtonDoes, tutorialTimeout_sec);
+                    break;
+                case TutorialStep.StampOperation_LeftButton:
+                    explainPanel.ChangeExplainPanel();
+                    ExececutionTask(message_StampOperation_LeftButton, leftChangeConditions, taskTimeout_sec);
+                    break;
+                case TutorialStep.StampOperation_LeftButtonDoes:
+                    ViewingMessage(message_StampOperation_LeftButtonDoes, tutorialTimeout_sec);
+                    break;
+                case TutorialStep.StampOperation_MiddleButton:
+                    explainPanel.ChangeExplainPanel();
+                    ExececutionTask(message_StampOperation_MiddleButton, middleChangeConditions, taskTimeout_sec);
+                    break;
+                case TutorialStep.StampOperation_MiddleButtonDoes:
+                    ViewingMessage(message_StampOperation_MiddleButtonDoes, tutorialTimeout_sec);
+                    break;
+                case TutorialStep.StampOperation_CardRead:
+                    explainPanel.ChangeExplainPanel();
+                    ExececutionTask(message_StampOperation_CardRead, cardReadConditions, taskTimeout_sec);
+                    break;
+                case TutorialStep.StampOperation_CardReadDoes:
+                    explainPanel.ChangeExplainPanel();
+                    ViewingMessage(message_StampOperation_CardReadDoes, tutorialTimeout_sec);
+                    break;
+                case TutorialStep.StampOperation_TutorialMikan1:
+                    tutorialCharactorScript.KanSetup();
+                    trySupportCheck.CheckBoxSetup();
+                    explainPanel.ChangeExplainPanel();
+                    ViewingMessage(message_StampOperation_TutorialMikan1, tutorialTimeout_sec);
+                    tutorialCharactorScript.isChange = false;
+                    break;
+                case TutorialStep.StampOperation_TutorialMikan2:
+                    ExececutionTask(message_StampOperation_TutorialMikan2, mikanChangeConditions, taskTimeout_sec);
+                    trySupportCheck.CheckBoxCondition();
+                    tutorialCharactorScript.PushStamp();
+                    break;
+                case TutorialStep.StampOperation_TutorialMikanDoes:
+                    trySupportCheck.CheckBoxCondition();
+                    tutorialCharactorScript.PushStamp();
+                    ViewingMessage(message_StampOperation_TutorialMikanDoes, tutorialTimeout_sec);
+                    break;
+                case TutorialStep.EndStep:
+                    explainPanel.ChangeExplainPanel();
+                    transitionMode = TransitionMode.afterSwitching;
+                    tutorialStep = TutorialStep.TutorialVerification;
+                    sceneControl.screenMode = (ScreenMode)((int)sceneControl.screenMode + 1);
+                    break;
+            }
+            await UniTask.DelayFrame(1, cancellationToken: this.GetCancellationTokenOnDestroy());
+        }
+        tutorialPanelCanvasGroup.blocksRaycasts = false;
+        ShowMessage().Forget();
+    }
+
 
     void Start()
     {
@@ -490,132 +599,10 @@ public class TutorialMessage : MonoBehaviour
         cardReadConditions = new CardReadConditions(serialScipt);
         mikanChangeConditions = new MikanChangeConditions(tutorialCharactorScript);
         ct = new CancellationTokenSource();
+
+        ShowMessage().Forget();
     }
 
-    void Update()
-    {
-        if (sceneControl.screenMode == ScreenMode.Tutorial)
-        {
-            tutorialPanelCanvasGroup.blocksRaycasts = true;
-
-            if (tutorialStep == TutorialStep.TutorialVerification)
-            {
-                explainPanel.TutorialVerification();
-                if (transitionMode == TransitionMode.afterSwitching)
-                {
-                    TutorialPanelFI();
-                    touchInstructionImage.alpha = 0;
-                    verificationPanelScript.SetUp();
-                    WaitForTimeout(verificationTimeout_sec).Forget();
-                    TransitionChange();
-                }
-                else if (transitionMode == TransitionMode.continuation)
-                {
-                    TutorialVerification();
-                }
-                else if (transitionMode == TransitionMode.beforeSwitching)
-                {
-                    ct.Cancel();
-                    Debug.Log($"changeTiming1: {ct.IsCancellationRequested}");
-                    TransitionChange();
-                }
-            }
-            else if (tutorialStep == TutorialStep.BearGreeting)
-            {
-                explainPanel.ChangeExplainPanel();
-                ViewingMessage(message_BearGreeting, tutorialTimeout_sec);
-            }
-            else if (tutorialStep == TutorialStep.BearGreeting_Mikan)
-            {
-                explainPanel.ChangeExplainPanel();
-                ViewingMessage(message_BearGreeting_Mikan, tutorialTimeout_sec);
-            }
-            else if (tutorialStep == TutorialStep.BearGreeting_Kamen)
-            {
-                explainPanel.ChangeExplainPanel();
-                ViewingMessage(message_BearGreeting_Kamen, tutorialTimeout_sec);
-            }
-            else if (tutorialStep == TutorialStep.BearGreeting_Kannna)
-            {
-                explainPanel.ChangeExplainPanel();
-                ViewingMessage(message_BearGreeting_Kannna, tutorialTimeout_sec);
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_GrapStamp)
-            {
-                explainPanel.ChangeExplainPanel();
-                ViewingMessage(message_StampOperation_GrapStamp, tutorialTimeout_sec);
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_RightButton)
-            {
-                explainPanel.ChangeExplainPanel();
-                ExececutionTask(message_StampOperation_RightButton, rightChangeConditions, taskTimeout_sec);
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_RightButtonDoes)
-            {
-                ViewingMessage(message_StampOperation_RightButtonDoes, tutorialTimeout_sec);
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_LeftButton)
-            {
-                explainPanel.ChangeExplainPanel();
-                ExececutionTask(message_StampOperation_LeftButton, leftChangeConditions, taskTimeout_sec);
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_LeftButtonDoes)
-            {
-                ViewingMessage(message_StampOperation_LeftButtonDoes, tutorialTimeout_sec);
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_MiddleButton)
-            {
-                explainPanel.ChangeExplainPanel();
-                ExececutionTask(message_StampOperation_MiddleButton, middleChangeConditions, taskTimeout_sec);
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_MiddleButtonDoes)
-            {
-                ViewingMessage(message_StampOperation_MiddleButtonDoes, tutorialTimeout_sec);
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_CardRead)
-            {
-                explainPanel.ChangeExplainPanel();
-                ExececutionTask(message_StampOperation_CardRead, cardReadConditions, taskTimeout_sec);
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_CardReadDoes)
-            {
-                explainPanel.ChangeExplainPanel();
-                ViewingMessage(message_StampOperation_CardReadDoes, tutorialTimeout_sec);
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_TutorialMikan1)
-            {
-                tutorialCharactorScript.KanSetup();
-                trySupportCheck.CheckBoxSetup();
-                explainPanel.ChangeExplainPanel();
-                ViewingMessage(message_StampOperation_TutorialMikan1, tutorialTimeout_sec);
-                tutorialCharactorScript.isChange = false;
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_TutorialMikan2)
-            {
-                ExececutionTask(message_StampOperation_TutorialMikan2, mikanChangeConditions, taskTimeout_sec);
-                trySupportCheck.CheckBoxCondition();
-                tutorialCharactorScript.PushStamp();
-            }
-            else if (tutorialStep == TutorialStep.StampOperation_TutorialMikanDoes)
-            {
-                trySupportCheck.CheckBoxCondition();
-                tutorialCharactorScript.PushStamp();
-                ViewingMessage(message_StampOperation_TutorialMikanDoes, tutorialTimeout_sec);
-            }
-            else if(tutorialStep == TutorialStep.EndStep)
-            {
-                explainPanel.ChangeExplainPanel();
-
-                transitionMode = TransitionMode.afterSwitching;
-                tutorialStep = TutorialStep.TutorialVerification;
-                sceneControl.screenMode = (ScreenMode)((int)sceneControl.screenMode + 1);
-            }
-        }
-        else
-        {
-            tutorialPanelCanvasGroup.blocksRaycasts = false;
-        }
-    }
 }
 
 //チュートリアルの段階

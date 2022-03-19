@@ -78,7 +78,7 @@ public class MessageWindow : MonoBehaviour
         }
     }
     //メッセージウィンドウのUpdate
-    public void MessageWindowUpdate()
+    public void ShowMessage()
     {
         PrintText();
 
