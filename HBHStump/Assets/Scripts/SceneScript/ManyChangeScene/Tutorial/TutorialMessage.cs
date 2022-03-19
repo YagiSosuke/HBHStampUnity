@@ -6,8 +6,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 
 /*
-チュートリアルのメッセージを管理する
-スクリプト
+チュートリアルのメッセージを管理する - 以下、チュートリアル順序
 
 ゲームの内容を説明する
     かん→みかん
@@ -19,7 +18,7 @@ using System.Threading;
     真ん中ボタンで部位の変更
     カードを読み込んで子音の変更
     
-    かんを変身（自由変身）
+    かんを変身（みかんに）
     自由にやってみよう！(〇〇秒でたくさん変身させてね！)
 */
 
@@ -77,7 +76,9 @@ public class TutorialMessage : MonoBehaviour
                                                         "くま", "本番もがんばってね！"
                                     };
     #endregion
-    
+
+
+    public TutorialStep GetTutorialStep() => tutorialStep;
 
     //Transitionmodeを変化させる
     void TransitionChange()
@@ -345,7 +346,7 @@ public class TutorialMessage : MonoBehaviour
         {
             if (serialScript.IsUseDevice)
             {
-                if (Serial.cardReadF)
+                if (Serial.isCardRead)
                 {
                     return true;
                 }
@@ -387,9 +388,7 @@ public class TutorialMessage : MonoBehaviour
         }
 
         //現在のデータをセット
-        public void setNowData()
-        {
-        }
+        public void setNowData() { }
 
         //状態を変化させるフラグ
         public bool StepChangeF()
@@ -451,13 +450,13 @@ public class TutorialMessage : MonoBehaviour
     float tutorialTimeout_sec = 60.0f;
     float taskTimeout_sec = 120.0f;
     
-    async UniTask WaitForTimeout(float time_sec)
+    async UniTask WaitForTimeout(float duration)
     {
         TutorialStep _step = tutorialStep;
 
         ct = new CancellationTokenSource();
 
-        await UniTask.Delay((int)(time_sec * 1000), cancellationToken: ct.Token);
+        await UniTask.Delay((int)(duration * 1000), cancellationToken: ct.Token);
 
         if (_step == tutorialStep)
         {

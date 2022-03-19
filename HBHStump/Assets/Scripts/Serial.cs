@@ -19,7 +19,7 @@ public class Serial : MonoBehaviour
     Text[] IDGroup = new Text[10];                     //IDを表示するテキストたち
 
     public static bool[,] PushF = new bool[6, 3];
-    public static bool cardReadF = false;
+    public static bool isCardRead = false;
 
     [SerializeField] StumpImageScript stumpImageScript;     //現在のパーツを視覚的に表示するスクリプト
     [SerializeField] GameObject disconnectPanel;            //切断されたことを示すパネル
@@ -49,7 +49,7 @@ public class Serial : MonoBehaviour
 
     void Update()
     {
-        if (cardReadF)
+        if (isCardRead)
         {
             CardReadFlagDown().Forget();
         }
@@ -76,7 +76,7 @@ public class Serial : MonoBehaviour
 
             //カードの読み込み
             case "CardRead":
-                cardReadF = true;
+                isCardRead = true;
                 break;
 
             #region カードやパネルが読み込まれていないとき
@@ -471,7 +471,7 @@ public class Serial : MonoBehaviour
     async UniTask CardReadFlagDown()
     {
         await UniTask.DelayFrame(1);
-        cardReadF = false;
+        isCardRead = false;
     }
 
     public bool pushCheck()
