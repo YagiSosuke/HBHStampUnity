@@ -39,23 +39,15 @@ public class ExplainPanel : MonoBehaviour
     
     [SerializeField] Image wordPanelPlaceImage;             //文字カード説明時の照明
     [SerializeField] CanvasGroup wordSupportArrowGroups;
-    
+
 
     //チュートリアルを受けるか確認
-    public void TutorialVerification()
+    public void ShowVerificationPanel()
     {
-        switch (tutorialMessage.transitionMode)
-        {
-            case TransitionMode.afterSwitching:
-                VerificationPanel.blocksRaycasts = true;
-                VerificationPanel.DOFade(endValue: 1.0f, duration: fadeTime);
-                break;
-            case TransitionMode.beforeSwitching:
-                VerificationPanelFadeOut();
-                break;
-        }
+        VerificationPanel.blocksRaycasts = true;
+        VerificationPanel.DOFade(endValue: 1.0f, duration: fadeTime);
     }
-    public void VerificationPanelFadeOut()
+    public void HideVerificationPanel()
     {
         VerificationPanel.blocksRaycasts = false;
         VerificationPanel.DOFade(endValue: 0.0f, duration: fadeTime);

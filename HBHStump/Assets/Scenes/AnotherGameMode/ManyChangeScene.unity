@@ -8824,8 +8824,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f0a217219adb644da98e7ee5c10628f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTakeTutorial: 0
-  isNotTakeTutorial: 0
+  serial: {fileID: 1713773050}
 --- !u!225 &278987609
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -9903,7 +9902,6 @@ MonoBehaviour:
   messageText: {fileID: 1868186924}
   serial: {fileID: 1713773050}
   talkAudioClip: {fileID: 8300000, guid: 0a757df426744684585b2a9a6bc560a2, type: 3}
-  messageFinish: 0
 --- !u!1 &347386850
 GameObject:
   m_ObjectHideFlags: 0
@@ -34933,7 +34931,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 598360008}
-  masterData: {fileID: 0}
+  masterData: {fileID: 554548863}
   sceneControl: {fileID: 554548861}
 --- !u!1 &1697026685
 GameObject:

@@ -25,9 +25,6 @@ using System.Threading;
     //TODO: タイムアウトの実装
 public class TutorialMessage : MonoBehaviour
 {
-    readonly Vector2 verificationYesPosition = new Vector2(2, 1);
-    readonly Vector2 verificationNoPosition = new Vector2(3, 1);
-
     //シーンを管理する
     [SerializeField] SceneControl sceneControl;
 
@@ -99,20 +96,19 @@ public class TutorialMessage : MonoBehaviour
     }
 
     //チュートリアルを受けるか確認する
-    void TutorialVerification()
+    async UniTask TutorialVerification()
     {
-        if (verificationPanelScript.isTakeTutorial || 
-            (serialScipt.IsUseDevice == true && Serial.PushF[(int)verificationYesPosition.x, (int)verificationYesPosition.y]))
+        await UniTask.WaitUntil(() => verificationPanelScript.IsTakeTutorial || verificationPanelScript.IsNotTakeTutorial);
+        if (verificationPanelScript.IsTakeTutorial)
         {
             TransitionChange();
         }
-        else if (verificationPanelScript.isNotTakeTutorial ||
-                 (serialScipt.IsUseDevice == true && Serial.PushF[(int)verificationNoPosition.x, (int)verificationNoPosition.y]))
+        else if (verificationPanelScript.IsNotTakeTutorial)
         {
             ct.Cancel();
             sceneControl.screenMode = (ScreenMode)((int)sceneControl.screenMode + 1);
             transitionMode = TransitionMode.afterSwitching;
-            explainPanel.VerificationPanelFadeOut();
+            explainPanel.HideVerificationPanel();
         }
     }
 
@@ -488,25 +484,20 @@ public class TutorialMessage : MonoBehaviour
             switch (tutorialStep)
             {
                 case TutorialStep.TutorialVerification:
-                    explainPanel.TutorialVerification();
-                    if (transitionMode == TransitionMode.afterSwitching)
-                    {
-                        TutorialPanelFI();
-                        touchInstructionImage.alpha = 0;
-                        verificationPanelScript.SetUp();
-                        WaitForTimeout(verificationTimeout_sec).Forget();
-                        TransitionChange();
-                    }
-                    else if (transitionMode == TransitionMode.continuation)
-                    {
-                        TutorialVerification();
-                    }
-                    else if (transitionMode == TransitionMode.beforeSwitching)
-                    {
-                        ct.Cancel();
-                        Debug.Log($"changeTiming1: {ct.IsCancellationRequested}");
-                        TransitionChange();
-                    }
+                    explainPanel.ShowVerificationPanel();
+                    TutorialPanelFI();
+                    touchInstructionImage.alpha = 0;
+                    verificationPanelScript.SetUp();
+                    WaitForTimeout(verificationTimeout_sec).Forget();
+                    TransitionChange();
+
+                    TutorialVerification();
+                    await UniTask.WaitUntil(() => transitionMode != TransitionMode.continuation);
+
+                    explainPanel.HideVerificationPanel();
+                    ct.Cancel();
+                    Debug.Log($"changeTiming1: {ct.IsCancellationRequested}");
+                    TransitionChange();
                     break;
                 case TutorialStep.BearGreeting:
                     explainPanel.ChangeExplainPanel();

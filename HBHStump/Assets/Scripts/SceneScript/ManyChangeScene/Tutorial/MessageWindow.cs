@@ -38,6 +38,7 @@ public class MessageWindow : MonoBehaviour
         messageLine = messageGroup[messageLineNum * 2 + 1];
         currentMessageLength = 0;
         totalMessageLength = messageGroup[messageLineNum * 2 + 1].Length;
+        messageText.text = "";
     }
     //メッセージを1文字ごと表示
     async UniTask PrintText()
@@ -73,8 +74,7 @@ public class MessageWindow : MonoBehaviour
     }
     public async UniTask ShowMessage()
     {
-        cts.Cancel();
-        await UniTask.DelayFrame(1);
+        cts.Cancel();   //TODO: バグるかも
         cts = new CancellationTokenSource();
 
         while (!cts.IsCancellationRequested) {
