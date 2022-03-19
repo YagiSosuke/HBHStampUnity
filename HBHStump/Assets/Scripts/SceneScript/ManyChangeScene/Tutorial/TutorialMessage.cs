@@ -38,6 +38,7 @@ public class TutorialMessage : MonoBehaviour
     [SerializeField] VerificationPanelScript verificationPanelScript;
     [SerializeField] MessageWindow messageWindow;
     [SerializeField] ExplainPanel explainPanel;
+    [SerializeField] Serial serial;
     #region 表示するメッセージ
     string[] message_BearGreeting = { "くま", "こんにちは、ぼくはくま！\nモジプラスタンプの世界にようこそ！",
                                       "くま", "モジプラスタンプのあそびかたを\nせつめいするよ",
@@ -126,12 +127,13 @@ public class TutorialMessage : MonoBehaviour
             case TransitionMode.afterSwitching:
                 messageWindow.LoadMessage(new List<string>(message));
                 WaitForTimeout(time_sec).Forget();
+                messageWindow.ShowMessage().Forget();
                 TransitionChange();
                 break;
             case TransitionMode.continuation:
-                messageWindow.ShowMessage();
                 ShowTouchInstruction();
-                if (messageWindow.messageFinish)
+                if ((Input.GetMouseButtonDown(0) || serial.pushCheck()) && 
+                     messageWindow.IsFinishMessageGroup() && messageWindow.IsFinishMessageLine())
                 {
                     TransitionChange();
                 }
@@ -152,11 +154,10 @@ public class TutorialMessage : MonoBehaviour
                 messageWindow.LoadMessage(new List<string>(message));
                 stepChangeConditions.setNowData();
                 WaitForTimeout(time_sec).Forget();
+                messageWindow.ShowMessage().Forget();
                 TransitionChange();
                 break;
             case TransitionMode.continuation:
-                messageWindow.ShowMessage();
-
                 if (!messageWindow.IsFinishMessageGroup() && messageWindow.IsFinishMessageLine()) 
                 {
                     ShowTouchInstruction();
@@ -186,15 +187,11 @@ public class TutorialMessage : MonoBehaviour
                 messageWindow.LoadMessage(new List<string>(message));
                 stepChangeConditions.setNowData();
                 WaitForTimeout(time_sec).Forget();
+                messageWindow.ShowMessage().Forget();
                 TransitionChange();
                 break;
             case TransitionMode.continuation:
                 //Debug.Log($"messageWindow.messageCount = {messageWindow.currentMessageLength}\nmessageWindow.messageLength = {messageWindow.totalMessageLength}\nmessageWindow.message.Count = {messageWindow.messageGroup.Count}\nmessageWindow.messageNum = {messageWindow.messageLineNum * 2}");
-                //クリックでメッセージを表示する
-                if (!messageWindow.IsFinishMessageLine() || !messageWindow.IsFinishMessageGroup())
-                {
-                    messageWindow.ShowMessage();
-                }
                 if (!messageWindow.IsFinishMessageGroup() && messageWindow.IsFinishMessageLine())
                 {
                     ShowTouchInstruction();
