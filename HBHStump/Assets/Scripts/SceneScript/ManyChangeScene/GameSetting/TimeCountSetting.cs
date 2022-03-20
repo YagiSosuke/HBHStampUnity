@@ -62,9 +62,19 @@ public class TimeCountSetting : MonoBehaviour
         countImage1.SetActive(false);
         countImage2.SetActive(false);
         countImage3.SetActive(false);
-        GOImage.SetActive(false);        
+        GOImage.SetActive(false);
+
+        OnGameSetting().Forget();
     }
 
+    async UniTask OnGameSetting()
+    {
+        await UniTask.WaitUntil(() => sceneControl.screenMode == ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
+        await DisplayCountDown();
+        OnGameSetting().Forget();
+    }
+
+    /*
     void Update()
     {
         if (sceneControl.screenMode == ScreenMode.GameSetting) 
@@ -75,4 +85,5 @@ public class TimeCountSetting : MonoBehaviour
             }
         }
     }
+    */
 }

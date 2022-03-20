@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Cysharp.Threading.Tasks;
 
 public class DeisplayTimer : MonoBehaviour
 {
@@ -15,39 +16,40 @@ public class DeisplayTimer : MonoBehaviour
     [SerializeField] SceneControl sceneControl;
     MasterData MasterData => MasterData.Instance;
 
-    
-    void Update()
-    {
-        if(sceneControl.screenMode == ScreenMode.GameSetting)
-        {
-            if (sceneControl.transitionMode == TransitionMode.afterSwitching)
-            {
-                currentTimeText.text = MasterData.TimeLimit.ToString();
-                timerImage.fillAmount = 1.0f;
-                transform.DOLocalMoveY(480, slideTime).SetEase(Ease.OutCubic);
-            }
-            if (sceneControl.transitionMode == TransitionMode.continuation)
-            {
 
-            }
-            if (sceneControl.transitionMode == TransitionMode.beforeSwitching) { }
-        }
-        if (sceneControl.screenMode == ScreenMode.Game)
+    async UniTask OnGameSetting()
+    {
+        await UniTask.WaitUntil(() => sceneControl.screenMode == ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
+        Debug.Log("タイマー表示");
+        currentTimeText.text = MasterData.TimeLimit.ToString();
+        timerImage.fillAmount = 1.0f;
+        transform.DOLocalMoveY(-70, slideTime).SetEase(Ease.OutCubic);
+        await UniTask.WaitUntil(() => sceneControl.screenMode != ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
+
+        OnGameSetting().Forget();
+    }
+    async UniTask OnGame()
+    {
+        await UniTask.WaitUntil(() => sceneControl.screenMode == ScreenMode.Game, cancellationToken: this.GetCancellationTokenOnDestroy());
+        Debug.Log("タイマーカウント");
+        await UniTask.WaitUntil(() => sceneControl.transitionMode == TransitionMode.continuation, cancellationToken: this.GetCancellationTokenOnDestroy());
+        while (sceneControl.transitionMode == TransitionMode.continuation)
         {
-            if (sceneControl.transitionMode == TransitionMode.afterSwitching)
-            {
-            }
-            if (sceneControl.transitionMode == TransitionMode.continuation)
-            {
-                currentTimeText.text = MasterData.CurrentTime.ToString("0");
-                timerImage.fillAmount = (MasterData.CurrentTime / MasterData.TimeLimit);
-            }
-            if(sceneControl.transitionMode == TransitionMode.beforeSwitching)
-            {
-                currentTimeText.text = "0";
-                timerImage.fillAmount = 0.0f;
-                transform.DOLocalMoveY(700, slideTime).SetEase(Ease.OutCubic);
-            }
+            currentTimeText.text = MasterData.CurrentTime.ToString("0");
+            timerImage.fillAmount = (MasterData.CurrentTime / MasterData.TimeLimit);
+            await UniTask.DelayFrame(1, cancellationToken: this.GetCancellationTokenOnDestroy());
         }
+        currentTimeText.text = "0";
+        timerImage.fillAmount = 0.0f;
+        transform.DOLocalMoveY(150, slideTime).SetEase(Ease.OutCubic);
+        await UniTask.WaitUntil(() => sceneControl.screenMode != ScreenMode.Game, cancellationToken: this.GetCancellationTokenOnDestroy());
+
+        OnGame().Forget();
+    }
+
+    void Start()
+    {
+        OnGameSetting().Forget();
+        OnGame().Forget();
     }
 }

@@ -187,7 +187,6 @@ public class TutorialMessage : MonoBehaviour
                 TransitionChange();
                 break;
             case TransitionMode.continuation:
-                //Debug.Log($"messageWindow.messageCount = {messageWindow.currentMessageLength}\nmessageWindow.messageLength = {messageWindow.totalMessageLength}\nmessageWindow.message.Count = {messageWindow.messageGroup.Count}\nmessageWindow.messageNum = {messageWindow.messageLineNum * 2}");
                 if (!messageWindow.IsFinishMessageGroup() && messageWindow.IsFinishMessageLine())
                 {
                     ShowTouchInstruction();
@@ -206,6 +205,7 @@ public class TutorialMessage : MonoBehaviour
                 }
                 break;
             case TransitionMode.beforeSwitching:
+                    HideTouchInstruction();
                 ct.Cancel();
                 TransitionChange();
                 break;

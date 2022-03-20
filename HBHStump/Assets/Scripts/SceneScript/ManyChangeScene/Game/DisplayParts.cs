@@ -18,8 +18,10 @@ public class DisplayParts : MonoBehaviour
     
 
     //現在のパーツを表示する
-    void DisplayPartsUpdate()
+    async UniTask DisplayPartsUpdate()
     {
+        var parts = Stamp.Instance.Parts;
+        await UniTask.WaitUntil(() => parts != Stamp.Instance.Parts, cancellationToken: this.GetCancellationTokenOnDestroy());
         switch (Stamp.Instance.Parts) {
             case Parts.Head:
                 partsImage.sprite = partsSample[0];
@@ -31,27 +33,31 @@ public class DisplayParts : MonoBehaviour
                 partsImage.sprite = partsSample[2];
                 break;
         }
-    }
-    
-    void Update()
-    {
-        if (sceneControl.screenMode == ScreenMode.GameSetting)
-        {
-            DisplayPartsUpdate();
 
-            if (sceneControl.transitionMode == TransitionMode.afterSwitching)
-            {
-                transform.DOLocalMoveY(-40, 0.5f).SetEase(Ease.OutCubic);
-            }
-        }
-        if (sceneControl.screenMode == ScreenMode.Game)
-        {
-            DisplayPartsUpdate();
-            
-            if (sceneControl.transitionMode == TransitionMode.beforeSwitching)
-            {
-                transform.DOLocalMoveY(150, 0.5f).SetEase(Ease.OutCubic);
-            }
-        }
+        DisplayPartsUpdate().Forget();
+    }
+
+    async UniTask OnGameSetting()
+    {
+        await UniTask.WaitUntil(() => sceneControl.screenMode == ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
+        transform.DOLocalMoveY(-40, 0.5f).SetEase(Ease.OutCubic);
+        await UniTask.WaitUntil(() => sceneControl.screenMode != ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
+
+        OnGameSetting().Forget();
+    }
+    async UniTask OnGameFinish()
+    {
+        await UniTask.WaitUntil(() => sceneControl.screenMode == ScreenMode.GameFinish, cancellationToken: this.GetCancellationTokenOnDestroy());
+        transform.DOLocalMoveY(150, 0.5f).SetEase(Ease.OutCubic);
+        await UniTask.WaitUntil(() => sceneControl.screenMode != ScreenMode.GameFinish, cancellationToken: this.GetCancellationTokenOnDestroy());
+
+        OnGameFinish().Forget();
+    }
+
+    void Start()
+    {
+        DisplayPartsUpdate().Forget();
+        OnGameSetting().Forget();
+        OnGameFinish().Forget();
     }
 }
