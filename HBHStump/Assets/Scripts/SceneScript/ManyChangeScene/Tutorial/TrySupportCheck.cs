@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System;
 
-/*みかんを変身させるときのサポートのスクリプト*/
+/*みかんを変身させるときのサポートのチェックボックス*/
 
 public class TrySupportCheck : MonoBehaviour
 {
@@ -117,6 +117,7 @@ public class TrySupportCheck : MonoBehaviour
         }
         public override void CheckBoxConditions()
         {
+            /*
             if (this.tutorialCharacterScript.isSerch)
             {
                 Check_On();
@@ -127,6 +128,7 @@ public class TrySupportCheck : MonoBehaviour
             }
 
             ValueSet();
+            */
         }
     }
 
@@ -153,13 +155,10 @@ public class TrySupportCheck : MonoBehaviour
     //チェックボックスのセットアップ(チェックを消す)
     public void CheckBoxSetup()
     {
-        if(tutorialMessage.transitionMode == TransitionMode.afterSwitching)
-        {
-            check1.Setup();
-            check2.Setup();
-            check3.Setup();
-            check4.Setup();
-        }
+        check1.Setup();
+        check2.Setup();
+        check3.Setup();
+        check4.Setup();
     }
     
     void Start()

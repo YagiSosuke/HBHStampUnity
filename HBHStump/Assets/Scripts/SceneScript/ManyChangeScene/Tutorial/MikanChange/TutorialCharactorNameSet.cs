@@ -66,6 +66,7 @@ public class TutorialCharactorNameSet : MonoBehaviour
 
     void Update()
     {
+        /*
         //スタンプ 打つとき
         if ((gameObject.tag == "Head" || gameObject.tag == "Body" || gameObject.tag == "Hip") && count < 3)
         {
@@ -95,5 +96,6 @@ public class TutorialCharactorNameSet : MonoBehaviour
         {
             count = 0;
         }
+        */
     }
 }

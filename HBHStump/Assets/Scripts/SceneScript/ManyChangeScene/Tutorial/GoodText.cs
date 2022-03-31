@@ -31,4 +31,8 @@ public class GoodText : MonoBehaviour
         GoodTextImage.transform.localScale = Vector3.zero;
         GoodTextImage.transform.rotation = Quaternion.Euler(0, 0, 90);
     }
+    void Start()
+    {
+        Initialize();
+    }
 }

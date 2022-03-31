@@ -20,7 +20,6 @@ public class DeisplayTimer : MonoBehaviour
     async UniTask OnGameSetting()
     {
         await UniTask.WaitUntil(() => sceneControl.screenMode == ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
-        Debug.Log("タイマー表示");
         currentTimeText.text = MasterData.TimeLimit.ToString();
         timerImage.fillAmount = 1.0f;
         transform.DOLocalMoveY(-70, slideTime).SetEase(Ease.OutCubic);
@@ -31,7 +30,6 @@ public class DeisplayTimer : MonoBehaviour
     async UniTask OnGame()
     {
         await UniTask.WaitUntil(() => sceneControl.screenMode == ScreenMode.Game, cancellationToken: this.GetCancellationTokenOnDestroy());
-        Debug.Log("タイマーカウント");
         await UniTask.WaitUntil(() => sceneControl.transitionMode == TransitionMode.continuation, cancellationToken: this.GetCancellationTokenOnDestroy());
         while (sceneControl.transitionMode == TransitionMode.continuation)
         {

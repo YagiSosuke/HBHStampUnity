@@ -37,7 +37,7 @@ public class VerificationPanelScript : MonoBehaviour
 
     async UniTask WaitForTakeTutorial()
     {
-        await UniTask.WaitUntil(() => serial.IsUseDevice == false &&
+        await UniTask.WaitUntil(() => serial.IsUseDevice == true &&
             Serial.PushF[(int)verificationYesPosition.x, (int)verificationYesPosition.y],
             cancellationToken: cts.Token);
         IsTakeTutorial = true;
@@ -45,7 +45,7 @@ public class VerificationPanelScript : MonoBehaviour
     }
     async UniTask WaitForNotTakeTutorial()
     {
-        await UniTask.WaitUntil(() => serial.IsUseDevice == false &&
+        await UniTask.WaitUntil(() => serial.IsUseDevice == true &&
             Serial.PushF[(int)verificationNoPosition.x, (int)verificationNoPosition.y],
             cancellationToken: cts.Token);
         IsNotTakeTutorial = true;

@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using System;
 
 /*
 チュートリアルのメッセージを管理する - 以下、チュートリアル順序
@@ -12,76 +13,58 @@ using System.Threading;
     かん→みかん
     かん→かめん
     かん→かんな
-やってみよう
 スタンプ操作方法
-    右と左ボタンであいうえおの変更
+    右と左ボタンで母音の変更
     真ん中ボタンで部位の変更
     カードを読み込んで子音の変更
-    
-    かんを変身（みかんに）
-    自由にやってみよう！(〇〇秒でたくさん変身させてね！)
+かんをみかんに変身
 */
 
-    //TODO: タイムアウトの実装
+//TODO: タイムアウトの実装
 public class TutorialMessage : MonoBehaviour
 {
-    //シーンを管理する
-    [SerializeField] SceneControl sceneControl;
-
+    string[] message = { "くま", "<Action>こんにちは、ぼくはくま！\nモジプラスタンプの世界にようこそ！",
+                                      "くま", "モジプラスタンプのあそびかたを\nせつめいするよ",
+                                      "くま", "モジプラスタンプはキャラクターの名前に\n文字をくわえて\n別のキャラクターに変身させるゲームだよ",
+                                      "くま", "<Action>たとえば、『かん』のあたまに『み』をつけると\n『みかん』",
+                                      "くま", "<Action>『かん』のまんなかに『め』をつけると\n『かめん』",
+                                      "くま", "<Action>『かん』のおしりに『な』をつけると\n『かんな』に変身するよ",
+                                      "くま", "<Action>次に文字の追加について説明するよ",
+                                      "くま", "文字の追加にはスタンプをつかうよ",
+                                      "くま", "<Action><Condition>右のボタンで母音\n(あ, い, う……)を変えられるよ\n早速やってみよう！",
+                                      "くま", "いいね！その調子！",
+                                      "くま", "<Action><Condition>左のボタンではんたいに母音\n(お, え, う……)を変えられるよ\n早速やってみよう！",
+                                      "くま", "いいね！その調子！",
+                                      "くま", "<Action><Condition>真ん中のボタンで文字をくわえる場所\n(頭, 体, お尻)を変えられるよ\n早速やってみよう！",
+                                      "くま", "いいね！その調子！",
+                                      "くま", "<Action><Condition>カードにスタンプを押すとスタンプに文字を\n読み込むことができるよ\n下にあるカードを読んでみよう！",
+                                      "くま", "<Action>いいね！その調子！",
+                                      "くま", "スタンプの説明は以上だよ",
+                                      "くま", "<Action>それじゃあ、『かん』を『みかん』\nに変身させてみよう！",
+                                      "くま", "変身させるまでのステップはここに\n表示しておくよ",
+                                      "くま", "<Condition>文字をセットしたら、みかんにスタンプを\n打ってね！\n早速やってみよう！",
+                                      "くま", "いいね！その調子！",
+                                      "くま", "本番は90秒でたくさんキャラクターを\n変身させてね！",
+                                      "くま", "本番もがんばってね！"
+                                    };
+    [Header("StepControllers")]
     [SerializeField] TutorialStep tutorialStep = TutorialStep.BearGreeting;
-    public TransitionMode transitionMode = TransitionMode.afterSwitching;
-    
+    [SerializeField] TransitionMode transitionMode = TransitionMode.afterSwitching;
+    [Header("Panels")]
     [SerializeField] CanvasGroup tutorialPanelCanvasGroup;
     [SerializeField] VerificationPanelScript verificationPanelScript;
     [SerializeField] MessageWindow messageWindow;
     [SerializeField] ExplainPanel explainPanel;
+    [Header("TutorialMaterial")]
+    [SerializeField] TutorialCharactorScript tutorialCharactorScript;
+    [SerializeField] TrySupportCheck trySupportCheck;
+    [SerializeField] GoodText goodText;
+    [SerializeField] TouchInstructionImage touchInstructionImage;
+    [Header("Serial")]
     [SerializeField] Serial serial;
-    #region 表示するメッセージ
-    string[] message_BearGreeting = { "くま", "こんにちは、ぼくはくま！\nモジプラスタンプの世界にようこそ！",
-                                      "くま", "モジプラスタンプのあそびかたを\nせつめいするよ",
-                                      "くま", "モジプラスタンプはキャラクターの名前に\n文字をくわえて\n別のキャラクターに変身させるゲームだよ"
-                                    };
-    string[] message_BearGreeting_Mikan = { "くま", "たとえば、『かん』のあたまに『み』をつけると\n『みかん』"
-                                    };
-    string[] message_BearGreeting_Kamen = { "くま", "『かん』のまんなかに『め』をつけると\n『かめん』"
-                                    };
-    string[] message_BearGreeting_Kannna = { "くま", "『かん』のおしりに『な』をつけると\n『かんな』に変身するよ",
-                                    };
-    string[] message_StampOperation_GrapStamp = { "くま", "次に文字の追加について説明するよ",
-                                                  "くま", "文字の追加にはスタンプをつかうよ"
-                                    };
-    string[] message_StampOperation_RightButton = { "くま", "右のボタンで母音\n(あ, い, う……)を変えられるよ\n早速やってみよう！"
-                                    };
-    string[] message_StampOperation_RightButtonDoes = { "くま", "いいね！その調子！"
-                                    };
-    string[] message_StampOperation_LeftButton = { "くま", "左のボタンではんたいに母音\n(お, え, う……)を変えられるよ\n早速やってみよう！"
-                                    };
-    string[] message_StampOperation_LeftButtonDoes = { "くま", "いいね！その調子！"
-                                    };
-    string[] message_StampOperation_MiddleButton = { "くま", "真ん中のボタンで文字をくわえる場所\n(頭, 体, お尻)を変えられるよ\n早速やってみよう！"
-                                    };
-    string[] message_StampOperation_MiddleButtonDoes = { "くま", "いいね！その調子！"
-                                    };
-    string[] message_StampOperation_CardRead = { "くま", "カードにスタンプを押すとスタンプに文字を\n読み込むことができるよ\n下にあるカードを読んでみよう！"
-                                    };
-    string[] message_StampOperation_CardReadDoes = { "くま", "いいね！その調子！",
-                                                   "くま", "スタンプの説明は以上だよ"
-                                    };
-    string[] message_StampOperation_TutorialMikan1 = { "くま", "それじゃあ、『かん』を『みかん』\nに変身させてみよう！",
-                                    };
-    string[] message_StampOperation_TutorialMikan2 = { "くま", "変身させるまでのステップはここに\n表示しておくよ",
-                                                       "くま", "文字をセットしたら、みかんにスタンプを\n打ってね！\n早速やってみよう！"
-                                    };
-    string[] message_StampOperation_TutorialMikanDoes = { "くま", "いいね！その調子！",
-                                                        "くま", "本番は90秒でたくさんキャラクターを\n変身させてね！",
-                                                        "くま", "本番もがんばってね！"
-                                    };
-    #endregion
-
-
-    public TutorialStep GetTutorialStep() => tutorialStep;
-
-    //Transitionmodeを変化させる
+    
+    SceneControl SceneControl => SceneControl.Instance;
+        
     void TransitionChange()
     {
         if (tutorialStep < TutorialStep.EndStep && transitionMode < TransitionMode.beforeSwitching)
@@ -94,8 +77,7 @@ public class TutorialMessage : MonoBehaviour
             tutorialStep++;
         }
     }
-
-    //チュートリアルを受けるか確認する
+    
     async UniTask TutorialVerification()
     {
         await UniTask.WaitUntil(() => verificationPanelScript.IsTakeTutorial || verificationPanelScript.IsNotTakeTutorial);
@@ -106,28 +88,43 @@ public class TutorialMessage : MonoBehaviour
         else if (verificationPanelScript.IsNotTakeTutorial)
         {
             ct.Cancel();
-            sceneControl.screenMode = (ScreenMode)((int)sceneControl.screenMode + 1);
+            SceneControl.screenMode = (ScreenMode)(SceneControl.screenMode + 1);
             transitionMode = TransitionMode.afterSwitching;
             explainPanel.HideVerificationPanel();
         }
     }
-
-    #region 各ステップで実行する内容
-    //主に文字送りをするメソッド
-    //transitionMode変更もまとめている
-    //文字送り以外の処理を呼び出す場合は、この関数は最後に描く(transitionMode の Update も兼ねているため)
-    void ViewingMessage(string[] message, float time_sec)
+    void ShowMessage(string[] message, float time_sec)
     {
         switch (transitionMode)
         {
             case TransitionMode.afterSwitching:
-                messageWindow.LoadMessage(new List<string>(message));
+                var actionInMessage = new List<Action>(){
+                    () => explainPanel.OnBearGreeting(),
+                    () => explainPanel.OnBearGreeting_Mikan(),
+                    () => explainPanel.OnBearGreeting_Kamen(),
+                    () => explainPanel.OnBearGreeting_Kannna(),
+                    () => explainPanel.OnStampOperation_GrapStamp(),
+                    () => explainPanel.OnStampOperation_RightButton(),
+                    () => explainPanel.OnStampOperation_LeftButton(),
+                    () => explainPanel.OnStampOperation_MiddleButton(),
+                    () => explainPanel.OnStampOperation_CardRead(),
+                    () => explainPanel.OnStampOperation_CardReadDoes(),
+                    () => explainPanel.OnStampOperation_TutorialMikan1()
+                };
+                var conditionInMessage = new List<Func<bool>>(){
+                    () => OnRightButtonPush(),
+                    () => OnLeftButtonPush(),
+                    () => OnMiddleButtonPush(),
+                    () => OnCardRead(),
+                    () => tutorialCharactorScript.OnTutorialMikanChange()
+                };
+                messageWindow.LoadMessage(new List<string>(message), actionInMessage, conditionInMessage);
                 WaitForTimeout(time_sec).Forget();
-                messageWindow.ShowMessage().Forget();
+                messageWindow.ShowMessage(touchInstructionImage.HideTouchInstruction).Forget();
                 TransitionChange();
                 break;
             case TransitionMode.continuation:
-                ShowTouchInstruction();
+                if(messageWindow.IsFinishMessageLine()) touchInstructionImage.ShowTouchInstruction();
                 if ((Input.GetMouseButtonDown(0) || serial.pushCheck()) && 
                      messageWindow.IsFinishMessageGroup() && messageWindow.IsFinishMessageLine())
                 {
@@ -135,313 +132,217 @@ public class TutorialMessage : MonoBehaviour
                 }
                 break;
             case TransitionMode.beforeSwitching:
-                HideTouchInstruction();
                 ct.Cancel();
                 TransitionChange();
                 break;
         }
     }
-    //文字送りのためにタスクを達成する必要がある場合
-    //stepChangeConditions にて別途条件を設定
-    void ViewingMessage(string[] message, StepChangeConditions stepChangeConditions, float time_sec)
+    async UniTask PlayTutorial()
     {
-        switch (transitionMode) {
-            case TransitionMode.afterSwitching:
-                messageWindow.LoadMessage(new List<string>(message));
-                stepChangeConditions.setNowData();
-                WaitForTimeout(time_sec).Forget();
-                messageWindow.ShowMessage().Forget();
-                TransitionChange();
-                break;
-            case TransitionMode.continuation:
-                if (!messageWindow.IsFinishMessageGroup() && messageWindow.IsFinishMessageLine()) 
-                {
-                    ShowTouchInstruction();
-                }
-                else
-                {
-                    HideTouchInstruction();
-                }
-                if (stepChangeConditions.StepChangeF())
-                {
+        await UniTask.WaitUntil(() => SceneControl.screenMode == ScreenMode.Tutorial, cancellationToken: this.GetCancellationTokenOnDestroy());
+        while (SceneControl.screenMode == ScreenMode.Tutorial)
+        {
+            tutorialPanelCanvasGroup.blocksRaycasts = true;
+
+            switch (tutorialStep)
+            {
+                case TutorialStep.TutorialVerification:
+                    explainPanel.ShowVerificationPanel();
+                    ShowTutorialPanel();
+                    touchInstructionImage.Init();
+                    verificationPanelScript.SetUp();
+                    WaitForTimeout(verificationTimeout_sec).Forget();
                     TransitionChange();
-                }
-                break;
-            case TransitionMode.beforeSwitching:
-                HideTouchInstruction();
-                ct.Cancel();
-                TransitionChange();
-                break;
-        }
-    }
-    //タスクの実行で transition を変更するメソッド
-    void ExececutionTask(string[] message, StepChangeConditions stepChangeConditions, float time_sec)
-    {
-        switch (transitionMode)
-        {
-            case TransitionMode.afterSwitching:
-                messageWindow.LoadMessage(new List<string>(message));
-                stepChangeConditions.setNowData();
-                WaitForTimeout(time_sec).Forget();
-                messageWindow.ShowMessage().Forget();
-                TransitionChange();
-                break;
-            case TransitionMode.continuation:
-                if (!messageWindow.IsFinishMessageGroup() && messageWindow.IsFinishMessageLine())
-                {
-                    ShowTouchInstruction();
-                }
-                else
-                {
-                    HideTouchInstruction();
-                }
 
-                //ステップを更新するフラグが立った場合
-                if (stepChangeConditions.StepChangeF())
-                {
-                    Debug.Log("実行された");
+                    TutorialVerification();
+                    await UniTask.WaitUntil(() => transitionMode != TransitionMode.continuation);
+
+                    explainPanel.HideVerificationPanel();
+                    ct.Cancel();
                     TransitionChange();
-                    goodText.displayGoodText().Forget();
-                }
-                break;
-            case TransitionMode.beforeSwitching:
-                    HideTouchInstruction();
-                ct.Cancel();
-                TransitionChange();
-                break;
-        }
-    }
-
-    //文字送りメソッドで Step を変更させる為の条件を示すクラス群
-    interface StepChangeConditions
-    {
-        void setNowData();        
-        bool StepChangeF();     //状態を変化させるフラグ
-    }
-    class LRChangeConditions : StepChangeConditions
-    {   
-        //現在記憶されてる文字、目的の変化形
-        string nowWord;
-        string nextWord;
-        string direction;
-
-        //コンストラクタ directionをセット
-        public LRChangeConditions(string dir)
-        {
-            direction = dir;
-        }
-
-        void setNowWord()
-        {
-            nowWord = Stamp.Instance.Word;
-        }
-        void setNextWord()
-        {
-            nextWord = MasterData.Instance.getNextWord(nowWord, direction);
-        }
-
-        //現在のデータをセット
-        public void setNowData()
-        {
-            setNowWord();
-            setNextWord();
-        }
-
-        //状態を変化させるフラグ
-        public bool StepChangeF()
-        {
-            if (nowWord != Stamp.Instance.Word)
-            {
-                setNowWord();
-                if (nowWord != nextWord)
-                {
-                    setNextWord();
-                }
-            }
-
-            if (nowWord == nextWord)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-    }
-    class MiddleChangeConditions : StepChangeConditions
-    {
-        //現在記憶されてるパーツ、目的の変化形
-        Parts nowParts;
-        Parts nextParts;
-            
-        private void setNowParts()
-        {
-            nowParts = Stamp.Instance.Parts;
-        }
-        private void setNextParts()
-        {
-            switch (nowParts)
-            {
-                case Parts.Head:
-                    nextParts = Parts.Body;
                     break;
-                case Parts.Body:
-                    nextParts = Parts.Hip;
+                case TutorialStep.BearGreeting:
+                    ShowMessage(message, tutorialTimeout_sec);
                     break;
-                case Parts.Hip:
-                    nextParts = Parts.Head;
+                case TutorialStep.EndStep:
+                    explainPanel.OnEndStep();
+                    transitionMode = TransitionMode.afterSwitching;
+                    tutorialStep = TutorialStep.TutorialVerification;
+                    SceneControl.screenMode = (ScreenMode)(SceneControl.screenMode + 1);
                     break;
             }
+            await UniTask.DelayFrame(1, cancellationToken: this.GetCancellationTokenOnDestroy());
         }
-
-        //現在のデータをセット
-        public void setNowData()
-        {
-            setNowParts();
-            setNextParts();
-        }
-
-        //状態を変化させるフラグ
-        public bool StepChangeF()
-        {
-            if (nowParts != Stamp.Instance.Parts)
-            {
-                setNowParts();
-            }
-
-            if (nowParts == nextParts)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-    }
-    class CardReadConditions : StepChangeConditions
-    {
-        Serial serialScript;
-        string nowWord;
-
-        public CardReadConditions(Serial serialScript)
-        {
-            this.serialScript = serialScript;
-        }
-
-        //現在のデータをセット
-        public void setNowData() {
-            nowWord = Stamp.Instance.Word;
-        }
-
-        //状態を変化させるフラグ
-        public bool StepChangeF()
-        {
-            if (serialScript.IsUseDevice)
-            {
-                if (Serial.isCardRead)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                if(nowWord != Stamp.Instance.Word)
-                {
-                    if( Stamp.Instance.Word == "あ" ||
-                        Stamp.Instance.Word == "か" ||
-                        Stamp.Instance.Word == "さ" ||
-                        Stamp.Instance.Word == "た" ||
-                        Stamp.Instance.Word == "な" ||
-                        Stamp.Instance.Word == "は" ||
-                        Stamp.Instance.Word == "ま" ||
-                        Stamp.Instance.Word == "や" ||
-                        Stamp.Instance.Word == "ら" ||
-                        Stamp.Instance.Word == "わ")
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-    }
-    class MikanChangeConditions : StepChangeConditions
-    {
-        TutorialCharactorScript tutorialCharactorScript;
-        string nowWord;
-
-        public MikanChangeConditions(TutorialCharactorScript tutorialCharactorScript)
-        {
-            this.tutorialCharactorScript = tutorialCharactorScript;
-        }
-
-        //現在のデータをセット
-        public void setNowData() { }
-
-        //状態を変化させるフラグ
-        public bool StepChangeF()
-        {
-            if (tutorialCharactorScript.isSerch)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        tutorialPanelCanvasGroup.blocksRaycasts = false;
+        PlayTutorial().Forget();
     }
 
-    StepChangeConditions rightChangeConditions;
-    StepChangeConditions leftChangeConditions;
-    StepChangeConditions middleChangeConditions;
-    StepChangeConditions cardReadConditions;
-    StepChangeConditions mikanChangeConditions;
-    #endregion
-    
-    [SerializeField] Serial serialScipt;
-
-    
-    [SerializeField] TrySupportCheck trySupportCheck;   //みかんの変身時のチェックボックスのアニメ
-    [SerializeField] TutorialCharactorScript tutorialCharactorScript;   //みかんに変身できたか判断
-
-    [Header("メッセージを表示しきった時にタッチを促す画像")]
-    [SerializeField] CanvasGroup touchInstructionImage;
-    [SerializeField] Animator touchInstructionAnimator;
-    void ShowTouchInstruction()
+    #region 条件を変化させる際に必要な処理
+    string beforeWord = "";
+    Parts beforeParts = Parts.NULL;
+    bool OnRightButtonPush()
     {
-        if (messageWindow.IsFinishMessageLine() && touchInstructionImage.alpha != 1.0f)
+        string nextWord = "";
+        var wordSanple = MasterData.Instance.wordSample;
+        switch (beforeWord)
         {
-            touchInstructionAnimator.SetBool("AnimationF", true);
-            touchInstructionImage.DOFade(endValue: 1.0f, duration: 0.2f);
+            case "": break;
+            case "お":
+                nextWord = "あ"; break;
+            case "こ":
+                nextWord = "か"; break;
+            case "そ":
+                nextWord = "さ"; break;
+            case "と":
+                nextWord = "た"; break;
+            case "の":
+                nextWord = "な"; break;
+            case "ほ":
+                nextWord = "は"; break;
+            case "も":
+                nextWord = "ま"; break;
+            case "よ":
+                nextWord = "や"; break;
+            case "ろ":
+                nextWord = "ら"; break;
+            case "ん":
+                nextWord = "わ"; break;
+            case "ご":
+                nextWord = "が"; break;
+            case "ぞ":
+                nextWord = "ざ"; break;
+            case "ど":
+                nextWord = "だ"; break;
+            case "ぼ":
+                nextWord = "ば"; break;
+            case "ぽ":
+                nextWord = "ぱ"; break;
+            default:
+                nextWord = wordSanple[wordSanple.IndexOf(beforeWord) + 1]; break;
+        }
+
+        if (Stamp.Instance.Word == nextWord)
+        {
+            beforeWord = "";
+            return true;
         }
         else
         {
-            HideTouchInstruction();
+            if (beforeWord != Stamp.Instance.Word) beforeWord = Stamp.Instance.Word;
+            return false;
         }
     }
-    void HideTouchInstruction()
+    bool OnLeftButtonPush()
     {
-        if (touchInstructionImage.alpha != 0.0f)
+        string nextWord = "";
+        var wordSanple = MasterData.Instance.wordSample;
+        switch (beforeWord)
         {
-            touchInstructionAnimator.SetBool("AnimationF", true);
-            touchInstructionImage.DOFade(endValue: 0.0f, duration: 0.2f);
+            case "": break;
+            case "あ":
+                nextWord = "お"; break;
+            case "か":
+                nextWord = "こ"; break;
+            case "さ":
+                nextWord = "そ"; break;
+            case "た":
+                nextWord = "と"; break;
+            case "な":
+                nextWord = "の"; break;
+            case "は":
+                nextWord = "ほ"; break;
+            case "ま":
+                nextWord = "も"; break;
+            case "や":
+                nextWord = "よ"; break;
+            case "ら":
+                nextWord = "ろ"; break;
+            case "わ":
+                nextWord = "ん"; break;
+            case "が":
+                nextWord = "ご"; break;
+            case "ざ":
+                nextWord = "ぞ"; break;
+            case "だ":
+                nextWord = "ど"; break;
+            case "ば":
+                nextWord = "ぼ"; break;
+            case "ぱ":
+                nextWord = "ぽ"; break;
+            default:
+                nextWord = wordSanple[wordSanple.IndexOf(beforeWord) - 1]; break;
+        }
+
+        if (Stamp.Instance.Word == nextWord)
+        {
+            beforeWord = "";
+            return true;
+        }
+        else
+        {
+            if (beforeWord != Stamp.Instance.Word) beforeWord = Stamp.Instance.Word;
+            return false;
         }
     }
-    
-    [SerializeField] GoodText goodText;
+    bool OnMiddleButtonPush()
+    {
+        Parts nextParts = Parts.NULL;
+        switch (beforeParts)
+        {
+            case Parts.NULL: break;
+            case Parts.Head:
+                nextParts = Parts.Body; break;
+            case Parts.Body:
+                nextParts = Parts.Hip; break;
+            case Parts.Hip:
+                nextParts = Parts.Head; break;
+        }
 
-    //タイムアウト関連
+
+        Debug.Log($"beforeParts = {beforeParts}:nextParts = {nextParts}");
+        if (Stamp.Instance.Parts == nextParts)
+        {
+            return true;
+        }
+        else
+        {
+            if (beforeParts != Stamp.Instance.Parts) beforeParts = Stamp.Instance.Parts;
+            return false;
+        }
+    }
+    bool OnCardRead()
+    {
+        if (serial.IsUseDevice)
+        {
+            return Serial.isCardRead;
+        }
+        else
+        {
+            //本当はこの処理ではいけないが、デバッグ用に新たに処理を追加すると冗長になるので……
+            return (Stamp.Instance.Word == "あ" ||
+                    Stamp.Instance.Word == "か" ||
+                    Stamp.Instance.Word == "さ" ||
+                    Stamp.Instance.Word == "た" ||
+                    Stamp.Instance.Word == "な" ||
+                    Stamp.Instance.Word == "は" ||
+                    Stamp.Instance.Word == "ま" ||
+                    Stamp.Instance.Word == "や" ||
+                    Stamp.Instance.Word == "ら" ||
+                    Stamp.Instance.Word == "わ" ||
+                    Stamp.Instance.Word == "が" ||
+                    Stamp.Instance.Word == "ざ" ||
+                    Stamp.Instance.Word == "だ" ||
+                    Stamp.Instance.Word == "ば" ||
+                    Stamp.Instance.Word == "ぱ");
+        }
+    }
+    #endregion
+    #region タイムアウト関連
+    //TODO: デバッグ時邪魔だったので一時1000倍した、後に元に戻す
     CancellationTokenSource ct = new CancellationTokenSource();
-    float verificationTimeout_sec = 30.0f;
-    float tutorialTimeout_sec = 60.0f;
-    float taskTimeout_sec = 120.0f;
+    float verificationTimeout_sec = 30000.0f;
+    float tutorialTimeout_sec = 60000.0f;
+    float taskTimeout_sec = 120000.0f;
     
     async UniTask WaitForTimeout(float duration)
     {
@@ -454,143 +355,34 @@ public class TutorialMessage : MonoBehaviour
         if (_step == tutorialStep)
         {
             //全てのパネルを非表示
-            TutorialPanelFO();
+            HideTutorialPanel();
             tutorialStep = TutorialStep.TutorialVerification;
             transitionMode = TransitionMode.afterSwitching;
 
             //タイトルへ
-            sceneControl.screenMode = ScreenMode.Title;
-            sceneControl.transitionMode = TransitionMode.afterSwitching;
+            SceneControl.screenMode = ScreenMode.Title;
+            SceneControl.transitionMode = TransitionMode.afterSwitching;
         }
     }
-    void TutorialPanelFI()
+    #endregion
+
+    void ShowTutorialPanel()
     {
         tutorialPanelCanvasGroup.DOFade(endValue: 1.0f, duration: 1.0f);
     }
-    void TutorialPanelFO()
+    void HideTutorialPanel()
     {
         tutorialPanelCanvasGroup.DOFade(endValue: 0.0f, duration: 1.0f).OnComplete(() =>
         {
             explainPanel.PanelsInit();
         });
     }
-    async UniTask ShowMessage()
-    {
-        await UniTask.WaitUntil(() => sceneControl.screenMode == ScreenMode.Tutorial, cancellationToken: this.GetCancellationTokenOnDestroy());
-        while (sceneControl.screenMode == ScreenMode.Tutorial)
-        {
-            tutorialPanelCanvasGroup.blocksRaycasts = true;
-
-            switch (tutorialStep)
-            {
-                case TutorialStep.TutorialVerification:
-                    explainPanel.ShowVerificationPanel();
-                    TutorialPanelFI();
-                    touchInstructionImage.alpha = 0;
-                    verificationPanelScript.SetUp();
-                    WaitForTimeout(verificationTimeout_sec).Forget();
-                    TransitionChange();
-
-                    TutorialVerification();
-                    await UniTask.WaitUntil(() => transitionMode != TransitionMode.continuation);
-
-                    explainPanel.HideVerificationPanel();
-                    ct.Cancel();
-                    Debug.Log($"changeTiming1: {ct.IsCancellationRequested}");
-                    TransitionChange();
-                    break;
-                case TutorialStep.BearGreeting:
-                    explainPanel.ChangeExplainPanel();
-                    ViewingMessage(message_BearGreeting, tutorialTimeout_sec);
-                    break;
-                case TutorialStep.BearGreeting_Mikan:
-                    explainPanel.ChangeExplainPanel();
-                    ViewingMessage(message_BearGreeting_Mikan, tutorialTimeout_sec);
-                    break;
-                case TutorialStep.BearGreeting_Kamen:
-                    explainPanel.ChangeExplainPanel();
-                    ViewingMessage(message_BearGreeting_Kamen, tutorialTimeout_sec);
-                    break;
-                case TutorialStep.BearGreeting_Kannna:
-                    explainPanel.ChangeExplainPanel();
-                    ViewingMessage(message_BearGreeting_Kannna, tutorialTimeout_sec);
-                    break;
-                case TutorialStep.StampOperation_GrapStamp:
-                    explainPanel.ChangeExplainPanel();
-                    ViewingMessage(message_StampOperation_GrapStamp, tutorialTimeout_sec);
-                    break;
-                case TutorialStep.StampOperation_RightButton:
-                    explainPanel.ChangeExplainPanel();
-                    ExececutionTask(message_StampOperation_RightButton, rightChangeConditions, taskTimeout_sec);
-                    break;
-                case TutorialStep.StampOperation_RightButtonDoes:
-                    ViewingMessage(message_StampOperation_RightButtonDoes, tutorialTimeout_sec);
-                    break;
-                case TutorialStep.StampOperation_LeftButton:
-                    explainPanel.ChangeExplainPanel();
-                    ExececutionTask(message_StampOperation_LeftButton, leftChangeConditions, taskTimeout_sec);
-                    break;
-                case TutorialStep.StampOperation_LeftButtonDoes:
-                    ViewingMessage(message_StampOperation_LeftButtonDoes, tutorialTimeout_sec);
-                    break;
-                case TutorialStep.StampOperation_MiddleButton:
-                    explainPanel.ChangeExplainPanel();
-                    ExececutionTask(message_StampOperation_MiddleButton, middleChangeConditions, taskTimeout_sec);
-                    break;
-                case TutorialStep.StampOperation_MiddleButtonDoes:
-                    ViewingMessage(message_StampOperation_MiddleButtonDoes, tutorialTimeout_sec);
-                    break;
-                case TutorialStep.StampOperation_CardRead:
-                    explainPanel.ChangeExplainPanel();
-                    ExececutionTask(message_StampOperation_CardRead, cardReadConditions, taskTimeout_sec);
-                    break;
-                case TutorialStep.StampOperation_CardReadDoes:
-                    explainPanel.ChangeExplainPanel();
-                    ViewingMessage(message_StampOperation_CardReadDoes, tutorialTimeout_sec);
-                    break;
-                case TutorialStep.StampOperation_TutorialMikan1:
-                    tutorialCharactorScript.KanSetup();
-                    trySupportCheck.CheckBoxSetup();
-                    explainPanel.ChangeExplainPanel();
-                    ViewingMessage(message_StampOperation_TutorialMikan1, tutorialTimeout_sec);
-                    tutorialCharactorScript.isChange = false;
-                    break;
-                case TutorialStep.StampOperation_TutorialMikan2:
-                    ExececutionTask(message_StampOperation_TutorialMikan2, mikanChangeConditions, taskTimeout_sec);
-                    trySupportCheck.CheckBoxCondition();
-                    tutorialCharactorScript.PushStamp();
-                    break;
-                case TutorialStep.StampOperation_TutorialMikanDoes:
-                    trySupportCheck.CheckBoxCondition();
-                    tutorialCharactorScript.PushStamp();
-                    ViewingMessage(message_StampOperation_TutorialMikanDoes, tutorialTimeout_sec);
-                    break;
-                case TutorialStep.EndStep:
-                    explainPanel.ChangeExplainPanel();
-                    transitionMode = TransitionMode.afterSwitching;
-                    tutorialStep = TutorialStep.TutorialVerification;
-                    sceneControl.screenMode = (ScreenMode)((int)sceneControl.screenMode + 1);
-                    break;
-            }
-            await UniTask.DelayFrame(1, cancellationToken: this.GetCancellationTokenOnDestroy());
-        }
-        tutorialPanelCanvasGroup.blocksRaycasts = false;
-        ShowMessage().Forget();
-    }
-
 
     void Start()
     {
-        rightChangeConditions = new LRChangeConditions("right");
-        leftChangeConditions = new LRChangeConditions("left");
-        middleChangeConditions = new MiddleChangeConditions();
-        cardReadConditions = new CardReadConditions(serialScipt);
-        mikanChangeConditions = new MikanChangeConditions(tutorialCharactorScript);
         ct = new CancellationTokenSource();
-
-        ShowMessage().Forget();
+        PlayTutorial().Forget();
     }
-
 }
 
 //チュートリアルの段階
@@ -598,20 +390,5 @@ public enum TutorialStep
 {
     TutorialVerification = 0,
     BearGreeting,
-    BearGreeting_Mikan,
-    BearGreeting_Kamen,
-    BearGreeting_Kannna,
-    StampOperation_GrapStamp,
-    StampOperation_RightButton,
-    StampOperation_RightButtonDoes,
-    StampOperation_LeftButton,
-    StampOperation_LeftButtonDoes,
-    StampOperation_MiddleButton,
-    StampOperation_MiddleButtonDoes,
-    StampOperation_CardRead,
-    StampOperation_CardReadDoes,
-    StampOperation_TutorialMikan1,
-    StampOperation_TutorialMikan2,
-    StampOperation_TutorialMikanDoes,
     EndStep
 };

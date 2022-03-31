@@ -15,6 +15,7 @@ public class ExplainPanel : MonoBehaviour
     const float fadeTime = 0.5f;        //パネルがフェードする時間
     
     [SerializeField] TutorialMessage tutorialMessage;
+    [SerializeField] TrySupportCheck trySupportCheck;
 
     [Header("パネル群")]
     //説明するためのパネル]
@@ -40,7 +41,6 @@ public class ExplainPanel : MonoBehaviour
     [SerializeField] Image wordPanelPlaceImage;             //文字カード説明時の照明
     [SerializeField] CanvasGroup wordSupportArrowGroups;
 
-
     //チュートリアルを受けるか確認
     public void ShowVerificationPanel()
     {
@@ -52,8 +52,89 @@ public class ExplainPanel : MonoBehaviour
         VerificationPanel.blocksRaycasts = false;
         VerificationPanel.DOFade(endValue: 0.0f, duration: fadeTime);
     }
-    
+
     //説明パネルの内容を変更するメソッド
+    public void OnBearGreeting()
+    {
+        CharAndMessagePanel.DOFade(endValue: 1.0f, duration: fadeTime);
+    }
+    public void OnBearGreeting_Mikan()
+    {
+        explainPanel.DOFade(endValue: 1.0f, duration: fadeTime);
+        kanPanel.DOFade(endValue: 1.0f, duration: fadeTime);
+        mikanPanel.DOFade(endValue: 1.0f, duration: fadeTime);
+    }
+    public void OnBearGreeting_Kamen()
+    {
+        mikanPanel.DOFade(endValue: 0.0f, duration: fadeTime);
+        kamenPanel.DOFade(endValue: 1.0f, duration: fadeTime);
+    }
+    public void OnBearGreeting_Kannna()
+    {
+        kamenPanel.DOFade(endValue: 0.0f, duration: fadeTime);
+        kannaPanel.DOFade(endValue: 1.0f, duration: fadeTime);
+    }
+    public void OnStampOperation_GrapStamp()
+    {
+        kannaPanel.DOFade(endValue: 0.0f, duration: fadeTime);
+        kanPanel.DOFade(endValue: 0.0f, duration: fadeTime);
+        devicePanel.DOFade(endValue: 1.0f, duration: fadeTime);
+    }
+    public void OnStampOperation_RightButton()
+    {
+        buttonCoverObj.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
+        buttonCoverObj.GetComponent<Animator>().SetBool("AnimationF", true);
+        buttonCoverObj.transform.localPosition = new Vector2(39.0f, 60.0f);
+        BtnWindowImg.DOFade(endValue: 1.0f, duration: fadeTime);
+        rightBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
+        rightBtnExImg.GetComponent<Animator>().SetBool("AnimationF", true);
+    }
+    public void OnStampOperation_LeftButton()
+    {
+        buttonCoverObj.transform.localPosition = new Vector2(-39.0f, 60.0f);
+        rightBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 0.0f, duration: fadeTime);
+        rightBtnExImg.GetComponent<Animator>().SetBool("AnimationF", false);
+        leftBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
+        leftBtnExImg.GetComponent<Animator>().SetBool("AnimationF", true);
+    }
+    public void OnStampOperation_MiddleButton()
+    {
+        buttonCoverObj.transform.localPosition = new Vector2(0.0f, 60.0f);
+        BtnWindowImg.DOFade(endValue: 0.0f, duration: fadeTime);
+        leftBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 0.0f, duration: fadeTime);
+        leftBtnExImg.GetComponent<Animator>().SetBool("AnimationF", false);
+        middleBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
+        middleBtnExImg.GetComponent<Animator>().SetBool("AnimationF", true);
+    }
+    public void OnStampOperation_CardRead()
+    {
+        devicePanel.DOFade(endValue: 0.0f, duration: fadeTime);
+        middleBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 0.0f, duration: fadeTime);
+        middleBtnExImg.GetComponent<Animator>().SetBool("AnimationF", false);
+        wordPanelImg.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
+        wordPanelImg.GetComponent<Animator>().SetBool("AnimationF", true);
+        WordPanelAnimation().Forget();
+    }
+    public void OnStampOperation_CardReadDoes()
+    {
+        wordPanelPlaceCt.Cancel();
+    }
+    public void OnStampOperation_TutorialMikan1()
+    {
+        wordPanelImg.GetComponent<CanvasGroup>().DOFade(endValue: 0.0f, duration: fadeTime);
+        wordPanelImg.GetComponent<Animator>().SetBool("AnimationF", false);
+        explainPanel.DOFade(endValue: 0.0f, duration: fadeTime);
+        tryMikanChangeImages.DOFade(endValue: 1.0f, duration: fadeTime);
+        trySupportCheck.CheckBoxSetup();
+    }
+    public void OnEndStep()
+    {
+        //TODO; バグがないか確認
+        tryMikanChangeImages.DOFade(endValue: 0.0f, duration: fadeTime);
+        CharAndMessagePanel.DOFade(endValue: 0.0f, duration: fadeTime);
+    }
+
+    /*
     public void ChangeExplainPanel()
     {
         if (tutorialMessage.transitionMode == TransitionMode.afterSwitching)
@@ -61,73 +142,42 @@ public class ExplainPanel : MonoBehaviour
             switch (tutorialMessage.GetTutorialStep())
             {
                 case TutorialStep.BearGreeting:
-                    CharAndMessagePanel.DOFade(endValue: 1.0f, duration: fadeTime);
+                    OnBearGreeting();
                     break;
                 case TutorialStep.BearGreeting_Mikan:
-                    explainPanel.DOFade(endValue: 1.0f, duration: fadeTime);
-                    kanPanel.DOFade(endValue: 1.0f, duration: fadeTime);
-                    mikanPanel.DOFade(endValue: 1.0f, duration: fadeTime);
+                    OnBearGreeting_Mikan();
                     break;
                 case TutorialStep.BearGreeting_Kamen:
-                    mikanPanel.DOFade(endValue: 0.0f, duration: fadeTime);
-                    kamenPanel.DOFade(endValue: 1.0f, duration: fadeTime);
+                    OnBearGreeting_Kamen();
                     break;
                 case TutorialStep.BearGreeting_Kannna:
-                    kamenPanel.DOFade(endValue: 0.0f, duration: fadeTime);
-                    kannaPanel.DOFade(endValue: 1.0f, duration: fadeTime);
+                    OnBearGreeting_Kannna();
                     break;
                 case TutorialStep.StampOperation_GrapStamp:
-                    kannaPanel.DOFade(endValue: 0.0f, duration: fadeTime);
-                    kanPanel.DOFade(endValue: 0.0f, duration: fadeTime);
-                    devicePanel.DOFade(endValue: 1.0f, duration: fadeTime);
+                    OnStampOperation_GrapStamp();
                     break;
                 case TutorialStep.StampOperation_RightButton:
-                    buttonCoverObj.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
-                    buttonCoverObj.GetComponent<Animator>().SetBool("AnimationF", true);
-                    buttonCoverObj.transform.localPosition = new Vector2(39.0f, 60.0f);
-                    BtnWindowImg.DOFade(endValue: 1.0f, duration: fadeTime);
-                    rightBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
-                    rightBtnExImg.GetComponent<Animator>().SetBool("AnimationF", true);
+                    OnStampOperation_RightButton();
                     break;
                 case TutorialStep.StampOperation_LeftButton:
-                    buttonCoverObj.transform.localPosition = new Vector2(-39.0f, 60.0f);
-                    rightBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 0.0f, duration: fadeTime);
-                    rightBtnExImg.GetComponent<Animator>().SetBool("AnimationF", false);
-                    leftBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
-                    leftBtnExImg.GetComponent<Animator>().SetBool("AnimationF", true);
+                    OnStampOperation_LeftButton();
                     break;
                 case TutorialStep.StampOperation_MiddleButton:
-                    buttonCoverObj.transform.localPosition = new Vector2(0.0f, 60.0f);
-                    BtnWindowImg.DOFade(endValue: 0.0f, duration: fadeTime);
-                    leftBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 0.0f, duration: fadeTime);
-                    leftBtnExImg.GetComponent<Animator>().SetBool("AnimationF", false);
-                    middleBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
-                    middleBtnExImg.GetComponent<Animator>().SetBool("AnimationF", true);
+                    OnStampOperation_MiddleButton();
                     break;
                 case TutorialStep.StampOperation_CardRead:
-                    devicePanel.DOFade(endValue: 0.0f, duration: fadeTime);
-                    middleBtnExImg.GetComponent<CanvasGroup>().DOFade(endValue: 0.0f, duration: fadeTime);
-                    middleBtnExImg.GetComponent<Animator>().SetBool("AnimationF", false);
-                    wordPanelImg.GetComponent<CanvasGroup>().DOFade(endValue: 1.0f, duration: fadeTime);
-                    wordPanelImg.GetComponent<Animator>().SetBool("AnimationF", true);
-                    WordPanelAnimation().Forget();
+                    OnStampOperation_CardRead();
                     break;
                 case TutorialStep.StampOperation_CardReadDoes:
-                    wordPanelPlaceCt.Cancel();
+                    OnStampOperation_CardReadDoes();
                     break;
                 case TutorialStep.StampOperation_TutorialMikan1:
-                    wordPanelImg.GetComponent<CanvasGroup>().DOFade(endValue: 0.0f, duration: fadeTime);
-                    wordPanelImg.GetComponent<Animator>().SetBool("AnimationF", false);
-                    explainPanel.DOFade(endValue: 0.0f, duration: fadeTime);
-                    tryMikanChangeImages.DOFade(endValue: 1.0f, duration: fadeTime);
-                    break;
-                case TutorialStep.EndStep://TODO; バグがないか確認
-                    tryMikanChangeImages.DOFade(endValue: 0.0f, duration: fadeTime);
-                    CharAndMessagePanel.DOFade(endValue: 0.0f, duration: fadeTime);
+                    OnStampOperation_TutorialMikan1();
                     break;
             }
         }
     }
+    */
 
     //カード読むときのパネル部分アニメーション
     CancellationTokenSource wordPanelPlaceCt;

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using System;
 
 /*
 メッセージウィンドウのクラス
@@ -12,7 +13,14 @@ using System.Threading;
 public class MessageWindow : MonoBehaviour
 {
     const float duration = 0.05f;           //次の文字が表れるまでの時間
-    
+    const string markupTagAction = "<Action>";
+    const string markupTagCondition = "<Condition>";
+    List<Action> actionGroup;
+    List<Func<bool>> conditionGroup;
+    Func<bool> currentCondition;
+    int actionIndex;
+    int conditionIndex;
+
     List<string> messageGroup;              //メッセージ群
     string messageLine;                     //表示するメッセージ1行
     int    messageLineNum;                  //メッセージはメッセージ群のうち何行目か      
@@ -28,16 +36,24 @@ public class MessageWindow : MonoBehaviour
 
     public bool IsFinishMessageLine() => currentMessageLength >= totalMessageLength;
     public bool IsFinishMessageGroup() => messageLineNum * 2 + 2 >= messageGroup.Count;
+    public bool IsAdvanceStep() => Input.GetMouseButtonDown(0) || serial.pushCheck();
 
     //メッセージ列を読み込む。加えて、初期化もする
-    public void LoadMessage(List<string> message)
+    public void LoadMessage(List<string> message, List<Action> _actions = null, List<Func<bool>> _conditions = null)
     {
         messageGroup = message;
+        actionGroup = _actions;
+        conditionGroup = _conditions;
 
+        actionIndex = 0;
+        conditionIndex = 0;
         messageLineNum = 0;
-        messageLine = messageGroup[messageLineNum * 2 + 1];
         currentMessageLength = 0;
-        totalMessageLength = messageGroup[messageLineNum * 2 + 1].Length;
+
+        messageLine = messageGroup[messageLineNum * 2 + 1];
+        currentCondition = IsAdvanceStep;
+        ScanMarkupLanguage();
+        totalMessageLength = messageLine.Length;
         messageText.text = "";
     }
     //メッセージを1文字ごと表示
@@ -59,20 +75,34 @@ public class MessageWindow : MonoBehaviour
         {
             nameText.text = messageGroup[messageLineNum * 2];
         }
-        messageText.text = messageGroup[messageLineNum * 2 + 1].Substring(0, currentMessageLength);
+        messageText.text = messageLine.Substring(0, currentMessageLength);
     }
     //クリック or スタンプを押した時に、次のテキストを表示する
     void NextMessage()
     {
-        if (!IsFinishMessageGroup())
+        messageLineNum++;
+        currentMessageLength = 0;
+        messageLine = messageGroup[messageLineNum * 2 + 1];
+        currentCondition = IsAdvanceStep;
+        ScanMarkupLanguage();
+        totalMessageLength = messageLine.Length;
+    }
+    void ScanMarkupLanguage()
+    {
+        if (messageLine.IndexOf(markupTagAction) != -1)
         {
-            messageLineNum++;
-            currentMessageLength = 0;
-            totalMessageLength = messageGroup[messageLineNum * 2 + 1].Length;
-            messageLine = messageGroup[messageLineNum * 2 + 1];
+            actionGroup[actionIndex].Invoke();
+            actionIndex++;
+            messageLine = messageLine.Replace(markupTagAction, "");
+        }
+        if (messageLine.IndexOf(markupTagCondition) != -1)
+        {
+            currentCondition = conditionGroup[conditionIndex];
+            conditionIndex++;
+            messageLine = messageLine.Replace(markupTagCondition, "");
         }
     }
-    public async UniTask ShowMessage()
+    public async UniTask ShowMessage(Action onNextMessage)
     {
         cts.Cancel();   //TODO: バグるかも
         cts = new CancellationTokenSource();
@@ -80,8 +110,10 @@ public class MessageWindow : MonoBehaviour
         while (!cts.IsCancellationRequested) {
             await PrintText();
 
-            if ((Input.GetMouseButtonDown(0) || serial.pushCheck()) && IsFinishMessageLine())
+            if (IsFinishMessageLine() && !IsFinishMessageGroup())
             {
+                await UniTask.WaitUntil(() => currentCondition.Invoke(), cancellationToken: this.GetCancellationTokenOnDestroy());
+                onNextMessage.Invoke();
                 NextMessage();
             }
         }

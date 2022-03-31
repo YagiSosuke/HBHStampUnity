@@ -12857,7 +12857,6 @@ GameObject:
   m_Component:
   - component: {fileID: 507518172}
   - component: {fileID: 507518174}
-  - component: {fileID: 507518173}
   m_Layer: 5
   m_Name: TutorialFogEffect
   m_TagString: Untagged
@@ -12884,31 +12883,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 384, y: 360}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &507518173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 507518171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -98529514, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Texture: {fileID: 8400000, guid: d4aab8c6ddfa2af42be31f00d5c27364, type: 2}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
 --- !u!222 &507518174
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -21652,12 +21626,10 @@ MonoBehaviour:
   messageWindow: {fileID: 342928262}
   explainPanel: {fileID: 1133810259}
   serial: {fileID: 1713773050}
-  serialScipt: {fileID: 1713773050}
   trySupportCheck: {fileID: 1257539811}
   tutorialCharactorScript: {fileID: 2002783542}
-  touchInstructionImage: {fileID: 1892272308}
-  touchInstructionAnimator: {fileID: 1892272306}
   goodText: {fileID: 541922653}
+  touchInstructionImage: {fileID: 1892272309}
 --- !u!225 &795044783
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -26853,6 +26825,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tutorialMessage: {fileID: 795044782}
+  trySupportCheck: {fileID: 1257539811}
   VerificationPanel: {fileID: 278987609}
   CharAndMessagePanel: {fileID: 795044783}
   explainPanel: {fileID: 1133810260}
@@ -28708,7 +28681,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1284871987}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -34122,6 +34095,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1854387588}
     m_Modifications:
+    - target: {fileID: 1188447299478085043, guid: 3f18311d724480949ae9b2d020fd0446,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 1188447299478085043, guid: 3f18311d724480949ae9b2d020fd0446,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 7016115426777991797, guid: 3f18311d724480949ae9b2d020fd0446,
+        type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 1651874924}
     - target: {fileID: 8211995434004881849, guid: 3f18311d724480949ae9b2d020fd0446,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -34235,7 +34223,7 @@ PrefabInstance:
     - target: {fileID: 8211995434004881850, guid: 3f18311d724480949ae9b2d020fd0446,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8549735377617112518, guid: 3f18311d724480949ae9b2d020fd0446, type: 3}
@@ -34275,18 +34263,12 @@ MonoBehaviour:
   FrameChildPrefab: {fileID: 7015819730844844405, guid: 824f3376aba9d11429eabd85ea71ffba,
     type: 3}
   tutorialCharactorScript: {fileID: 2002783542}
---- !u!225 &1651874923
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+--- !u!95 &1651874924 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6539100556904912171, guid: 3f18311d724480949ae9b2d020fd0446,
+    type: 3}
+  m_PrefabInstance: {fileID: 1651874918}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1651874921}
-  m_Enabled: 1
-  m_Alpha: 0
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!1001 &1656056587
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36175,7 +36157,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1741657704}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -37486,8 +37468,9 @@ GameObject:
   - component: {fileID: 1892272307}
   - component: {fileID: 1892272306}
   - component: {fileID: 1892272308}
+  - component: {fileID: 1892272309}
   m_Layer: 5
-  m_Name: StampPushInstractionUI
+  m_Name: StampPushInstractionImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37545,6 +37528,20 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1892272309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1892272305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133ac592e601c5a499f5bb59a110d3cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  touchInstructionImage: {fileID: 1892272308}
+  touchInstructionAnimator: {fileID: 1892272306}
 --- !u!1 &1893991219
 GameObject:
   m_ObjectHideFlags: 0
@@ -38725,6 +38722,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1854387588}
     m_Modifications:
+    - target: {fileID: 2813632959046226949, guid: 654ac7e1797aae2439fbcc425444eb6f,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 2813632959046226949, guid: 654ac7e1797aae2439fbcc425444eb6f,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 300
+      objectReference: {fileID: 0}
     - target: {fileID: 3419198568507989652, guid: 654ac7e1797aae2439fbcc425444eb6f,
         type: 3}
       propertyPath: m_TagString
@@ -38808,12 +38815,12 @@ PrefabInstance:
     - target: {fileID: 7676953252109845754, guid: 654ac7e1797aae2439fbcc425444eb6f,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 200
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 7676953252109845754, guid: 654ac7e1797aae2439fbcc425444eb6f,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 7676953252109845754, guid: 654ac7e1797aae2439fbcc425444eb6f,
         type: 3}
@@ -38878,35 +38885,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39d932ab0912e0f42986868238b0b533, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dic:
-  - Parts: 0
-    Word: "\u307F"
-    AfterObject: {fileID: 8211995434004881850, guid: 3f18311d724480949ae9b2d020fd0446,
-      type: 3}
-  coordinate:
-  - pos_x: 1
-    pos_y: 0
-  - pos_x: 1
-    pos_y: 1
-  ParentObject: {fileID: 1854387584}
-  kanObj: {fileID: 2002783543}
-  mikanObj: {fileID: 1651874923}
-  tutorialFogCamera: {fileID: 0}
-  isChange: 0
-  isSerch: 0
-  tutorialMessage: {fileID: 795044782}
---- !u!225 &2002783543
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2002783540}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
+  kanObject: {fileID: 2002783540}
+  mikanObject: {fileID: 1651874921}
+  serial: {fileID: 1713773050}
 --- !u!114 &2017531791 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4752657089945437997, guid: 5cb38f58c05134d4981deae4a680ccde,
