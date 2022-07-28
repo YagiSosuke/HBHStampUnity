@@ -4,10 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 
-/*キャラクターにスタンプ打った時のスクリプト（辞書）*/
-
+/*キャラクターにスタンプ打った時のスクリプト*/
 
 public class CharacterScript : MonoBehaviour, IPointerClickHandler
 {

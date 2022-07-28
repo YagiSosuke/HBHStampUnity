@@ -20,7 +20,7 @@ public class RankingControl : MonoBehaviour
     [SerializeField] List<Text> rankText = new List<Text>(10);
     [SerializeField] List<Image> rankBack = new List<Image>(10);
 
-    [SerializeField] SceneControl sceneControl;
+    [SerializeField] SceneController sceneController;
 
     //現在のスコアによってランキングを更新
     public int rankUpdate(int score)
@@ -78,7 +78,7 @@ public class RankingControl : MonoBehaviour
             await UniTask.Delay(((int)duration * 1000));
             rankBack[rankNum - 1].DOColor(Color.white, duration);
             await UniTask.Delay(((int)duration * 1000));
-        } while (sceneControl.screenMode == ScreenMode.Result);
+        } while (sceneController.screenMode == ScreenMode.Result);
 
     }
     void Start()

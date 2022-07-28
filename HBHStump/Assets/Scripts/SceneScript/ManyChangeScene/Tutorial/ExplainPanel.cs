@@ -125,7 +125,7 @@ public class ExplainPanel : MonoBehaviour
         wordPanelImg.GetComponent<Animator>().SetBool("AnimationF", false);
         explainPanel.DOFade(endValue: 0.0f, duration: fadeTime);
         tryMikanChangeImages.DOFade(endValue: 1.0f, duration: fadeTime);
-        trySupportCheck.CheckBoxSetup();
+        trySupportCheck.Init();
     }
     public void OnEndStep()
     {

@@ -10,13 +10,12 @@ public class TimeCountSetting : MonoBehaviour
     [SerializeField] GameObject countImage2;
     [SerializeField] GameObject countImage1;
     [SerializeField] GameObject GOImage;
-
-    [SerializeField] SceneControl sceneControl;
-
+    
     [Header("効果音")]
     [SerializeField] AudioClip countAudioClip;
     [SerializeField] AudioClip GOAudioClip;
 
+    SceneController SceneController => SceneController.Instance;
     AudioManager AudioManager => AudioManager.Instance;
 
     //ゲームスタート前にカウントダウンを表示する
@@ -69,7 +68,7 @@ public class TimeCountSetting : MonoBehaviour
 
     async UniTask OnGameSetting()
     {
-        await UniTask.WaitUntil(() => sceneControl.screenMode == ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
+        await UniTask.WaitUntil(() => SceneController.screenMode == ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
         await DisplayCountDown();
         OnGameSetting().Forget();
     }

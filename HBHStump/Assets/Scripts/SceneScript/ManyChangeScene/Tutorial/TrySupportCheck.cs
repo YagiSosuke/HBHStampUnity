@@ -1,171 +1,86 @@
-﻿using System.Collections;
+﻿using System.Threading;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using System;
+using Cysharp.Threading.Tasks;
 
 /*みかんを変身させるときのサポートのチェックボックス*/
 
 public class TrySupportCheck : MonoBehaviour
 {
-    abstract class CheckControler
+    [SerializeField] Slider[] slider;
+    [SerializeField] TutorialCharactorScript tutorialCharacter;
+    Parts Parts => Stamp.Instance.Parts;
+    string Word => Stamp.Instance.Word;
+
+    CancellationTokenSource cts;
+    SceneController SceneController => SceneController.Instance;
+
+    public void Init()
     {
-        Slider slider;
-        bool checkF = false;
-        float value = 0.0f;
+        Check_Off(0);
+        Check_Off(1);
+        Check_Off(2);
+        Check_Off(3);
+        CheckBoxCondition_1().Forget();
+        CheckBoxCondition_2().Forget();
+        CheckBoxCondition_3().Forget();
+        CheckBoxCondition_4().Forget();
+        cts = new CancellationTokenSource();
+        Cancel().Forget();
+
+        async UniTask Cancel()
+        {
+            await UniTask.WaitUntil(() => SceneController.screenMode != ScreenMode.Tutorial, cancellationToken: this.GetCancellationTokenOnDestroy());
+            cts.Cancel();
+        }
+    }
+
+    public void Check_On(int num)
+    {
         float checkTime = 0.5f;
-
-        public CheckControler(Slider slider)
-        {
-            this.slider = slider;
-            slider.value = 0.0f;
-        }
-        public void Setup()
-        {
-            slider.value = 0.0f;
-            checkF = false;
-            value = 0.0f;
-        }
-        public void Check_On()
-        {
-            if (!checkF)
-            {
-                DOTween.To(() => value, (x) => value = x, 1.0f, checkTime).SetEase(Ease.OutQuad);
-            }
-            checkF = true;
-        }
-        public void Check_Off()
-        {
-            checkF = false;
-            value = 0.0f;
-        }
-        public void ValueSet()
-        {
-            slider.value = value;
-        }
-
-        //チェックする条件
-        public abstract void CheckBoxConditions();
+        DOTween.To(() => slider[num].value, (x) => slider[num].value = x, 1.0f, checkTime).SetEase(Ease.OutQuad);
     }
-    //「ま」行を読み込んだかチェック
-    class Check1 : CheckControler
+    public void Check_Off(int num)
     {
-        public Check1(Slider slider) : base(slider) { }
-        public override void CheckBoxConditions()
-        {
-            if(Stamp.Instance.Word == "ま" ||
-               Stamp.Instance.Word == "み" ||
-               Stamp.Instance.Word == "む" ||
-               Stamp.Instance.Word == "め" ||
-               Stamp.Instance.Word == "も")
-            {
-                Check_On();
-            }
-            else
-            {
-                Check_Off();
-            }
-
-            ValueSet();
-        }
-    }
-    //「み」をセットしたかチェック
-    class Check2 : CheckControler
-    {
-        public Check2(Slider slider) : base(slider) { }
-        public override void CheckBoxConditions()
-        {
-            if (Stamp.Instance.Word == "み")
-            {
-                Check_On();
-            }
-            else
-            {
-                Check_Off();
-            }
-
-            ValueSet();
-        }
-    }
-    //「あたま」を選択したかチェック
-    class Check3 : CheckControler
-    {
-        public Check3(Slider slider) : base(slider) { }
-        public override void CheckBoxConditions()
-        {
-            if (Stamp.Instance.Parts == Parts.Head)
-            {
-                Check_On();
-            }
-            else
-            {
-                Check_Off();
-            }
-
-            ValueSet();
-        }
-    }
-    //みかんにスタンプを打ったかチェック
-    class Check4 : CheckControler
-    {
-        TutorialCharactorScript tutorialCharacterScript;
-
-        public Check4(Slider slider, TutorialCharactorScript tutorialCharacterScript) : base(slider)
-        {
-            this.tutorialCharacterScript = tutorialCharacterScript;
-        }
-        public override void CheckBoxConditions()
-        {
-            /*
-            if (this.tutorialCharacterScript.isSerch)
-            {
-                Check_On();
-            }
-            else
-            {
-                Check_Off();
-            }
-
-            ValueSet();
-            */
-        }
+        slider[num].value = 0.0f;
     }
 
-    CheckControler check1, check2, check3, check4;
-
-    [SerializeField] Slider[] slider = new Slider[4];
-
-    //みかんに変身させたかチェックするスクリプト
-    [SerializeField] TutorialCharactorScript tutorialCharactorScript;
-
-
-    //チェックボックスの条件が達成されているかチェックする
-    public void CheckBoxCondition()
+    async UniTask CheckBoxCondition_1()
     {
-        check1.CheckBoxConditions();
-        check2.CheckBoxConditions();
-        check3.CheckBoxConditions();
-        check4.CheckBoxConditions();
+        bool Condition() => Word == "ま" || Word == "み" || Word == "む" || Word == "め" || Word == "も";
+        await UniTask.WaitUntil(() => Condition(), cancellationToken: this.GetCancellationTokenOnDestroy());
+        Check_On(0);
+
+        await UniTask.WaitUntil(() => !Condition(), cancellationToken: cts.Token);
+        Check_Off(0);
+        CheckBoxCondition_1().Forget();
     }
-
-    //チュートリアルの段階をコントロールするクラス
-    [SerializeField] TutorialMessage tutorialMessage;
-
-    //チェックボックスのセットアップ(チェックを消す)
-    public void CheckBoxSetup()
+    async UniTask CheckBoxCondition_2()
     {
-        check1.Setup();
-        check2.Setup();
-        check3.Setup();
-        check4.Setup();
+        bool Condition() => Word == "み";
+        await UniTask.WaitUntil(() => Condition(), cancellationToken: this.GetCancellationTokenOnDestroy());
+        Check_On(1);
+
+        await UniTask.WaitUntil(() => !Condition(), cancellationToken: cts.Token);
+        Check_Off(1);
+        CheckBoxCondition_2().Forget();
     }
-    
-    void Start()
+    async UniTask CheckBoxCondition_3()
     {
-        check1 = new Check1(slider[0]);
-        check2 = new Check2(slider[1]);
-        check3 = new Check3(slider[2]);
-        check4 = new Check4(slider[3], tutorialCharactorScript);
-    }    
+        bool Condition() => Parts == Parts.Head;
+        await UniTask.WaitUntil(() => Condition(), cancellationToken: this.GetCancellationTokenOnDestroy());
+        Check_On(2);
+
+        await UniTask.WaitUntil(() => !Condition(), cancellationToken: cts.Token);
+        Check_Off(2);
+        CheckBoxCondition_3().Forget();
+    }
+    async UniTask CheckBoxCondition_4()
+    {
+        await UniTask.WaitUntil(() => tutorialCharacter.IsPushStampToMikan(), cancellationToken: this.GetCancellationTokenOnDestroy());
+        Check_On(3);
+    }
 }

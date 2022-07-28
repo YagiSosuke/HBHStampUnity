@@ -13,7 +13,6 @@ public class PlaySEWhenPushed : MonoBehaviour
     bool isStampOnPanel = false;         //パネル上にスタンプが載り続けているかどうかのフラグ
 
     [SerializeField] Serial serial;
-    [SerializeField] SceneControl sceneControl;
 
     [Header("Audio")]
     [SerializeField] AudioClip clip;

@@ -14,7 +14,8 @@ public class DisplayParts : MonoBehaviour
 {
     [SerializeField] Image partsImage;
     [SerializeField] List<Sprite> partsSample = new List<Sprite>();
-    [SerializeField] SceneControl sceneControl;
+
+    SceneController SceneController => SceneController.Instance;
     
 
     //現在のパーツを表示する
@@ -39,17 +40,17 @@ public class DisplayParts : MonoBehaviour
 
     async UniTask OnGameSetting()
     {
-        await UniTask.WaitUntil(() => sceneControl.screenMode == ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
+        await UniTask.WaitUntil(() => SceneController.screenMode == ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
         transform.DOLocalMoveY(-40, 0.5f).SetEase(Ease.OutCubic);
-        await UniTask.WaitUntil(() => sceneControl.screenMode != ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
+        await UniTask.WaitUntil(() => SceneController.screenMode != ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
 
         OnGameSetting().Forget();
     }
     async UniTask OnGameFinish()
     {
-        await UniTask.WaitUntil(() => sceneControl.screenMode == ScreenMode.GameFinish, cancellationToken: this.GetCancellationTokenOnDestroy());
+        await UniTask.WaitUntil(() => SceneController.screenMode == ScreenMode.GameFinish, cancellationToken: this.GetCancellationTokenOnDestroy());
         transform.DOLocalMoveY(150, 0.5f).SetEase(Ease.OutCubic);
-        await UniTask.WaitUntil(() => sceneControl.screenMode != ScreenMode.GameFinish, cancellationToken: this.GetCancellationTokenOnDestroy());
+        await UniTask.WaitUntil(() => SceneController.screenMode != ScreenMode.GameFinish, cancellationToken: this.GetCancellationTokenOnDestroy());
 
         OnGameFinish().Forget();
     }

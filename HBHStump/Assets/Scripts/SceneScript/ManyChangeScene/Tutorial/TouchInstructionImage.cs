@@ -16,20 +16,20 @@ public class TouchInstructionImage : MonoBehaviour
     }
     public void ShowTouchInstruction()
     {
+        Debug.Log("Show");
         if (touchInstructionImage.alpha != 1.0f)
         {
             touchInstructionAnimator.SetBool("AnimationF", true);
             touchInstructionImage.DOFade(endValue: 1.0f, duration: 0.2f);
-            Debug.Log("Show");
         }
     }
     public void HideTouchInstruction()
     {
+        Debug.Log("Hide");
         if (touchInstructionImage.alpha != 0.0f)
         {
             touchInstructionAnimator.SetBool("AnimationF", false);
             touchInstructionImage.DOFade(endValue: 0.0f, duration: 0.2f);
-            Debug.Log("Hide");
         }
     }
 }

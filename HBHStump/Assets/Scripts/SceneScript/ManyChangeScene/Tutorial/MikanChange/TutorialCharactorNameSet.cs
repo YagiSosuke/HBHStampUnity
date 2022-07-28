@@ -2,100 +2,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+using Cysharp.Threading.Tasks;
 
 /*十中八九エラる*/
 
 public class TutorialCharactorNameSet : MonoBehaviour
 {
-    string Name;                    //オブジェクトの名前
-    [SerializeField]
-    GameObject FramePrefab;         //フレーム
-    GameObject Frame;               //フレームの実体
+    [SerializeField] string charaName;
+    [SerializeField] Image flamePartsPrefab;
+    [SerializeField] GameObject flamePrefab;
+    [SerializeField] AudioClip clip;
 
-    [SerializeField]
-    GameObject FrameChildPrefab;    //フレーム1つ
-    GameObject FrameChild;          //フレーム1つの実体
-    GameObject newFrame;            //追加した文字
-    float count = 0;                //カウントする
-    float NamePosY = 150;
+    GameObject addFrame;
+    const float namePosY = 150;
 
-    [SerializeField] TutorialCharactorScript tutorialCharactorScript;
 
-    void Start()
+    public void Initialize()
     {
-        Name = this.gameObject.name.Replace("Image_", "").Replace("(Clone)", "");      //名前取得
-        
         //枠組みを形成
-        Frame = Instantiate(FramePrefab, new Vector3(transform.position.x, transform.position.y + NamePosY, transform.position.z), Quaternion.identity, this.gameObject.transform.parent.gameObject.transform);
-        Frame.transform.localPosition = new Vector3(0, NamePosY, transform.position.z);
-        Frame.transform.localScale = Vector2.one;
-        Frame.GetComponent<RectTransform>().sizeDelta = new Vector2((Name.Length) * 100, 100);        //枠のサイズを決定
+        var flame = Instantiate(flamePrefab, transform.parent);
+        flame.transform.localPosition = new Vector3(0, namePosY, transform.position.z);
+        flame.GetComponent<RectTransform>().sizeDelta = new Vector2(charaName.Length * 100, 100);
 
-        //文字を指定
-        for (int i = 0; i < Name.Length; i++)
+        //文字を表示
+        for (int i = 0; i < charaName.Length; i++)
         {
-            FrameChild = Instantiate(FrameChildPrefab, Frame.transform.position, Quaternion.identity, Frame.transform);
-            FrameChild.transform.GetChild(1).GetComponent<Text>().text = Name.Substring(i, 1);
+            var flameParts = Instantiate(flamePartsPrefab, flame.transform.position, Quaternion.identity, flame.transform);
+            flameParts.transform.GetChild(1).GetComponent<Text>().text = charaName.Substring(i, 1);
 
-            if (i == 0)
+            if (i == 0 && (charaName == "みかん"))
             {
-                if (gameObject.tag == "Head" || gameObject.tag == "HeadSample")
-                {
-                    newFrame = FrameChild;
-                    FrameChild.GetComponent<Image>().color = Color.green;
-                }
-            }
-            else if (i == (Name.Length) / 2)
-            {
-                if (gameObject.tag == "Body" || gameObject.tag == "BodySample")
-                {
-                    newFrame = FrameChild;
-                    FrameChild.GetComponent<Image>().color = Color.green;
-                }
-            }
-            else if (i == Name.Length - 1)
-            {
-                if (gameObject.tag == "Hip" || gameObject.tag == "HipSample")
-                {
-                    newFrame = FrameChild;
-                    FrameChild.GetComponent<Image>().color = Color.green;
-                }
+                addFrame = flameParts.gameObject;
+                flameParts.color = Color.green;                
             }
         }
     }
 
-    void Update()
+    //追加された文字の表示
+    public async UniTask AddFlameAnimation()
     {
-        /*
-        //スタンプ 打つとき
-        if ((gameObject.tag == "Head" || gameObject.tag == "Body" || gameObject.tag == "Hip") && count < 3)
-        {
-            if (count == 0)
-            {
-                newFrame.transform.localScale = Vector3.zero;
-            }
-            else if (count < 1)
-            {
-                float lerp = (count) * (count) * (count) * (count);
-                newFrame.transform.localScale = new Vector3(3 - lerp * 2, 3 - lerp * 2, 3 - lerp * 2);
-            }
-            else
-            {
-                newFrame.transform.localScale = Vector2.one;
-                Frame.GetComponent<AudioSource>().Play();       //TODO: ここエラると思う
-                count = 10;
-            }
-        }
+        addFrame.transform.localScale = Vector2.one * 3;
+        addFrame.transform.DOScale(Vector2.one, 1.0f).SetEase(Ease.InCubic);
+        await UniTask.Delay(1000, cancellationToken: this.GetCancellationTokenOnDestroy());
 
-        //かんを変身させたときに count を増やす
-        if (tutorialCharactorScript.isSerch)
-        {
-            count += Time.deltaTime;
-        }
-        else
-        {
-            count = 0;
-        }
-        */
+        AudioManager.Instance.PlaySE(clip);
     }
 }

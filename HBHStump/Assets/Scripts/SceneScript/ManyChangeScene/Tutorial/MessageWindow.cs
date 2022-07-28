@@ -21,6 +21,11 @@ public class MessageWindow : MonoBehaviour
     int actionIndex;
     int conditionIndex;
 
+    [SerializeField] TouchInstructionImage touchInstruction;
+    [SerializeField] GoodText goodText;
+    Action onBeforeTouch;
+    Action onAfterTouch;
+
     List<string> messageGroup;              //メッセージ群
     string messageLine;                     //表示するメッセージ1行
     int    messageLineNum;                  //メッセージはメッセージ群のうち何行目か      
@@ -55,6 +60,9 @@ public class MessageWindow : MonoBehaviour
         ScanMarkupLanguage();
         totalMessageLength = messageLine.Length;
         messageText.text = "";
+
+        touchInstruction.Init();
+        goodText.Initialize();
     }
     //メッセージを1文字ごと表示
     async UniTask PrintText()
@@ -100,9 +108,17 @@ public class MessageWindow : MonoBehaviour
             currentCondition = conditionGroup[conditionIndex];
             conditionIndex++;
             messageLine = messageLine.Replace(markupTagCondition, "");
+
+            onBeforeTouch = null;
+            onAfterTouch = goodText.displayGoodText;
+        }
+        else
+        {
+            onBeforeTouch = touchInstruction.ShowTouchInstruction;
+            onAfterTouch = touchInstruction.HideTouchInstruction;
         }
     }
-    public async UniTask ShowMessage(Action onNextMessage)
+    public async UniTask ShowMessage()
     {
         cts.Cancel();   //TODO: バグるかも
         cts = new CancellationTokenSource();
@@ -112,8 +128,9 @@ public class MessageWindow : MonoBehaviour
 
             if (IsFinishMessageLine() && !IsFinishMessageGroup())
             {
+                onBeforeTouch?.Invoke();
                 await UniTask.WaitUntil(() => currentCondition.Invoke(), cancellationToken: this.GetCancellationTokenOnDestroy());
-                onNextMessage.Invoke();
+                onAfterTouch?.Invoke();
                 NextMessage();
             }
         }

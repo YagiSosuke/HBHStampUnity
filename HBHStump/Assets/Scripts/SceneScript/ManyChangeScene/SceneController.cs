@@ -7,10 +7,10 @@ using System.Threading;
 
 /*シーン遷移や各シーンごとの処理をまとめて操作する*/
 
-public class SceneControl : MonoBehaviour
+public class SceneController : MonoBehaviour
 {
-    public static SceneControl Instance;
-    SceneControl() { if (!Instance) Instance = this; }
+    public static SceneController Instance;
+    SceneController() { if (!Instance) Instance = this; }
 
     public ScreenMode screenMode = ScreenMode.Title;
     public TransitionMode transitionMode = TransitionMode.afterSwitching;
@@ -59,6 +59,157 @@ public class SceneControl : MonoBehaviour
         stateChangeInterval = -1;
     }
 
+    async UniTask Initialize()
+    {
+        var ct = this.GetCancellationTokenOnDestroy();
+
+        while (!ct.IsCancellationRequested)
+        {
+            switch (screenMode)
+            {
+                case ScreenMode.Title:
+                    if (stateChangeInterval == -1)
+                    {
+                        stateChangeInterval = 1.0f;
+                        titleCharImageMove.TitleSceneAfter(stateChangeInterval);
+
+                        await StateChange(stateChangeInterval);
+                    }
+
+                    await UniTask.WaitUntil(() => transitionMode == TransitionMode.continuation, cancellationToken: ct);
+                    while (transitionMode == TransitionMode.continuation)
+                    {
+                        if (Input.GetMouseButton(0))
+                        {
+                            StateChange().Forget();
+                        }
+                        else if (serialScript.IsUseDevice == true)
+                        {
+                            if (serialScript.pushCheck())
+                            {
+                                StateChange().Forget();
+                            }
+                        }
+                    }
+
+                    if (stateChangeInterval == -1)
+                    {
+                        stateChangeInterval = 1.0f;
+                        titleCharImageMove.TitleSceneBefore(stateChangeInterval);
+                        Debug.Log("statechange");
+                        await StateChange(stateChangeInterval);
+                    }
+                    break;
+                case ScreenMode.Tutorial:
+                    break;
+                case ScreenMode.GameSetting:
+                    await StateChange(3.0f);
+                    StateChange().Forget();
+                    StateChange().Forget();
+                    break;
+                case ScreenMode.Game:
+                    MasterData.Initialize();
+                    CharacterController.GameSceneAfter();
+                    StateChange().Forget();
+
+                    await UniTask.WaitUntil(() => transitionMode == TransitionMode.continuation, cancellationToken: ct);
+                    while (transitionMode == TransitionMode.continuation)
+                    {
+                        CharacterController.GameSceneContinuation();
+
+                        MasterData.CurrentTime -= Time.deltaTime;
+                        if (MasterData.CurrentTime <= 0)
+                        {
+                            StateChange().Forget();
+                        }
+                    }
+
+                    //TODO: 変更(何を?)
+                    CharacterController.GameSceneBefore();
+                    StateChange().Forget();
+                    break;
+                case ScreenMode.GameFinish:
+                    await StateChange(1.5f);
+                    StateChange().Forget();
+                    StateChange().Forget();
+                    break;
+                case ScreenMode.Result:
+                    if (stateChangeInterval == -1)
+                    {
+                        stateChangeInterval = 1.0f;
+
+                        resultPanelControl.ResultSceneAfter(stateChangeInterval).Forget();
+                        await StateChange(MasterData.Score * 0.1f + 1.0f);
+                    }
+                    await UniTask.WaitUntil(() => transitionMode == TransitionMode.continuation, cancellationToken: ct);
+                    while (transitionMode == TransitionMode.continuation)
+                    {
+                        resultPanelControl.ResultSceneContinuation();
+
+                        //ランキングパネルが出ていないときに実行
+                        if (resultPanelControl.RankNum == -1)
+                        {
+                            if (Input.GetMouseButtonDown(0) || (serialScript.IsUseDevice == true && serialScript.pushCheck()))
+                            {
+                                StateChange().Forget();
+                            }
+                        }
+                    }
+
+                    resultPanelControl.ResultSceneBefore(1.0f);
+                    StateChange().Forget();
+                    break;
+                case ScreenMode.Hint:
+                    //TODO: バグがあるので直す
+                    if (!onceDoF)
+                    {
+                        Debug.Log("ヒント表示");
+                        ShowHintPanel().Forget();
+                        async UniTask ShowHintPanel()
+                        {
+                            onceDoF = true;
+                            await hintPanel.GameSceneAfter();
+                            StateChange().Forget();
+                            onceDoF = false;
+                        }
+                    }
+
+                    await UniTask.WaitUntil(() => transitionMode == TransitionMode.continuation, cancellationToken: ct);
+                    while (transitionMode == TransitionMode.continuation)
+                    {
+                        hintPanel.GameSceneContinuation();
+
+                        //時間差でステップ変わる
+                        if (!onceDoF)
+                        {
+                            UniTask.Void(async () =>
+                            {
+                                onceDoF = true;
+                                await UniTask.Delay(6000);
+                                StateChange().Forget();
+                                onceDoF = false;
+                            });
+                        }
+                    }
+
+                    //パネル消えるまでのインターバル
+                    if (!onceDoF)
+                    {
+                        HideHintPanel().Forget();
+                        async UniTask HideHintPanel()
+                        {
+                            onceDoF = true;
+                            await hintPanel.GameSceneBefore();
+                            StateChange().Forget();
+                            onceDoF = false;
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
+    /*
     void Update()
     {
         Debug.Log($"pushCheck = {serialScript.pushCheck()}");
@@ -196,14 +347,15 @@ public class SceneControl : MonoBehaviour
                 {
                     if (!onceDoF)
                     {
-                        //パネル表示するまでのインターバル
-                        UniTask.Void(async () =>
+                        Debug.Log("ヒント表示");
+                        ShowHintPanel().Forget();
+                        async UniTask ShowHintPanel()
                         {
                             onceDoF = true;
                             await hintPanel.GameSceneAfter();
-                            onceDoF = false;
                             StateChange().Forget();
-                        });
+                            onceDoF = false;
+                        }
                     }
                 }
                 else if (transitionMode == TransitionMode.continuation)
@@ -217,8 +369,8 @@ public class SceneControl : MonoBehaviour
                         {
                             onceDoF = true;
                             await UniTask.Delay(6000);
-                            onceDoF = false;
                             StateChange().Forget();
+                            onceDoF = false;
                         });
                     }
                 }
@@ -227,18 +379,20 @@ public class SceneControl : MonoBehaviour
                     //パネル消えるまでのインターバル
                     if (!onceDoF)
                     {
-                        UniTask.Void(async () =>
+                        HideHintPanel().Forget();
+                        async UniTask HideHintPanel()
                         {
                             onceDoF = true;
                             await hintPanel.GameSceneBefore();
-                            onceDoF = false;
                             StateChange().Forget();
-                        });
+                            onceDoF = false;
+                        }
                     }
                 }
                 break;
         }
     }
+    */
 }
 
 public enum ScreenMode

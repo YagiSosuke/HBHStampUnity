@@ -11,11 +11,11 @@ using Cysharp.Threading.Tasks;
 public class DisplayFinishText : MonoBehaviour
 {
     [SerializeField] GameObject finishImages;
-    [SerializeField] SceneControl sceneControl;
-
-    //効果音系
+    
     [Header("効果音系")]
     [SerializeField] AudioClip finishAudioClip;
+
+    SceneController SceneController => SceneController.Instance;
 
     async UniTask DisplayFinishImages()
     {
@@ -35,15 +35,15 @@ public class DisplayFinishText : MonoBehaviour
 
     void Update()
     {
-        if (sceneControl.screenMode == ScreenMode.GameFinish) {
-            if (sceneControl.transitionMode == TransitionMode.afterSwitching) 
+        if (SceneController.screenMode == ScreenMode.GameFinish) {
+            if (SceneController.transitionMode == TransitionMode.afterSwitching) 
             {
                 DisplayFinishImages().Forget();
             }
-            if (sceneControl.transitionMode == TransitionMode.continuation)
+            if (SceneController.transitionMode == TransitionMode.continuation)
             {
             }
-            if (sceneControl.transitionMode == TransitionMode.beforeSwitching)
+            if (SceneController.transitionMode == TransitionMode.beforeSwitching)
             {
             }
         }

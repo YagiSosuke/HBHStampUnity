@@ -11,7 +11,7 @@ public class RecordPlayData : MonoBehaviour
     string filePass;
     float startTime;
 
-    [SerializeField] SceneControl sceneControl;
+    SceneController SceneController => SceneController.Instance;
     ScreenMode nowScene = ScreenMode.Title;
     MasterData MasterData => MasterData.Instance;
         
@@ -47,19 +47,19 @@ public class RecordPlayData : MonoBehaviour
 
     void Update()
     {
-        if(sceneControl.screenMode == ScreenMode.Game)
+        if(SceneController.screenMode == ScreenMode.Game)
         {
-            if (nowScene != sceneControl.screenMode) {
+            if (nowScene != SceneController.screenMode) {
                 Init();
-                nowScene = sceneControl.screenMode;
+                nowScene = SceneController.screenMode;
             }
         }
-        else if(sceneControl.screenMode == ScreenMode.GameFinish)
+        else if(SceneController.screenMode == ScreenMode.GameFinish)
         {
-            if (nowScene != sceneControl.screenMode)
+            if (nowScene != SceneController.screenMode)
             {
                 WriteResultData();
-                nowScene = sceneControl.screenMode;
+                nowScene = SceneController.screenMode;
             }
         }
     }

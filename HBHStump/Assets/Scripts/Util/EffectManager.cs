@@ -39,4 +39,10 @@ public class EffectManager : MonoBehaviour
         fog.transform.localPosition = new Vector2(fog.transform.localPosition.x, fog.transform.localPosition.y + positionDifferenceY);
         Destroy(fog, 10.0f);
     }
+    public void InstantiateTutorialFog()
+    {
+        var fog = Instantiate(fogEffect, effectParent);
+        fog.transform.localPosition = new Vector2(-500, 200 + positionDifferenceY);
+        Destroy(fog, 10.0f);
+    }
 }

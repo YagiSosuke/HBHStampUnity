@@ -9,8 +9,8 @@ using Cysharp.Threading.Tasks;
 public class BGMControl : MonoBehaviour
 {
     [SerializeField] AudioSource audio;
-    [SerializeField] SceneControl sceneControl;
 
+    SceneController SceneController => SceneController.Instance;
     ScreenMode nowMode = ScreenMode.Title;
 
     void AudioStop()
@@ -67,22 +67,22 @@ public class BGMControl : MonoBehaviour
 
     void Update()
     {
-        if(sceneControl.screenMode == ScreenMode.GameSetting ||
-           sceneControl.screenMode == ScreenMode.GameFinish)
+        if(SceneController.screenMode == ScreenMode.GameSetting ||
+           SceneController.screenMode == ScreenMode.GameFinish)
         {
-            if (nowMode != sceneControl.screenMode)
+            if (nowMode != SceneController.screenMode)
             {
                 AudioStop();
-                nowMode = sceneControl.screenMode;
+                nowMode = SceneController.screenMode;
             }
         }
-        else if(sceneControl.screenMode == ScreenMode.Game ||
-                sceneControl.screenMode == ScreenMode.Title)
+        else if(SceneController.screenMode == ScreenMode.Game ||
+                SceneController.screenMode == ScreenMode.Title)
         {
-            if (nowMode != sceneControl.screenMode)
+            if (nowMode != SceneController.screenMode)
             {
                 AudioPlay();
-                nowMode = sceneControl.screenMode;
+                nowMode = SceneController.screenMode;
             }
         }
     }

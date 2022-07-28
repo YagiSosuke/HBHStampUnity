@@ -23,6 +23,15 @@ public class VerificationPanelScript : MonoBehaviour
         cts.Cancel();
     }
 
+    public void Init()
+    {
+        cts = new CancellationTokenSource();
+        IsTakeTutorial = false;
+        IsNotTakeTutorial = false;
+        WaitForTakeTutorial().Forget();
+        WaitForNotTakeTutorial().Forget();
+    }
+
     //「はい」「いいえ」のボタン押下時
     public void VerificationYes()
     {
@@ -51,13 +60,4 @@ public class VerificationPanelScript : MonoBehaviour
         IsNotTakeTutorial = true;
         cts.Cancel();
     }
-
-    public void SetUp()
-    {
-        cts = new CancellationTokenSource();
-        IsTakeTutorial = false;
-        IsNotTakeTutorial = false;
-        WaitForTakeTutorial().Forget();
-        WaitForNotTakeTutorial().Forget();
-    }    
 }

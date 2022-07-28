@@ -13,26 +13,25 @@ public class GoodText : MonoBehaviour
     [SerializeField] GameObject GoodTextImage;
     [SerializeField] AudioClip clip;
 
-    //Goodを表示する
-    public async UniTask displayGoodText()
-    {
-        GoodTextImage.transform.localScale = Vector3.zero;
-        GoodTextImage.transform.rotation = Quaternion.Euler(0, 0, 90);
-        GoodTextImage.transform.DOScale(Vector3.one, 0.4f);
-        GoodTextImage.transform.DORotate(Vector3.zero, 0.5f).SetEase(Ease.OutBack);
-        AudioManager.Instance.PlaySE(clip);
-        await UniTask.Delay(1000);
-        GoodTextImage.transform.DOScale(Vector3.zero, 0.4f).SetEase(Ease.InBack);
-    }
-
-    //TODO: 使用されていない、マネージャで使用されるようにする
     public void Initialize()
     {
         GoodTextImage.transform.localScale = Vector3.zero;
         GoodTextImage.transform.rotation = Quaternion.Euler(0, 0, 90);
     }
-    void Start()
+
+    //Goodを表示する
+    public void displayGoodText()
     {
-        Initialize();
+        Show().Forget();
+        async UniTask Show()
+        {
+            GoodTextImage.transform.localScale = Vector3.zero;
+            GoodTextImage.transform.rotation = Quaternion.Euler(0, 0, 90);
+            GoodTextImage.transform.DOScale(Vector3.one, 0.4f);
+            GoodTextImage.transform.DORotate(Vector3.zero, 0.5f).SetEase(Ease.OutBack);
+            AudioManager.Instance.PlaySE(clip);
+            await UniTask.Delay(1000);
+            GoodTextImage.transform.DOScale(Vector3.zero, 0.4f).SetEase(Ease.InBack);
+        }
     }
 }

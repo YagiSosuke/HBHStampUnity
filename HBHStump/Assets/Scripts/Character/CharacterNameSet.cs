@@ -35,10 +35,9 @@ public class CharacterNameSet : MonoBehaviour
             var flameParts = Instantiate(flamePartsPrefab, flame.transform.position, Quaternion.identity, flame.transform);
             flameParts.transform.GetChild(1).GetComponent<Text>().text = name.Substring(i, 1);
 
-            //TODO: 直す（tag判定はチュートリアル用に用意しているが冗長な為）
-            if ((i == 0 && (parts == Parts.Head || gameObject.tag == "HeadSample")) ||
-                (i == 1 && (parts == Parts.Body || gameObject.tag == "BodySample")) ||
-                (i == 2 && (parts == Parts.Hip || gameObject.tag == "HipSample")))
+            if (i == 0 && (parts == Parts.Head) ||
+                i == 1 && (parts == Parts.Body) ||
+                i == 2 && (parts == Parts.Hip))
             {
                 AddFlameAnimation(flameParts).Forget();
             }

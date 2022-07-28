@@ -13,25 +13,25 @@ public class DeisplayTimer : MonoBehaviour
     [SerializeField] Text currentTimeText;
     [SerializeField] Image timerImage;
 
-    [SerializeField] SceneControl sceneControl;
+    SceneController SceneController => SceneController.Instance;
     MasterData MasterData => MasterData.Instance;
 
 
     async UniTask OnGameSetting()
     {
-        await UniTask.WaitUntil(() => sceneControl.screenMode == ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
+        await UniTask.WaitUntil(() => SceneController.screenMode == ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
         currentTimeText.text = MasterData.TimeLimit.ToString();
         timerImage.fillAmount = 1.0f;
         transform.DOLocalMoveY(-70, slideTime).SetEase(Ease.OutCubic);
-        await UniTask.WaitUntil(() => sceneControl.screenMode != ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
+        await UniTask.WaitUntil(() => SceneController.screenMode != ScreenMode.GameSetting, cancellationToken: this.GetCancellationTokenOnDestroy());
 
         OnGameSetting().Forget();
     }
     async UniTask OnGame()
     {
-        await UniTask.WaitUntil(() => sceneControl.screenMode == ScreenMode.Game, cancellationToken: this.GetCancellationTokenOnDestroy());
-        await UniTask.WaitUntil(() => sceneControl.transitionMode == TransitionMode.continuation, cancellationToken: this.GetCancellationTokenOnDestroy());
-        while (sceneControl.transitionMode == TransitionMode.continuation)
+        await UniTask.WaitUntil(() => SceneController.screenMode == ScreenMode.Game, cancellationToken: this.GetCancellationTokenOnDestroy());
+        await UniTask.WaitUntil(() => SceneController.transitionMode == TransitionMode.continuation, cancellationToken: this.GetCancellationTokenOnDestroy());
+        while (SceneController.transitionMode == TransitionMode.continuation)
         {
             currentTimeText.text = MasterData.CurrentTime.ToString("0");
             timerImage.fillAmount = (MasterData.CurrentTime / MasterData.TimeLimit);
@@ -40,7 +40,7 @@ public class DeisplayTimer : MonoBehaviour
         currentTimeText.text = "0";
         timerImage.fillAmount = 0.0f;
         transform.DOLocalMoveY(150, slideTime).SetEase(Ease.OutCubic);
-        await UniTask.WaitUntil(() => sceneControl.screenMode != ScreenMode.Game, cancellationToken: this.GetCancellationTokenOnDestroy());
+        await UniTask.WaitUntil(() => SceneController.screenMode != ScreenMode.Game, cancellationToken: this.GetCancellationTokenOnDestroy());
 
         OnGame().Forget();
     }

@@ -57,13 +57,10 @@ public class TutorialMessage : MonoBehaviour
     [SerializeField] ExplainPanel explainPanel;
     [Header("TutorialMaterial")]
     [SerializeField] TutorialCharactorScript tutorialCharactorScript;
-    [SerializeField] TrySupportCheck trySupportCheck;
-    [SerializeField] GoodText goodText;
-    [SerializeField] TouchInstructionImage touchInstructionImage;
     [Header("Serial")]
     [SerializeField] Serial serial;
-    
-    SceneControl SceneControl => SceneControl.Instance;
+
+    SceneController SceneController => SceneController.Instance;
         
     void TransitionChange()
     {
@@ -88,7 +85,7 @@ public class TutorialMessage : MonoBehaviour
         else if (verificationPanelScript.IsNotTakeTutorial)
         {
             ct.Cancel();
-            SceneControl.screenMode = (ScreenMode)(SceneControl.screenMode + 1);
+            SceneController.screenMode = (ScreenMode)(SceneController.screenMode + 1);
             transitionMode = TransitionMode.afterSwitching;
             explainPanel.HideVerificationPanel();
         }
@@ -120,11 +117,10 @@ public class TutorialMessage : MonoBehaviour
                 };
                 messageWindow.LoadMessage(new List<string>(message), actionInMessage, conditionInMessage);
                 WaitForTimeout(time_sec).Forget();
-                messageWindow.ShowMessage(touchInstructionImage.HideTouchInstruction).Forget();
+                messageWindow.ShowMessage().Forget();
                 TransitionChange();
                 break;
             case TransitionMode.continuation:
-                if(messageWindow.IsFinishMessageLine()) touchInstructionImage.ShowTouchInstruction();
                 if ((Input.GetMouseButtonDown(0) || serial.pushCheck()) && 
                      messageWindow.IsFinishMessageGroup() && messageWindow.IsFinishMessageLine())
                 {
@@ -139,8 +135,8 @@ public class TutorialMessage : MonoBehaviour
     }
     async UniTask PlayTutorial()
     {
-        await UniTask.WaitUntil(() => SceneControl.screenMode == ScreenMode.Tutorial, cancellationToken: this.GetCancellationTokenOnDestroy());
-        while (SceneControl.screenMode == ScreenMode.Tutorial)
+        await UniTask.WaitUntil(() => SceneController.screenMode == ScreenMode.Tutorial, cancellationToken: this.GetCancellationTokenOnDestroy());
+        while (SceneController.screenMode == ScreenMode.Tutorial)
         {
             tutorialPanelCanvasGroup.blocksRaycasts = true;
 
@@ -149,9 +145,9 @@ public class TutorialMessage : MonoBehaviour
                 case TutorialStep.TutorialVerification:
                     explainPanel.ShowVerificationPanel();
                     ShowTutorialPanel();
-                    touchInstructionImage.Init();
-                    verificationPanelScript.SetUp();
                     WaitForTimeout(verificationTimeout_sec).Forget();
+                    verificationPanelScript.Init();
+                    tutorialCharactorScript.Init();
                     TransitionChange();
 
                     TutorialVerification();
@@ -168,7 +164,7 @@ public class TutorialMessage : MonoBehaviour
                     explainPanel.OnEndStep();
                     transitionMode = TransitionMode.afterSwitching;
                     tutorialStep = TutorialStep.TutorialVerification;
-                    SceneControl.screenMode = (ScreenMode)(SceneControl.screenMode + 1);
+                    SceneController.screenMode = (ScreenMode)(SceneController.screenMode + 1);
                     break;
             }
             await UniTask.DelayFrame(1, cancellationToken: this.GetCancellationTokenOnDestroy());
@@ -360,8 +356,8 @@ public class TutorialMessage : MonoBehaviour
             transitionMode = TransitionMode.afterSwitching;
 
             //タイトルへ
-            SceneControl.screenMode = ScreenMode.Title;
-            SceneControl.transitionMode = TransitionMode.afterSwitching;
+            SceneController.screenMode = ScreenMode.Title;
+            SceneController.transitionMode = TransitionMode.afterSwitching;
         }
     }
     #endregion

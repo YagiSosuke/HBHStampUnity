@@ -144,7 +144,9 @@ public class BeforeChangeCharacter : CharacterBase
             Destroy(afterChangeCharaObj.gameObject, moveDuration);
         }
     }
-    //ゲームモード終了時オブジェクトを縮小する
+    /// <summary>
+    /// ゲームモード終了時オブジェクトを縮小する
+    /// </summary>
     public void ObjShrink()
     {
         transform.DOScale(Vector2.zero, 0.9f).SetEase(Ease.InBack);
